@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { expect, test } from "vitest";
-import { InputLabel } from "./inputlabel";
+import { InputLabel } from "./input-label";
 
 test("renders input label element", () => {
   render(

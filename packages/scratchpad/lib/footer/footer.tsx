@@ -1,9 +1,14 @@
 import { faLightbulb, faMoon } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { Hyperlink } from "src/lib";
+import { Hyperlink } from "./../hyperlink/hyperlink";
 
-export function Footer() {
+type FooterProps = {
+  label: string;
+  link: string;
+};
+
+export function Footer(props: FooterProps) {
   if (localStorage["theme"] === "dark")
     document.documentElement.classList.add("dark");
 
@@ -54,8 +59,8 @@ export function Footer() {
         {getFooterContent()}
         <div className="flex-1 text-end">
           <Hyperlink
-            text="Julius Polar@GitHub"
-            link="https://github.com/JulianElda/nt-p"
+            text={props.label}
+            link={props.link}
           />
         </div>
       </div>

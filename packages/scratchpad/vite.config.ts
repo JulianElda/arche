@@ -1,29 +1,38 @@
 /// <reference types="vitest" />
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { resolve } from "path";
+import { defineConfig } from "vite";
+import dts from "vite-plugin-dts";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), dts({ include: ["lib"] })],
   test: {
     globals: true,
     environment: "jsdom",
-    setupFiles: "./src/test/test-setup.ts",
+    setupFiles: "./lib/test-setup.ts",
   },
   resolve: {
     alias: {
-      src: "/src",
+      lib: "/lib",
     },
   },
   build: {
     copyPublicDir: false,
     lib: {
-      entry: "src/lib/index.ts",
+      entry: resolve(__dirname, "lib/index.ts"),
       name: "scratchpad",
       fileName: "main",
+      formats: ["es"],
     },
     rollupOptions: {
-      external: ["react", "react/jsx-runtime"],
+      external: [
+        "react",
+        "react/jsx-runtime",
+        "@fortawesome/fontawesome-svg-core",
+        "@fortawesome/free-regular-svg-icons",
+        "@fortawesome/react-fontawesome",
+      ],
     },
   },
 });

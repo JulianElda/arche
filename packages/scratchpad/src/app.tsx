@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Input, Footer } from "./lib";
+import { Input, Footer } from "lib";
 
 function App() {
   const [count, setCount] = useState("count");
@@ -14,7 +14,10 @@ function App() {
         onChange={setCount}
       />
       <p>count {count}</p>
-      <Footer />
+      <Footer
+        label="Julius Polar@GitHub"
+        link="https://github.com/JulianElda/scratchpad"
+      />
     </>
   );
 }

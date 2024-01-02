@@ -1,4 +1,5 @@
-import { InputField, InputLabel } from "src/lib";
+import { InputField } from "./../input-field/input-field";
+import { InputLabel } from "../input-label/input-label";
 
 type InputProps = {
   id: string;
