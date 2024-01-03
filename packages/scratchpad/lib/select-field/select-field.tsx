@@ -15,7 +15,8 @@ export function SelectField(props: SelectFieldProps) {
       name={props.id}
       data-testid={props.id}
       value={props.value}
-      className="h-full rounded-md border-0 bg-transparent
+      className="form-select h-full rounded-md
+        border-0 bg-transparent
         py-0 pl-2 pr-8 text-gray-600
         focus:ring-1 focus:ring-inset
       focus:ring-sky-300 dark:text-gray-300"
