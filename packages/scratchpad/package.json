@@ -10,7 +10,9 @@
     "build": "tsc --project ./tsconfig.lib.json && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "peerDependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
@@ -23,6 +25,15 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@storybook/addon-essentials": "^7.6.7",
+    "@storybook/addon-interactions": "^7.6.7",
+    "@storybook/addon-links": "^7.6.7",
+    "@storybook/addon-onboarding": "^1.0.10",
+    "@storybook/addon-themes": "^7.6.7",
+    "@storybook/blocks": "^7.6.7",
+    "@storybook/react": "^7.6.7",
+    "@storybook/react-vite": "^7.6.7",
+    "@storybook/test": "^7.6.7",
     "@tailwindcss/forms": "^0.5.7",
     "@testing-library/jest-dom": "^6.1.6",
     "@testing-library/react": "^14.1.2",
@@ -37,16 +48,19 @@
     "eslint": "^8.55.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
+    "eslint-plugin-storybook": "^0.6.15",
     "jsdom": "^23.0.1",
     "postcss": "^8.4.32",
     "prettier": "^3.1.1",
     "prettier-plugin-tailwindcss": "^0.5.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "storybook": "^7.6.7",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
     "vite-plugin-dts": "^3.7.0",
     "vitest": "^1.1.1"
-  }
+  },
+  "packageManager": "yarn@4.0.2"
 }
