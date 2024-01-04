@@ -1,30 +1,48 @@
 import { useState } from "react";
-import { Input, Footer, Checkbox } from "lib";
+import { Button, Card, Input, Footer, Checkbox } from "lib";
 
 function App() {
-  const [count, setCount] = useState("count");
-  const [isGandoo, setIsGandoo] = useState(true);
+  const [name, setName] = useState("name");
+  const [isChecked, setIsChecked] = useState(true);
 
   return (
-    <>
+    <Card>
       <Input
         id="test-id"
         type="text"
         label="test-label"
-        value={count}
-        onChange={setCount}
+        value={name}
+        onChange={setName}
       />
       <Checkbox
         id="test-checkbox"
         label="its a checkbox"
-        value={isGandoo}
-        onChange={setIsGandoo}
+        value={isChecked}
+        onChange={setIsChecked}
+      />
+      <Button
+        type="button"
+        style="primary"
+        id="test-button"
+        text="its a button"
+        onClick={() => {
+          console.log("clicked");
+        }}
+      />
+      <Button
+        type="button"
+        style="secondary"
+        id="test-button2"
+        text="its a button"
+        onClick={() => {
+          console.log("clicked");
+        }}
       />
       <Footer
         label="Julius Polar@GitHub"
         link="https://github.com/JulianElda/scratchpad"
       />
-    </>
+    </Card>
   );
 }
 
