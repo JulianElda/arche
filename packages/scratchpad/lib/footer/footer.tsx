@@ -1,42 +1,22 @@
 import { faLightbulb, faMoon } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
 import { Hyperlink } from "./../hyperlink/hyperlink";
 
-type FooterProps = {
+export function Footer(props: {
   label: string;
   link: string;
-};
-
-export function Footer(props: FooterProps) {
-  if (localStorage["theme"] === "dark")
-    document.documentElement.classList.add("dark");
-
-  const [isDarkTheme, setDarkTheme] = useState(
-    localStorage["theme"] === "dark"
-  );
-
-  const changeTheme = () => {
-    if (localStorage["theme"] !== "dark") {
-      localStorage["theme"] = "dark";
-      document.documentElement.classList.add("dark");
-      setDarkTheme(true);
-    } else {
-      localStorage.removeItem("theme");
-      document.documentElement.classList.remove("dark");
-      setDarkTheme(false);
-    }
-  };
-
+  darkTheme: boolean;
+  toggleDarkTheme: () => void;
+}) {
   const getFooterContent = () => {
-    if (isDarkTheme) {
+    if (props.darkTheme) {
       return (
         <div className="block h-6 w-6 cursor-pointer rounded-md border border-gray-100 bg-white text-gray-900">
           <FontAwesomeIcon
             icon={faLightbulb}
             aria-hidden={true}
             fixedWidth={true}
-            onClick={changeTheme}
+            onClick={() => props.toggleDarkTheme()}
           />
         </div>
       );
@@ -47,7 +27,7 @@ export function Footer(props: FooterProps) {
             icon={faMoon}
             aria-hidden={true}
             fixedWidth={true}
-            onClick={changeTheme}
+            onClick={() => props.toggleDarkTheme()}
           />
         </div>
       );
@@ -59,8 +39,8 @@ export function Footer(props: FooterProps) {
         {getFooterContent()}
         <div className="flex-1 text-end">
           <Hyperlink
-            text={props.label}
-            link={props.link}
+            title={props.label}
+            href={props.link}
           />
         </div>
       </div>

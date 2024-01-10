@@ -22,7 +22,8 @@
     "baseUrl": ".",
     "paths": {
       "lib": ["./lib"]
-    }
+    },
+    "types": ["vitest/globals"]
   },
   "include": ["src", "lib"],
   "references": [{ "path": "./tsconfig.node.json" }]

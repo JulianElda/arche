@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { expect, test } from "vitest";
 import { Footer } from "./footer";
 
 test("renders footer elements", () => {
@@ -7,6 +6,8 @@ test("renders footer elements", () => {
     <Footer
       label="Julius Polar@GitHub"
       link="https://github.com/JulianElda/scratchpad"
+      darkTheme={true}
+      toggleDarkTheme={vi.fn()}
     />
   );
   expect(screen.getByText(/Julius Polar/)).toBeInTheDocument();

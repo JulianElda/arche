@@ -1,11 +1,18 @@
-export function Hyperlink({ link, text }: { link: string; text: string }) {
+type HyperlinkProps = {
+  href: string;
+  title: string;
+  asterisk?: boolean;
+};
+
+export function Hyperlink(props: HyperlinkProps) {
   return (
     <a
-      href={link}
+      href={props.href}
       target="_blank"
       rel="noreferrer"
       className="text-sky-950 decoration-dotted hover:text-sky-800 hover:underline dark:text-sky-100">
-      {text}*
+      {props.title}
+      {props.asterisk === false ? "" : "*"}
     </a>
   );
 }

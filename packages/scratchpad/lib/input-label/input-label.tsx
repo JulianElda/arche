@@ -1,7 +1,7 @@
 type InputLabelProps = {
   id: string;
   label: string;
-  hideLabel: boolean;
+  hideLabel?: boolean;
 };
 
 export function InputLabel(props: InputLabelProps) {

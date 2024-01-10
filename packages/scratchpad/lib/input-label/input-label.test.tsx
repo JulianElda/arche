@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { expect, test } from "vitest";
 import { InputLabel } from "./input-label";
 
 test("renders input label element", () => {

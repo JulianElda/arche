@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { expect, test, vi } from "vitest";
 import { Input } from "./input";
 
 test("renders input form", async () => {

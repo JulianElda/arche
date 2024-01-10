@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Button, Card, Input, Footer, Checkbox } from "lib";
+import { Button, Card, Input, Footer, Checkbox, useDarkMode } from "lib";
 
 function App() {
   const [name, setName] = useState("name");
   const [isChecked, setIsChecked] = useState(true);
+  const { isDarkTheme, toggleDarkTheme } = useDarkMode();
 
   return (
     <Card>
@@ -41,6 +42,8 @@ function App() {
       <Footer
         label="Julius Polar@GitHub"
         link="https://github.com/JulianElda/scratchpad"
+        darkTheme={isDarkTheme}
+        toggleDarkTheme={toggleDarkTheme}
       />
     </Card>
   );

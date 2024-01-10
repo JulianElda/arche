@@ -11,6 +11,8 @@ import { Input } from "./input/input";
 import { InputLabel } from "./input-label/input-label";
 import { SelectField } from "./select-field/select-field";
 
+import { useDarkMode } from "./commons/dark-mode-toggle";
+
 export {
   Button,
   Card,
@@ -21,4 +23,5 @@ export {
   InputField,
   InputLabel,
   SelectField,
+  useDarkMode,
 };

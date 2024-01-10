@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import { expect, test, vi } from "vitest";
 import { SelectField } from "./select-field";
 
 test("renders select element", () => {
