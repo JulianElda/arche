@@ -1,13 +1,45 @@
 import { useState } from "react";
-import { Button, Card, Input, Footer, Checkbox, useDarkMode } from "lib";
+import {
+  Button,
+  Card,
+  Input,
+  Footer,
+  Checkbox,
+  InputSelect,
+  useDarkMode,
+} from "lib";
 
 function App() {
   const [name, setName] = useState("name");
   const [isChecked, setIsChecked] = useState(true);
+  const [selectedOption, setSelectedOption] = useState("one");
+  const options = [
+    {
+      label: "One",
+      value: "one",
+    },
+    {
+      label: "Two",
+      value: "two",
+    },
+  ];
+
   const { isDarkTheme, toggleDarkTheme } = useDarkMode();
 
   return (
     <Card>
+      <InputSelect
+        type="text"
+        inputId="test-inputselect-input"
+        selectId="test-inputselect-select"
+        inputLabel="Input select"
+        selectLabel="Input select options"
+        inputValue={name}
+        onInputChange={setName}
+        selectValue={selectedOption}
+        onSelectChange={setSelectedOption}
+        options={options}
+      />
       <Input
         id="test-id"
         type="text"

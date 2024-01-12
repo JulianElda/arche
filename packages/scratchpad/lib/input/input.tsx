@@ -1,5 +1,5 @@
 import { InputField } from "./../input-field/input-field";
-import { InputLabel } from "../input-label/input-label";
+import { InputLabel } from "./../input-label/input-label";
 
 type InputProps = {
   id: string;
