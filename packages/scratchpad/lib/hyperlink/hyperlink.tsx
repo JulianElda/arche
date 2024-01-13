@@ -1,8 +1,4 @@
-type HyperlinkProps = {
-  href: string;
-  title: string;
-  asterisk?: boolean;
-};
+import { HyperlinkProps } from "./hyperlink.types";
 
 export function Hyperlink(props: HyperlinkProps) {
   return (

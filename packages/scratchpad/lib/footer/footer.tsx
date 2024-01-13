@@ -6,6 +6,7 @@ export function Footer(props: FooterProps) {
     if (props.darkTheme) {
       return (
         <div
+          data-testid="footer-toggle-light"
           className="block h-6 w-6 cursor-pointer rounded-md
             border border-gray-100 bg-white
             p-1 text-gray-900"
@@ -28,6 +29,7 @@ export function Footer(props: FooterProps) {
     } else
       return (
         <div
+          data-testid="footer-toggle-dark"
           className="block h-6 w-6 cursor-pointer rounded-md
             border border-gray-700 bg-slate-700
             p-1 text-white"

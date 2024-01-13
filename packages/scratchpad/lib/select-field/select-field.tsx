@@ -1,13 +1,4 @@
-type SelectFieldProps = {
-  id: string;
-  value: string;
-  options: {
-    value: string;
-    label: string;
-  }[];
-  inInputField?: boolean;
-  onChange: (value: string) => void;
-};
+import { SelectFieldProps } from "./select-field.types";
 
 export function SelectField(props: SelectFieldProps) {
   let baseClass = `

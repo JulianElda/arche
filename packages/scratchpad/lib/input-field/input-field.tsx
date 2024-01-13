@@ -1,11 +1,4 @@
-type InputFieldProps = {
-  id: string;
-  type: "text" | "number" | "search";
-  value: string | number;
-  autofocus?: boolean;
-  onChange: (value: string) => void;
-  onKeyDown?: (key: string) => void;
-};
+import { InputFieldProps } from "./input-field.types";
 
 export function InputField(props: InputFieldProps) {
   return (
@@ -16,7 +9,7 @@ export function InputField(props: InputFieldProps) {
       data-testid={props.id}
       value={props.value}
       autoFocus={!!props.autofocus}
-      onChange={(event) => props.onChange(event.target.value)}
+      onChange={(event) => props.onChange?.(event.target.value)}
       onKeyDown={(event) => props.onKeyDown?.(event.key)}
       className="form-input block w-full
         rounded-md border-0 bg-white p-2 px-3 text-gray-900

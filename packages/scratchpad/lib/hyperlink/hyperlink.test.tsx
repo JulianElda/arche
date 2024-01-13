@@ -1,38 +1,38 @@
 import { render, screen } from "@testing-library/react";
 import { Hyperlink } from "./hyperlink";
+import {
+  hyperlinkPropsDefault,
+  hyperlinkPropsAsterisk,
+  hyperlinkPropsNoAsterisk,
+} from "./hyperlink.mocks";
 
-describe("hyperlink", () => {
-  test("renders hyperlink element", () => {
-    render(
-      <Hyperlink
-        href="https://julianelda.github.io"
-        title="GitHub"
-      />
-    );
+describe("Hyperlink", () => {
+  test("shows asterisks by default", () => {
+    render(<Hyperlink {...hyperlinkPropsDefault} />);
     expect(screen.getByText(/GitHub/)).toHaveAttribute(
       "href",
-      "https://julianelda.github.io"
+      hyperlinkPropsDefault.href
     );
+    expect(
+      screen.getByText(hyperlinkPropsDefault.title + "*")
+    ).toBeInTheDocument();
   });
 
-  test("shows asterisks by default", () => {
-    render(
-      <Hyperlink
-        href="https://julianelda.github.io"
-        title="GitHub"
-      />
+  test("shows asterisks", () => {
+    render(<Hyperlink {...hyperlinkPropsAsterisk} />);
+    expect(screen.getByText(/GitHub/)).toHaveAttribute(
+      "href",
+      hyperlinkPropsAsterisk.href
     );
-    expect(screen.getByText("GitHub*")).toBeInTheDocument();
+    expect(
+      screen.getByText(hyperlinkPropsAsterisk.title + "*")
+    ).toBeInTheDocument();
   });
 
   test("shows no asterisks", () => {
-    render(
-      <Hyperlink
-        href="https://julianelda.github.io"
-        title="GitHub"
-        asterisk={false}
-      />
-    );
-    expect(screen.getByText("GitHub")).toBeInTheDocument();
+    render(<Hyperlink {...hyperlinkPropsNoAsterisk} />);
+    expect(
+      screen.getByText(hyperlinkPropsNoAsterisk.title)
+    ).toBeInTheDocument();
   });
 });

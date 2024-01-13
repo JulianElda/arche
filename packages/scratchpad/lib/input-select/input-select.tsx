@@ -1,23 +1,7 @@
 import { InputField } from "./../input-field/input-field";
 import { InputLabel } from "./../input-label/input-label";
 import { SelectField } from "./../select-field/select-field";
-
-type InputSelectProps = {
-  type: "text" | "number" | "search";
-  inputId: string;
-  selectId: string;
-  hideLabel?: boolean;
-  inputLabel: string;
-  selectLabel: string;
-  inputValue: string | number;
-  selectValue: string;
-  options: {
-    value: string;
-    label: string;
-  }[];
-  onInputChange?: (value: string) => void;
-  onSelectChange?: (value: string) => void;
-};
+import { InputSelectProps } from "./input-select.types";
 
 export function InputSelect(props: InputSelectProps) {
   return (
@@ -32,7 +16,9 @@ export function InputSelect(props: InputSelectProps) {
           id={props.inputId}
           type={props.type}
           value={props.inputValue}
+          autofocus={props.autofocus}
           onChange={(value) => props.onInputChange?.(value)}
+          onKeyDown={(value) => props.onInputKeydown?.(value)}
         />
         <div className="absolute inset-y-0 right-0 flex items-center">
           <InputLabel

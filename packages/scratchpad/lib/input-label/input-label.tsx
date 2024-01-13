@@ -1,8 +1,4 @@
-type InputLabelProps = {
-  id: string;
-  label: string;
-  hideLabel?: boolean;
-};
+import { InputLabelProps } from "./input-label.types";
 
 export function InputLabel(props: InputLabelProps) {
   return (

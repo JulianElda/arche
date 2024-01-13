@@ -1,14 +1,6 @@
 import { InputField } from "./../input-field/input-field";
 import { InputLabel } from "./../input-label/input-label";
-
-type InputProps = {
-  id: string;
-  type: "text" | "number" | "search";
-  label: string;
-  value: string | number;
-  hideLabel?: boolean;
-  onChange?: (value: string) => void;
-};
+import { InputProps } from "./input.types";
 
 export function Input(props: InputProps) {
   return (
@@ -23,7 +15,9 @@ export function Input(props: InputProps) {
           id={props.id}
           type={props.type}
           value={props.value}
+          autofocus={props.autofocus}
           onChange={(value) => props.onChange?.(value)}
+          onKeyDown={(value) => props.onKeyDown?.(value)}
         />
       </div>
     </div>

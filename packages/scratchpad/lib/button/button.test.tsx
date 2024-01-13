@@ -3,18 +3,24 @@ import userEvent from "@testing-library/user-event";
 import { Button } from "./button";
 import { buttonPropsPrimary } from "./button.mocks";
 
-test("renders button and trigger callback", async () => {
-  const onClickMock = vi.fn();
-  const testProps = {
-    ...buttonPropsPrimary,
-    onClick: onClickMock,
-  };
-  const user = userEvent.setup();
+describe("Button", () => {
+  test("renders Button elements", async () => {
+    render(<Button {...buttonPropsPrimary} />);
+    expect(screen.getByLabelText(buttonPropsPrimary.text)).toBeInTheDocument();
+    expect(screen.getByTestId(buttonPropsPrimary.id)).toBeInTheDocument();
+  });
 
-  render(<Button {...testProps} />);
-  expect(screen.getByLabelText(testProps.text)).toBeInTheDocument();
-  expect(screen.getByTestId(testProps.id)).toBeInTheDocument();
+  test("callbacks function when clicked", async () => {
+    const onClickMock = vi.fn();
+    const testProps: typeof buttonPropsPrimary = {
+      ...buttonPropsPrimary,
+      onClick: onClickMock,
+    };
+    const user = userEvent.setup();
 
-  await user.click(screen.getByTestId(testProps.id));
-  expect(onClickMock).toHaveBeenCalled();
+    render(<Button {...testProps} />);
+
+    await user.click(screen.getByTestId(testProps.id));
+    expect(onClickMock).toHaveBeenCalled();
+  });
 });

@@ -1,17 +1,6 @@
 import { InputLabel } from "./../input-label/input-label";
 import { SelectField } from "./../select-field/select-field";
-
-type SelectProps = {
-  id: string;
-  label: string;
-  hideLabel?: boolean;
-  value: string;
-  options: {
-    value: string;
-    label: string;
-  }[];
-  onChange: (value: string) => void;
-};
+import { SelectProps } from "./select.types";
 
 export function Select(props: SelectProps) {
   return (

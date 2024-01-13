@@ -1,11 +1,11 @@
+import { InputFieldTypes } from "./../commons/commons.types";
 import {
   selectFieldOptions1,
   selectFieldOptions2,
 } from "./../select-field/select-field.mocks";
+import { InputSelectProps } from "./input-select.types";
 
-type InputFieldTypes = "text" | "number" | "search";
-
-export const inputSelectProps1 = {
+export const inputSelectProps1: InputSelectProps = {
   type: "text" as InputFieldTypes,
   inputId: "input-id-1",
   selectId: "select-id-1",
@@ -16,7 +16,7 @@ export const inputSelectProps1 = {
   options: [...selectFieldOptions1],
 };
 
-export const inputSelectProps2 = {
+export const inputSelectProps2: InputSelectProps = {
   type: "text" as InputFieldTypes,
   inputId: "input-id-2",
   selectId: "select-id-2",

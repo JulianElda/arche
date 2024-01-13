@@ -10,6 +10,7 @@ import { InputField } from "./input-field/input-field";
 import { InputLabel } from "./input-label/input-label";
 import { InputSelect } from "./input-select/input-select";
 import { Input } from "./input/input";
+import { Select } from "./select/select";
 import { SelectField } from "./select-field/select-field";
 
 import { useDarkMode } from "./commons/dark-mode-toggle";
@@ -20,10 +21,11 @@ export {
   Checkbox,
   Footer,
   Hyperlink,
-  InputLabel,
-  InputField,
-  InputSelect,
   Input,
+  InputField,
+  InputLabel,
+  InputSelect,
+  Select,
   SelectField,
   useDarkMode,
 };

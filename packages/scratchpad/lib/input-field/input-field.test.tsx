@@ -1,14 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import { InputField } from "./input-field";
+import { inputFieldProps1 } from "./input-field.mocks";
 
-test("renders input field", () => {
-  render(
-    <InputField
-      id="input-id"
-      type="text"
-      value={"value"}
-      onChange={vi.fn()}
-    />
-  );
-  expect(screen.getByTestId("input-id")).toBeInTheDocument();
+describe("InputField", () => {
+  test("renders InputField elements", () => {
+    render(<InputField {...inputFieldProps1} />);
+    expect(screen.getByTestId(inputFieldProps1.id)).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue(inputFieldProps1.value)
+    ).toBeInTheDocument();
+  });
 });

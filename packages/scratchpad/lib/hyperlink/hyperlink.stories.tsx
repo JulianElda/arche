@@ -1,5 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Hyperlink } from "./hyperlink";
+import {
+  hyperlinkPropsAsterisk,
+  hyperlinkPropsNoAsterisk,
+} from "./hyperlink.mocks";
 
 const meta = {
   title: "Hyperlink",
@@ -19,16 +23,13 @@ type Story = StoryObj<typeof meta>;
 export const HyperlinkWithAsterisk: Story = {
   name: "Hyperlink",
   args: {
-    href: "https://julianelda.github.io",
-    title: "Julius Polar@GitHub",
+    ...hyperlinkPropsAsterisk,
   },
 };
 
 export const HyperlinkWithoutAsterisk: Story = {
   name: "Hyperlink without asterisk",
   args: {
-    href: "https://julianelda.github.io",
-    title: "Julius Polar@GitHub",
-    asterisk: false,
+    ...hyperlinkPropsNoAsterisk,
   },
 };
