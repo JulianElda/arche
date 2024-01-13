@@ -1,11 +1,7 @@
 import { Hyperlink } from "./../hyperlink/hyperlink";
+import { FooterProps } from "./footer.types";
 
-export function Footer(props: {
-  label: string;
-  link: string;
-  darkTheme: boolean;
-  toggleDarkTheme: () => void;
-}) {
+export function Footer(props: FooterProps) {
   const getFooterContent = () => {
     if (props.darkTheme) {
       return (

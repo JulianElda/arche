@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Checkbox } from "./checkbox";
+import { checkboxProps } from "./checkbox.mocks";
 
 const meta = {
   title: "Checkbox",
@@ -19,17 +20,14 @@ type Story = StoryObj<typeof meta>;
 export const CheckboxChecked: Story = {
   name: "Checkbox checked",
   args: {
-    id: "checkbox-id",
-    label: "Checkbox label",
-    value: true,
+    ...checkboxProps,
   },
 };
 
 export const CheckboxUnchecked: Story = {
   name: "Checkbox unchecked",
   args: {
-    id: "checkbox-id",
-    label: "Checkbox label",
+    ...checkboxProps,
     value: false,
   },
 };
@@ -37,9 +35,7 @@ export const CheckboxUnchecked: Story = {
 export const CheckboxNoLabel: Story = {
   name: "Checkbox without label",
   args: {
-    id: "checkbox-id",
-    label: "Checkbox label",
-    value: true,
+    ...checkboxProps,
     hideLabel: true,
   },
 };

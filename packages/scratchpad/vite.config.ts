@@ -11,6 +11,7 @@ export default defineConfig({
     dts({
       include: ["lib"],
       exclude: [
+        "lib/**/*.mocks.tsx",
         "lib/**/*.stories.tsx",
         "lib/**/*.test.tsx",
         "lib/test-setup.ts",

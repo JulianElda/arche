@@ -1,10 +1,4 @@
-type ButtonProps = {
-  type: "button" | "submit";
-  style: "primary" | "secondary";
-  id: string;
-  text: string;
-  onClick: () => void;
-};
+import { ButtonProps } from "./button.types";
 
 export function Button(props: ButtonProps) {
   let buttonStyle = `
@@ -35,7 +29,7 @@ export function Button(props: ButtonProps) {
 
   return (
     <button
-      type="button"
+      type={props.type || "button"}
       id={props.id}
       data-testid={props.id}
       aria-label={props.text}

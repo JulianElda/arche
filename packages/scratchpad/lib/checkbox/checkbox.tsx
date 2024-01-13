@@ -1,12 +1,5 @@
 import { InputLabel } from "../input-label/input-label";
-
-type CheckboxProps = {
-  id: string;
-  label: string;
-  value: boolean;
-  hideLabel?: boolean;
-  onChange?: (value: boolean) => void;
-};
+import { CheckboxProps } from "./checkbox.types";
 
 export function Checkbox(props: CheckboxProps) {
   return (
