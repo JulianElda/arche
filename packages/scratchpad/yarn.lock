@@ -2137,6 +2137,7 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": "npm:^6.5.1"
     "@fortawesome/free-regular-svg-icons": "npm:^6.5.1"
     "@fortawesome/react-fontawesome": "npm:^0.2.0"
+    "@storybook/addon-a11y": "npm:^7.6.8"
     "@storybook/addon-essentials": "npm:^7.6.7"
     "@storybook/addon-interactions": "npm:^7.6.7"
     "@storybook/addon-links": "npm:^7.6.7"
@@ -2163,7 +2164,6 @@ __metadata:
     eslint-plugin-react-refresh: "npm:^0.4.5"
     eslint-plugin-storybook: "npm:^0.6.15"
     jsdom: "npm:^23.0.1"
-    next-themes: "npm:^0.2.1"
     postcss: "npm:^8.4.32"
     prettier: "npm:^3.1.1"
     prettier-plugin-tailwindcss: "npm:^0.5.10"
@@ -2176,9 +2176,6 @@ __metadata:
     vite-plugin-dts: "npm:^3.7.0"
     vitest: "npm:^1.1.1"
   peerDependencies:
-    "@fortawesome/fontawesome-svg-core": ^6.5.1
-    "@fortawesome/free-regular-svg-icons": ^6.5.1
-    "@fortawesome/react-fontawesome": ^0.2.0
     react: ^18.2.0
     react-dom: ^18.2.0
   languageName: unknown
@@ -3039,6 +3036,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@storybook/addon-a11y@npm:^7.6.8":
+  version: 7.6.8
+  resolution: "@storybook/addon-a11y@npm:7.6.8"
+  dependencies:
+    "@storybook/addon-highlight": "npm:7.6.8"
+    axe-core: "npm:^4.2.0"
+  checksum: 351d9e94df345579cc41c6b03966e66e2a02c4593f56c6e53800f075f5574393a535a40730eb65b3399060d09074905440b1be84bbc51b2a3882da128cd928fd
+  languageName: node
+  linkType: hard
+
 "@storybook/addon-actions@npm:7.6.7":
   version: 7.6.7
   resolution: "@storybook/addon-actions@npm:7.6.7"
@@ -3136,6 +3143,15 @@ __metadata:
   dependencies:
     "@storybook/global": "npm:^5.0.0"
   checksum: efe8b7ff074db5b67705af9a033069e26b730425f112b5c748086f0a526352ee721c087a41324a90049b9800c2b9c47f9cab85b33ecb7aae58b3eb7d54e7e1b6
+  languageName: node
+  linkType: hard
+
+"@storybook/addon-highlight@npm:7.6.8":
+  version: 7.6.8
+  resolution: "@storybook/addon-highlight@npm:7.6.8"
+  dependencies:
+    "@storybook/global": "npm:^5.0.0"
+  checksum: 896907dfaf2dbceb0e114e0b188f097b99557b334989f29beb7447d2e790b63d05bef91f6e5b0fa18bdb7e87174509bd01c48074e67051110f4dc6e56d1adf52
   languageName: node
   linkType: hard
 
@@ -5111,6 +5127,13 @@ __metadata:
   version: 1.0.5
   resolution: "available-typed-arrays@npm:1.0.5"
   checksum: c4df567ca72d2754a6cbad20088f5f98b1065b3360178169fa9b44ea101af62c0f423fc3854fa820fd6895b6b9171b8386e71558203103ff8fc2ad503fdcc660
+  languageName: node
+  linkType: hard
+
+"axe-core@npm:^4.2.0":
+  version: 4.8.3
+  resolution: "axe-core@npm:4.8.3"
+  checksum: 762392d03e49b5613e0d58c19bfe0bb0df253a56d6296b07d6d968729acef4ad25822e560f067c563368ac52a62c48cb341e6940b58252ca573334cd74cf8622
   languageName: node
   linkType: hard
 
@@ -8938,17 +8961,6 @@ __metadata:
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: c2f5a604a54a8ec5438a342e1f356dff4bc33ccccdb6dc668d94fe8e5eccfc9d2c2eea6064b0967a767ba63b33763f51ccf2cd2441b461a7322656c1f06b3f5d
-  languageName: node
-  linkType: hard
-
-"next-themes@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "next-themes@npm:0.2.1"
-  peerDependencies:
-    next: "*"
-    react: "*"
-    react-dom: "*"
-  checksum: 979dec0a2de049ce7d1b5da835e7f7dc3b7ec83ba9e464348f497a52a6a6e5b5c395c97f071f66a63f50f22cce89fb6d19061ec7e75643b0eab215b21794bde7
   languageName: node
   linkType: hard
 

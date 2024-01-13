@@ -21,7 +21,7 @@ type InputSelectProps = {
 
 export function InputSelect(props: InputSelectProps) {
   return (
-    <div>
+    <div className="flex-1">
       <InputLabel
         id={props.inputId}
         label={props.inputLabel}

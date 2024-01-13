@@ -27,7 +27,7 @@ export function Button(props: ButtonProps) {
       buttonStyle += `
         border border-gray-300 bg-white
         text-gray-900 hover:bg-sky-500
-        hover:text-white dark:bg-slate-700
+        hover:text-white hover:border-sky-500 dark:bg-slate-700
         dark:text-gray-50 dark:hover:bg-sky-500
       `;
       break;

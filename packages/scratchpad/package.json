@@ -1,6 +1,6 @@
 {
   "name": "@julianelda/scratchpad",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "module": "./dist/scratchpad.js",
   "types": "./dist/index.d.ts",
@@ -12,7 +12,7 @@
       "import": "./dist/scratchpad.js",
       "types": "./dist/index.d.ts"
     },
-    "./styles.css": {
+    "./style.css": {
       "import": "./dist/style.css",
       "require": "./dist/style.css"
     }
@@ -27,9 +27,6 @@
     "build-storybook": "storybook build"
   },
   "peerDependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.5.1",
-    "@fortawesome/free-regular-svg-icons": "^6.5.1",
-    "@fortawesome/react-fontawesome": "^0.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -37,6 +34,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
     "@fortawesome/free-regular-svg-icons": "^6.5.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@storybook/addon-a11y": "^7.6.8",
     "@storybook/addon-essentials": "^7.6.7",
     "@storybook/addon-interactions": "^7.6.7",
     "@storybook/addon-links": "^7.6.7",

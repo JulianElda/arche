@@ -36,13 +36,7 @@ export default defineConfig({
       formats: ["es"],
     },
     rollupOptions: {
-      external: [
-        "react",
-        "react-dom",
-        "@fortawesome/fontawesome-svg-core",
-        "@fortawesome/free-regular-svg-icons",
-        "@fortawesome/react-fontawesome",
-      ],
+      external: ["react", "react-dom"],
     },
   },
 });

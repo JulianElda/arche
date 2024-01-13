@@ -1,16 +1,19 @@
-import { InputField } from "./../input-field/input-field";
 import { InputLabel } from "./../input-label/input-label";
+import { SelectField } from "./../select-field/select-field";
 
-type InputProps = {
+type SelectProps = {
   id: string;
-  type: "text" | "number" | "search";
   label: string;
-  value: string | number;
   hideLabel?: boolean;
-  onChange?: (value: string) => void;
+  value: string;
+  options: {
+    value: string;
+    label: string;
+  }[];
+  onChange: (value: string) => void;
 };
 
-export function Input(props: InputProps) {
+export function Select(props: SelectProps) {
   return (
     <div className="flex-1">
       <InputLabel
@@ -19,11 +22,11 @@ export function Input(props: InputProps) {
         hideLabel={!!props.hideLabel}
       />
       <div className="mt-1">
-        <InputField
+        <SelectField
           id={props.id}
-          type={props.type}
           value={props.value}
-          onChange={(value) => props.onChange?.(value)}
+          options={props.options}
+          onChange={props.onChange}
         />
       </div>
     </div>
