@@ -41,6 +41,7 @@ export function InputSelect(props: InputSelectProps) {
             hideLabel={true}
           />
           <SelectField
+            inInputField={true}
             id={props.selectId}
             value={props.selectValue}
             options={props.options}

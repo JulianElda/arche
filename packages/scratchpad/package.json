@@ -31,10 +31,8 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.5.1",
-    "@fortawesome/free-regular-svg-icons": "^6.5.1",
-    "@fortawesome/react-fontawesome": "^0.2.0",
     "@storybook/addon-a11y": "^7.6.8",
+    "@storybook/addon-actions": "^7.6.8",
     "@storybook/addon-essentials": "^7.6.7",
     "@storybook/addon-interactions": "^7.6.7",
     "@storybook/addon-links": "^7.6.7",

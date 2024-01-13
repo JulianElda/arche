@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { InputSelect } from "./input-select";
+import { inputSelectProps1, inputSelectProps2 } from "./input-select.mocks";
 
 const meta = {
   title: "InputSelect",
@@ -16,57 +17,24 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const InputWithSelect: Story = {
+export const InputWithSelect1: Story = {
   name: "Input with select",
   args: {
-    type: "text",
-    inputId: "input-id",
-    inputLabel: "Input with select",
-    inputValue: "Input value",
-    selectId: "select-id",
-    selectLabel: "Select label",
-    selectValue: "two",
-    options: [
-      {
-        label: "One",
-        value: "one",
-      },
-      {
-        label: "Two",
-        value: "two",
-      },
-      {
-        label: "Three",
-        value: "three",
-      },
-    ],
+    ...inputSelectProps1,
+  },
+};
+
+export const InputWithSelect2: Story = {
+  name: "Input with shorter select",
+  args: {
+    ...inputSelectProps2,
   },
 };
 
 export const InputSelectHiddenLabel: Story = {
   name: "Input select hidden label",
   args: {
-    type: "text",
-    inputId: "input-id",
-    inputLabel: "Input with select",
-    inputValue: "Input value",
+    ...inputSelectProps1,
     hideLabel: true,
-    selectId: "select-id",
-    selectLabel: "Select label",
-    selectValue: "one",
-    options: [
-      {
-        label: "One",
-        value: "one",
-      },
-      {
-        label: "Two",
-        value: "two",
-      },
-      {
-        label: "Three",
-        value: "three",
-      },
-    ],
   },
 };

@@ -23,7 +23,6 @@ export const ButtonPrimary: Story = {
     style: "primary",
     type: "button",
     text: "Primary button",
-    onClick: () => undefined,
   },
 };
 
