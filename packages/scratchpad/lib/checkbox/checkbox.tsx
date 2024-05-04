@@ -21,7 +21,7 @@ export function Checkbox(props: CheckboxProps) {
           dark:ring-gray-600"
         />
       </div>
-      <div className="ml-1 text-sm leading-6">
+      <div className="ml-1 leading-6">
         <InputLabel
           id={props.id}
           label={props.label}
