@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Input } from "./input";
+import { inputProps1, inputProps2, inputProps3 } from "./input.mocks";
 
 const meta = {
   title: "Input",
@@ -19,10 +20,7 @@ type Story = StoryObj<typeof meta>;
 export const InputText: Story = {
   name: "Input type text",
   args: {
-    id: "input-id",
-    label: "Input label",
-    type: "text",
-    value: "Input value",
+    ...inputProps1,
     hideLabel: false,
   },
 };
@@ -30,10 +28,7 @@ export const InputText: Story = {
 export const InputAutofocus: Story = {
   name: "Input with autofocus",
   args: {
-    id: "input-id",
-    label: "Input label",
-    type: "text",
-    value: "Input value",
+    ...inputProps1,
     hideLabel: false,
     autofocus: true,
   },
@@ -42,10 +37,7 @@ export const InputAutofocus: Story = {
 export const InputNumber: Story = {
   name: "Input type number",
   args: {
-    id: "input-id",
-    label: "Input number",
-    type: "number",
-    value: 12345,
+    ...inputProps2,
     hideLabel: false,
   },
 };
@@ -53,10 +45,7 @@ export const InputNumber: Story = {
 export const InputSearch: Story = {
   name: "Input type search",
   args: {
-    id: "input-id",
-    label: "Input search",
-    type: "search",
-    value: "Input search",
+    ...inputProps3,
     hideLabel: false,
   },
 };
@@ -64,10 +53,7 @@ export const InputSearch: Story = {
 export const InputHiddenLabel: Story = {
   name: "Input without label",
   args: {
-    id: "input-id",
-    label: "Input label",
-    type: "text",
-    value: "Input value",
+    ...inputProps1,
     hideLabel: true,
   },
 };

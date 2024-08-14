@@ -5,6 +5,7 @@ import {
   Input,
   Footer,
   Checkbox,
+  InputButton,
   InputSelect,
   useDarkMode,
 } from "lib";
@@ -28,6 +29,16 @@ function App() {
 
   return (
     <Card>
+      <InputButton
+        id="input-button"
+        label="Input button"
+        type="text"
+        value={name}
+        onChange={setName}
+        buttonAriaLabel="copy"
+        icon={<span>copy</span>}
+        onButtonClick={() => console.log("input button")}
+      />
       <InputSelect
         type="text"
         inputId="test-inputselect-input"

@@ -1,6 +1,16 @@
 import { InputFieldProps } from "./input-field.types";
+import clsx from "clsx";
 
 export function InputField(props: InputFieldProps) {
+  const roundingClass =
+    props.withIconLeft === true ? "rounded-l-md" : "rounded-md";
+
+  const standardClasses = `form-input block w-full
+        border-0 bg-white p-2 px-3 text-gray-900
+        ring-1 ring-inset ring-gray-300 focus:border-sky-300 focus:ring-1
+        focus:ring-inset focus:ring-sky-300 dark:bg-slate-700
+        dark:text-gray-100 dark:ring-gray-600`;
+
   return (
     <input
       type={props.type}
@@ -11,11 +21,7 @@ export function InputField(props: InputFieldProps) {
       autoFocus={!!props.autofocus}
       onChange={(event) => props.onChange?.(event.target.value)}
       onKeyDown={(event) => props.onKeyDown?.(event.key)}
-      className="form-input block w-full
-        rounded-md border-0 bg-white p-2 px-3 text-gray-900
-        ring-1 ring-inset ring-gray-300 focus:border-sky-300 focus:ring-1
-        focus:ring-inset focus:ring-sky-300 dark:bg-slate-700
-        dark:text-gray-100 dark:ring-gray-600"
+      className={clsx(roundingClass, standardClasses)}
     />
   );
 }

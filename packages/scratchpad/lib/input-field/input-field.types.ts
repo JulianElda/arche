@@ -7,4 +7,5 @@ export type InputFieldProps = {
   autofocus?: boolean;
   onChange?: (value: string) => void;
   onKeyDown?: (key: string) => void;
+  withIconLeft?: boolean;
 };
