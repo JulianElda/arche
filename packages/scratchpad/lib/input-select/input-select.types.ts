@@ -11,7 +11,7 @@ export type InputSelectProps = {
   selectValue: string;
   options: Option[];
   autofocus?: boolean;
-  onInputChange?: (value: string) => void;
-  onInputKeydown?: (key: string) => void;
+  onInputChange?: (value: string | number) => void;
+  onInputKeydown?: (key: string | number) => void;
   onSelectChange?: (value: string) => void;
 };
