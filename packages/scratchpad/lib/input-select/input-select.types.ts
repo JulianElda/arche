@@ -7,7 +7,7 @@ export type InputSelectProps = {
   hideLabel?: boolean;
   inputLabel: string;
   selectLabel: string;
-  inputValue: string;
+  inputValue: string | number;
   selectValue: string;
   options: Option[];
   autofocus?: boolean;
