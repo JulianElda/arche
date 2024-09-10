@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Input } from "./input";
-import { inputProps1 } from "./input.mocks";
+import { inputProps1, inputProps2 } from "./input.mocks";
 
 describe("Input", () => {
   test("renders Input elements", () => {
@@ -23,5 +23,21 @@ describe("Input", () => {
 
     await user.type(screen.getByTestId(props.id), "a");
     expect(onChangeMock).toHaveBeenLastCalledWith(props.value + "a");
+  });
+
+  test("callbacks number value and filters string", async () => {
+    const onChangeMock = vi.fn();
+    const props: typeof inputProps1 = {
+      ...inputProps2,
+      value: 0,
+      onChange: onChangeMock,
+    };
+    const user = userEvent.setup();
+    render(<Input {...props} />);
+
+    await user.type(screen.getByTestId(props.id), "1");
+    expect(onChangeMock).toHaveBeenLastCalledWith(1);
+    await user.type(screen.getByTestId(props.id), "a");
+    expect(onChangeMock).toHaveBeenLastCalledWith(1);
   });
 });

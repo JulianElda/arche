@@ -1,3 +1,4 @@
+import { isValidNumber } from "lib/commons/commons";
 import { InputFieldProps } from "./input-field.types";
 import clsx from "clsx";
 
@@ -11,6 +12,15 @@ export function InputField(props: InputFieldProps) {
         focus:ring-inset focus:ring-sky-300 dark:bg-slate-700
         dark:text-gray-100 dark:ring-gray-600`;
 
+  const onChange = (value: string) => {
+    if (!props.onChange) return;
+
+    if (props.type === "number" && isValidNumber(value))
+      props.onChange?.(parseInt(value));
+    else if (props.type === "text" || props.type === "search")
+      props.onChange(value);
+  };
+
   return (
     <input
       type={props.type}
@@ -19,7 +29,7 @@ export function InputField(props: InputFieldProps) {
       data-testid={props.id}
       value={props.value}
       autoFocus={!!props.autofocus}
-      onChange={(event) => props.onChange?.(event.target.value)}
+      onChange={(event) => onChange(event.target.value)}
       onKeyDown={(event) => props.onKeyDown?.(event.key)}
       className={clsx(roundingClass, standardClasses)}
     />

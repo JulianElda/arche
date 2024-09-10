@@ -12,6 +12,7 @@ import {
 
 function App() {
   const [name, setName] = useState("name");
+  const [phone, setPhone] = useState(123456);
   const [isChecked, setIsChecked] = useState(true);
   const [selectedOption, setSelectedOption] = useState("one");
   const options = [
@@ -27,6 +28,14 @@ function App() {
 
   const { isDarkTheme, toggleDarkTheme } = useDarkMode();
 
+  const onChangeName = (value: string) => {
+    setName(value);
+  };
+
+  const onChangePhone = (value: number) => {
+    setPhone(value);
+  };
+
   return (
     <Card>
       <InputButton
@@ -34,7 +43,7 @@ function App() {
         label="Input button"
         type="text"
         value={name}
-        onChange={setName}
+        onChange={onChangeName as (value: string | number) => void}
         buttonAriaLabel="copy"
         icon={<span>copy</span>}
         onButtonClick={() => console.log("input button")}
@@ -46,17 +55,17 @@ function App() {
         inputLabel="Input select"
         selectLabel="Input select options"
         inputValue={name}
-        onInputChange={setName}
+        onInputChange={setName as (value: string | number) => void}
         selectValue={selectedOption}
         onSelectChange={setSelectedOption}
         options={options}
       />
       <Input
         id="test-id"
-        type="text"
-        label="test-label"
-        value={name}
-        onChange={setName}
+        type="number"
+        label="test-phone"
+        value={phone}
+        onChange={onChangePhone as (value: string | number) => void}
       />
       <Checkbox
         id="test-checkbox"

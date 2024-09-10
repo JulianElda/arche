@@ -10,7 +10,7 @@ export const inputFieldProps1: InputFieldProps = {
 export const inputFieldProps2: InputFieldProps = {
   id: "input-id-2",
   type: "number" as InputFieldTypes,
-  value: "100",
+  value: 100,
 };
 
 export const inputFieldProps3: InputFieldProps = {

@@ -6,6 +6,6 @@ export type InputFieldProps = {
   value: string | number;
   autofocus?: boolean;
   onChange?: (value: string | number) => void;
-  onKeyDown?: (key: string | number) => void;
+  onKeyDown?: (value: string | number) => void;
   withIconLeft?: boolean;
 };
