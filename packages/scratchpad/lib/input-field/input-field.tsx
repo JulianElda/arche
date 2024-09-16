@@ -15,10 +15,17 @@ export function InputField(props: InputFieldProps) {
   const onChange = (value: string) => {
     if (!props.onChange) return;
 
-    if (props.type === "number" && isValidNumber(value))
-      props.onChange?.(parseInt(value));
-    else if (props.type === "text" || props.type === "search")
+    if (props.type === "number") {
+      if (value === "") {
+        props.onChange?.(value);
+      } else if (isValidNumber(value)) {
+        props.onChange?.(parseInt(value));
+      } else {
+        props.onChange?.(0);
+      }
+    } else if (props.type === "text" || props.type === "search") {
       props.onChange(value);
+    }
   };
 
   return (
