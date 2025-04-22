@@ -30,7 +30,7 @@ export function InputField(props: InputFieldProps) {
       onChange={(event) => onChange(event.target.value)}
       onKeyDown={(event) => props.onKeyDown?.(event.key)}
       className={clsx(
-        "form-input block w-full border-1 border-gray-400 bg-white p-2 px-3 text-gray-900 ring-inset focus:border-sky-300 focus:ring-1 focus:ring-sky-300 focus:ring-inset dark:bg-slate-700 dark:text-gray-100",
+        "form-input block w-full appearance-none border-1 border-gray-400 bg-white p-2 px-3 text-gray-900 ring-inset focus:border-sky-300 focus:ring-1 focus:ring-sky-300 focus:ring-inset dark:bg-slate-700 dark:text-gray-100",
         props.withIconLeft === true ? "rounded-l-md" : "rounded-md"
       )}
     />
