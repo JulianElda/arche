@@ -1,9 +1,8 @@
-@import "tailwindcss";
-
 @import "./heliotrope.css";
 
 @theme {
   --font-*: initial;
+  --font-sans: "Heliotrope 3";
   --font-serif: "Heliotrope 3";
   --font-heading: "Heliotrope 4";
 }

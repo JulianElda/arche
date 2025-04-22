@@ -1,17 +1,10 @@
 {
   "name": "@julianelda/stilo",
-  "version": "1.0.0",
-  "type": "module",
-  "style": "./dist/index.css",
+  "version": "1.0.1",
   "files": [
     "fonts",
-    "dist"
+    "src"
   ],
-  "scripts": {
-    "build": "npx @tailwindcss/cli -i ./src/index.css -o ./dist/index.css --minify"
-  },
-  "dependencies": {
-    "@tailwindcss/cli": "^4.1.4",
-    "tailwindcss": "^4.1.4"
-  }
+  "style": "./src/index.css",
+  "type": "module"
 }
