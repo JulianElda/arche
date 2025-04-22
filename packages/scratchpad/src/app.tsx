@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Card, Input, Footer, useDarkMode } from "lib";
+import { Card, Input, Footer } from "lib";
 
 function App() {
-  const { isDarkTheme, toggleDarkTheme } = useDarkMode();
   const [phone, setPhone] = useState(12);
 
   const onChangePhone = (value: number) => {
@@ -21,8 +20,6 @@ function App() {
       <Footer
         label="Julius Polar@GitHub"
         link="https://github.com/JulianElda/scratchpad"
-        darkTheme={isDarkTheme}
-        toggleDarkTheme={toggleDarkTheme}
       />
     </Card>
   );

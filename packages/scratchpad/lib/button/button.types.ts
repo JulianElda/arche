@@ -1,10 +1,6 @@
-export type ButtonTypes = "button" | "submit";
-
-export type ButtonStyles = "primary" | "secondary";
-
 export type ButtonProps = {
-  type: ButtonTypes;
-  style: ButtonStyles;
+  type: "button" | "submit";
+  style: "primary" | "secondary";
   id: string;
   text: string;
   onClick: () => void;

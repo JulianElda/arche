@@ -1,4 +1,4 @@
-import { ButtonProps, ButtonTypes, ButtonStyles } from "./button.types";
+import { ButtonProps } from "./button.types";
 
 export const buttonPropsPrimary: ButtonProps = {
   type: "button",
@@ -9,8 +9,8 @@ export const buttonPropsPrimary: ButtonProps = {
 };
 
 export const buttonPropsSecondary: ButtonProps = {
-  type: "button" as ButtonTypes,
-  style: "secondary" as ButtonStyles,
+  type: "button",
+  style: "secondary",
   id: "secondary-button",
   text: "Secondary button",
   onClick: () => undefined,

@@ -1,5 +1,5 @@
-import { InputField } from "./../input-field/input-field";
-import { InputLabel } from "./../input-label/input-label";
+import { InputField } from "lib/input-field/input-field";
+import { InputLabel } from "lib/input-label/input-label";
 import { InputProps } from "./input.types";
 
 export function Input(props: InputProps) {

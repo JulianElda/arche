@@ -1,9 +1,9 @@
-import { InputProps } from "./input.types";
 import {
   inputFieldProps1,
   inputFieldProps2,
   inputFieldProps3,
 } from "lib/input-field/input-field.mocks";
+import { InputProps } from "./input.types";
 
 export const inputProps1: InputProps = {
   ...inputFieldProps1,

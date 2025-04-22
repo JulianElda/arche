@@ -1,9 +1,8 @@
 import type { Preview } from "@storybook/react";
 import { withThemeByClassName } from "@storybook/addon-themes";
 
-//import "./../lib/assets/styles/styles.css";
-import "./../lib/assets/fonts/heliotrope.css";
 import "./../src/tailwind.css";
+import "@julianelda/stilo";
 
 const preview: Preview = {
   parameters: {
@@ -15,7 +14,6 @@ const preview: Preview = {
     },
   },
   decorators: [
-    // @ts-ignore
     withThemeByClassName({
       themes: {
         light: "",

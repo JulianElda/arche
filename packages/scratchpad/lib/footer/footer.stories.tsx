@@ -17,18 +17,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const FooterLightMode: Story = {
-  name: "Footer light mode",
+export const FooterStandard: Story = {
+  name: "Footer",
   args: {
     ...footerProps,
-    darkTheme: false,
-  },
-};
-
-export const FooterDarkMode: Story = {
-  name: "Footer dark mode",
-  args: {
-    ...footerProps,
-    darkTheme: true,
   },
 };

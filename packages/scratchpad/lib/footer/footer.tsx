@@ -1,16 +1,17 @@
-import { Hyperlink } from "./../hyperlink/hyperlink";
+import { Hyperlink } from "lib/hyperlink/hyperlink";
+import { useDarkMode } from "lib/commons/useDarkMode";
 import { FooterProps } from "./footer.types";
 
 export function Footer(props: FooterProps) {
+  const [isDarkMode, toggle] = useDarkMode();
+
   const getFooterContent = () => {
-    if (props.darkTheme) {
+    if (isDarkMode) {
       return (
         <div
           data-testid="footer-toggle-light"
-          className="block h-6 w-6 cursor-pointer rounded-md
-            border border-gray-100 bg-white
-            p-1 text-gray-900"
-          onClick={() => props.toggleDarkTheme()}>
+          className="block h-6 w-6 cursor-pointer rounded-md border border-gray-100 bg-white p-1 text-gray-900"
+          onClick={() => toggle()}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -30,10 +31,8 @@ export function Footer(props: FooterProps) {
       return (
         <div
           data-testid="footer-toggle-dark"
-          className="block h-6 w-6 cursor-pointer rounded-md
-            border border-gray-700 bg-slate-700
-            p-1 text-white"
-          onClick={() => props.toggleDarkTheme()}>
+          className="block h-6 w-6 cursor-pointer rounded-md border border-gray-700 bg-slate-700 p-1 text-white"
+          onClick={() => toggle()}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -52,7 +51,7 @@ export function Footer(props: FooterProps) {
   };
 
   return (
-    <footer className="mx-auto max-w-4xl bg-gray-50 p-2 sm:fixed sm:bottom-0 sm:left-0 sm:right-0 sm:h-10 dark:bg-gray-800">
+    <footer className="mx-auto max-w-4xl bg-gray-50 p-2 sm:fixed sm:right-0 sm:bottom-0 sm:left-0 sm:h-10 dark:bg-gray-800">
       <div className="flex">
         {getFooterContent()}
         <div className="flex-1 text-end">

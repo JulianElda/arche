@@ -1,5 +1,4 @@
-import "./assets/fonts/heliotrope.css";
-import "./assets/styles/styles.css";
+import "./tailwind.css";
 
 import { Button } from "./button/button";
 import { Card } from "./card/card";
@@ -14,7 +13,7 @@ import { Input } from "./input/input";
 import { Select } from "./select/select";
 import { SelectField } from "./select-field/select-field";
 
-import { useDarkMode } from "./commons/dark-mode-toggle";
+import { useDarkMode } from "lib/commons/useDarkMode";
 
 export {
   Button,

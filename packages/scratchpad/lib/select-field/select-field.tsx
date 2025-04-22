@@ -1,31 +1,19 @@
+import { clsx } from "clsx";
 import { SelectFieldProps } from "./select-field.types";
 
 export function SelectField(props: SelectFieldProps) {
-  let baseClass = `
-    form-select rounded-md border-0 w-full 
-    py-2 pl-2 pr-8 
-    focus:ring-1 focus:ring-inset 
-    focus:ring-sky-300 
-  `;
-
-  if (props.inInputField)
-    baseClass += `
-      h-full bg-transparent text-gray-600 dark:text-gray-300
-    `;
-  else
-    baseClass += `
-      block pl-3 bg-white dark:bg-slate-700
-      text-gray-900 dark:text-gray-100
-      ring-1 ring-inset ring-gray-300 dark:ring-gray-600
-    `;
-
   return (
     <select
       id={props.id}
       name={props.id}
       data-testid={props.id}
       value={props.value}
-      className={baseClass}
+      className={clsx(
+        "form-select w-full appearance-none rounded-md border-0 py-2 pr-8 pl-2 text-gray-900 focus:ring-1 focus:ring-sky-300 focus:ring-inset dark:bg-slate-700 dark:text-gray-100",
+        props.inInputField && "h-full bg-transparent",
+        !props.inInputField &&
+          "block bg-white pl-3 ring-1 ring-gray-300 ring-inset dark:ring-gray-600"
+      )}
       onChange={(event) => props.onChange(event.target.value)}>
       {props.options.slice().map((option) => (
         <option

@@ -14,7 +14,7 @@ export default defineConfig({
         "lib/**/*.mocks.tsx",
         "lib/**/*.stories.tsx",
         "lib/**/*.test.tsx",
-        "lib/test-setup.ts",
+        "lib/*test*.ts",
       ],
     }),
   ],

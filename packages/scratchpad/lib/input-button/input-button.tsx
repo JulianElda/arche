@@ -1,5 +1,5 @@
-import { InputField } from "./../input-field/input-field";
-import { InputLabel } from "./../input-label/input-label";
+import { InputField } from "lib/input-field/input-field";
+import { InputLabel } from "lib/input-label/input-label";
 import { InputButtonProps } from "./input-button.types";
 
 export function InputButton(props: InputButtonProps) {
@@ -11,7 +11,7 @@ export function InputButton(props: InputButtonProps) {
         hideLabel={!!props.hideLabel}
       />
       <div className="mt-1 flex">
-        <div className="relative flex flex-grow items-stretch focus-within:z-10">
+        <div className="relative flex grow items-stretch focus-within:z-10">
           <InputField
             id={props.id}
             type={props.type}
@@ -26,7 +26,7 @@ export function InputButton(props: InputButtonProps) {
           type="button"
           aria-label={props.buttonAriaLabel}
           onClick={() => props.onButtonClick()}
-          className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+          className="relative -ml-px inline-flex cursor-pointer items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-gray-50 focus:border-sky-300 focus:ring-1 focus:ring-sky-300 focus:ring-inset">
           {props.icon}
         </button>
       </div>

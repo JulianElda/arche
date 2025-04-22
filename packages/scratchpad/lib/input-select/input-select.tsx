@@ -1,6 +1,6 @@
-import { InputField } from "./../input-field/input-field";
-import { InputLabel } from "./../input-label/input-label";
-import { SelectField } from "./../select-field/select-field";
+import { InputField } from "lib/input-field/input-field";
+import { InputLabel } from "lib/input-label/input-label";
+import { SelectField } from "lib/select-field/select-field";
 import { InputSelectProps } from "./input-select.types";
 
 export function InputSelect(props: InputSelectProps) {
@@ -11,7 +11,7 @@ export function InputSelect(props: InputSelectProps) {
         label={props.inputLabel}
         hideLabel={props.hideLabel}
       />
-      <div className="relative mt-1 rounded-md shadow-sm">
+      <div className="relative mt-1 rounded-md shadow-xs">
         <InputField
           id={props.inputId}
           type={props.type}

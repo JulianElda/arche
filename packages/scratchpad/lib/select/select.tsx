@@ -1,5 +1,5 @@
-import { InputLabel } from "./../input-label/input-label";
-import { SelectField } from "./../select-field/select-field";
+import { InputLabel } from "lib/input-label/input-label";
+import { SelectField } from "lib/select-field/select-field";
 import { SelectProps } from "./select.types";
 
 export function Select(props: SelectProps) {
