@@ -9,7 +9,7 @@
       },
       "devDependencies": {
         "@eslint/js": "^9.19.0",
-        "@julianelda/stilo": "^1.0.0",
+        "@julianelda/stilo": "^1.0.1",
         "@storybook/addon-a11y": "^8.5.3",
         "@storybook/addon-actions": "^8.5.3",
         "@storybook/addon-essentials": "^8.5.3",
@@ -216,7 +216,7 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.25", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ=="],
 
-    "@julianelda/stilo": ["@julianelda/stilo@1.0.0", "", { "dependencies": { "@tailwindcss/cli": "^4.1.4", "tailwindcss": "^4.1.4" } }, "sha512-xe1YRbEFPmbBMlBpU2fW21wCxFVdKxsuXlajt0lj3hVLcMrG90JrrwPVhLKunQ1M6A2A7CA/XKCueSre7jK/ww=="],
+    "@julianelda/stilo": ["@julianelda/stilo@1.0.1", "", {}, "sha512-Lg4lFvSamG1eKcWb+/xzSyW/NUi3Rz1wtahluVFwDjYr6u65ZJWPDqEU9PLDVeOCclGjo1OKK8KMn82u3z9rkg=="],
 
     "@mdx-js/react": ["@mdx-js/react@3.1.0", "", { "dependencies": { "@types/mdx": "^2.0.0" }, "peerDependencies": { "@types/react": ">=16", "react": ">=16" } }, "sha512-QjHtSaoameoalGnKDT3FoIl4+9RwyTmo9ZJGBdLOks/YOiWHoRDI3PUwEzOE7kEmGcV3AFcp9K6dYu9rEuKLAQ=="],
 

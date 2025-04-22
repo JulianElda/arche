@@ -1,5 +1,3 @@
-import "./tailwind.css";
-
 import { Button } from "./button/button";
 import { Card } from "./card/card";
 import { Checkbox } from "./checkbox/checkbox";

@@ -9,10 +9,9 @@ export function SelectField(props: SelectFieldProps) {
       data-testid={props.id}
       value={props.value}
       className={clsx(
-        "form-select w-full appearance-none rounded-md border-0 py-2 pr-8 pl-2 text-gray-900 focus:ring-1 focus:ring-sky-300 focus:ring-inset dark:bg-slate-700 dark:text-gray-100",
-        props.inInputField && "h-full bg-transparent",
-        !props.inInputField &&
-          "block bg-white pl-3 ring-1 ring-gray-300 ring-inset dark:ring-gray-600"
+        "form-select w-full appearance-none rounded-md border-1 border-gray-400 py-2 pr-8 pl-2 text-gray-900 focus:ring-1 focus:ring-sky-300 focus:ring-inset dark:bg-slate-700 dark:text-gray-100",
+        props.inInputField && "h-full rounded-l-none bg-transparent",
+        !props.inInputField && "block pl-3"
       )}
       onChange={(event) => props.onChange(event.target.value)}>
       {props.options.slice().map((option) => (

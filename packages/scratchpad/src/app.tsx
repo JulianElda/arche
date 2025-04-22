@@ -1,22 +1,12 @@
-import { useState } from "react";
-import { Card, Input, Footer } from "lib";
+import { Card, Footer, InputSelect, Select } from "lib";
+import { inputSelectProps1 } from "lib/input-select/input-select.mocks";
+import { selectProps1 } from "lib/select/select.mocks";
 
 function App() {
-  const [phone, setPhone] = useState(12);
-
-  const onChangePhone = (value: number) => {
-    setPhone(value);
-  };
-
   return (
     <Card>
-      <Input
-        id="test-id"
-        type="number"
-        label="test-phone"
-        value={phone}
-        onChange={onChangePhone as (value: string | number) => void}
-      />
+      <InputSelect {...inputSelectProps1} />
+      <Select {...selectProps1} />
       <Footer
         label="Julius Polar@GitHub"
         link="https://github.com/JulianElda/scratchpad"

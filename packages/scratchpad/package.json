@@ -1,6 +1,6 @@
 {
   "name": "@julianelda/scratchpad",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "type": "module",
   "module": "./dist/scratchpad.js",
   "types": "./dist/index.d.ts",
@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
-    "@julianelda/stilo": "^1.0.0",
+    "@julianelda/stilo": "^1.0.1",
     "@storybook/addon-a11y": "^8.5.3",
     "@storybook/addon-actions": "^8.5.3",
     "@storybook/addon-essentials": "^8.5.3",

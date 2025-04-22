@@ -1,8 +1,7 @@
 import type { Preview } from "@storybook/react";
 import { withThemeByClassName } from "@storybook/addon-themes";
 
-import "./../src/tailwind.css";
-import "@julianelda/stilo";
+import "./storybook-tailwind.css";
 
 const preview: Preview = {
   parameters: {
