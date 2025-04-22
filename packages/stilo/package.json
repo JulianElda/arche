@@ -1,0 +1,18 @@
+{
+  "name": "stilo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "style": "./dist/index.css",
+  "files": [
+    "fonts",
+    "dist"
+  ],
+  "scripts": {
+    "build": "npx @tailwindcss/cli -i ./src/index.css -o ./dist/index.css --minify"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.4",
+    "tailwindcss": "^4.1.4"
+  }
+}
