@@ -1,5 +1,5 @@
 {
-  "name": "stilo",
+  "name": "@julianelda/stilo",
   "version": "1.0.0",
   "type": "module",
   "style": "./dist/index.css",
