@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { Input } from "./input";
-import { inputProps1, inputProps2 } from "./input.mocks";
+import { Input } from "lib/input/input";
+import { inputProps1, inputProps2 } from "lib/input/input.mocks";
 
 describe("Input", () => {
   test("renders Input elements", () => {
