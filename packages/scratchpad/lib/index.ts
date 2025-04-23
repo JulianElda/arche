@@ -1,15 +1,16 @@
-import { Button } from "./button/button";
-import { Card } from "./card/card";
-import { Checkbox } from "./checkbox/checkbox";
-import { Footer } from "./footer/footer";
-import { Hyperlink } from "./hyperlink/hyperlink";
-import { InputButton } from "./input-button/input-button";
-import { InputField } from "./input-field/input-field";
-import { InputLabel } from "./input-label/input-label";
-import { InputSelect } from "./input-select/input-select";
-import { Input } from "./input/input";
-import { Select } from "./select/select";
-import { SelectField } from "./select-field/select-field";
+import { Button } from "lib/button/button";
+import { Card } from "lib/card/card";
+import { Checkbox } from "lib/checkbox/checkbox";
+import { Footer } from "lib/footer/footer";
+import { Hyperlink } from "lib/hyperlink/hyperlink";
+import { InputButton } from "lib/input-button/input-button";
+import { InputField } from "lib/input-field/input-field";
+import { InputLabel } from "lib/input-label/input-label";
+import { InputSelect } from "lib/input-select/input-select";
+import { Input } from "lib/input/input";
+import { SelectField } from "lib/select-field/select-field";
+import { Select } from "lib/select/select";
+import { TextArea } from "lib/textarea/textarea";
 
 import { useDarkMode } from "lib/commons/useDarkMode";
 
@@ -26,5 +27,6 @@ export {
   InputSelect,
   Select,
   SelectField,
+  TextArea,
   useDarkMode,
 };
