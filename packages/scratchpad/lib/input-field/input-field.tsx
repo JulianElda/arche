@@ -8,11 +8,11 @@ export function InputField(props: InputFieldProps) {
 
     if (props.type === "number") {
       if (value === "") {
-        props.onChange?.(value);
+        props.onChange(value);
       } else if (isValidNumber(value)) {
-        props.onChange?.(parseInt(value));
+        props.onChange(parseInt(value));
       } else {
-        props.onChange?.(0);
+        props.onChange(0);
       }
     } else if (props.type === "text" || props.type === "search") {
       props.onChange(value);
@@ -26,6 +26,11 @@ export function InputField(props: InputFieldProps) {
       name={props.id}
       data-testid={props.id}
       value={props.value}
+      max={props.type === "number" ? props.max : undefined}
+      min={props.type === "number" ? props.min : undefined}
+      maxLength={props.maxLength ?? undefined}
+      disabled={props.disabled === true}
+      placeholder={props.placeholder}
       autoFocus={!!props.autofocus}
       onChange={(event) => onChange(event.target.value)}
       onKeyDown={(event) => props.onKeyDown?.(event.key)}

@@ -12,9 +12,14 @@ export function Input(props: InputProps) {
       />
       <div className="mt-1">
         <InputField
-          id={props.id}
           type={props.type}
+          id={props.id}
           value={props.value}
+          max={props.max}
+          min={props.min}
+          disabled={props.disabled}
+          maxLength={props.maxLength}
+          placeholder={props.placeholder}
           autofocus={props.autofocus}
           onChange={(value) => props.onChange?.(value)}
           onKeyDown={(value) => props.onKeyDown?.(value)}

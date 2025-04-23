@@ -57,3 +57,13 @@ export const InputHiddenLabel: Story = {
     hideLabel: true,
   },
 };
+
+export const InputWithPlaceholder: Story = {
+  name: "Input with placeholder",
+  args: {
+    ...inputProps1,
+    hideLabel: false,
+    value: "",
+    placeholder: "Type here",
+  },
+};

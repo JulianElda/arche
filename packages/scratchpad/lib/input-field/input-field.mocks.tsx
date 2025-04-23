@@ -18,3 +18,11 @@ export const inputFieldProps3: InputFieldProps = {
   type: "search" as InputFieldTypes,
   value: "Search query",
 };
+
+export const inputFieldProps4: InputFieldProps = {
+  id: "input-id-4",
+  type: "number" as InputFieldTypes,
+  value: 100,
+  max: 64,
+  min: 8,
+};
