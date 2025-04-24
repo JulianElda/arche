@@ -1,7 +1,7 @@
 import { InputField } from "lib/input-field/input-field";
 import { InputLabel } from "lib/input-label/input-label";
+import { InputSelectProps } from "lib/input-select/input-select.types";
 import { SelectField } from "lib/select-field/select-field";
-import { InputSelectProps } from "./input-select.types";
 
 export function InputSelect(props: InputSelectProps) {
   return (

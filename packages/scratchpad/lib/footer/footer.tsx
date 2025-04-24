@@ -1,6 +1,6 @@
-import { Hyperlink } from "lib/hyperlink/hyperlink";
 import { useDarkMode } from "lib/commons/useDarkMode";
-import { FooterProps } from "./footer.types";
+import { FooterProps } from "lib/footer/footer.types";
+import { Hyperlink } from "lib/hyperlink/hyperlink";
 
 export function Footer(props: FooterProps) {
   const [isDarkMode, toggle] = useDarkMode();

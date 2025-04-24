@@ -1,5 +1,5 @@
+import { CheckboxProps } from "lib/checkbox/checkbox.types";
 import { InputLabel } from "lib/input-label/input-label";
-import { CheckboxProps } from "./checkbox.types";
 
 export function Checkbox(props: CheckboxProps) {
   return (

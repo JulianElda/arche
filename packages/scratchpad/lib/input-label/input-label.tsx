@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { InputLabelProps } from "./input-label.types";
+import { InputLabelProps } from "lib/input-label/input-label.types";
 
 export function InputLabel(props: InputLabelProps) {
   return (

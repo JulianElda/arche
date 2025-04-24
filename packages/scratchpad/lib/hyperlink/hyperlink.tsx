@@ -1,4 +1,4 @@
-import { HyperlinkProps } from "./hyperlink.types";
+import { HyperlinkProps } from "lib/hyperlink/hyperlink.types";
 
 export function Hyperlink(props: HyperlinkProps) {
   return (

@@ -1,6 +1,6 @@
 import { clsx } from "clsx";
 import { isValidNumber } from "lib/commons/commons";
-import { InputFieldProps } from "./input-field.types";
+import { InputFieldProps } from "lib/input-field/input-field.types";
 
 export function InputField(props: InputFieldProps) {
   const onChange = (value: string) => {

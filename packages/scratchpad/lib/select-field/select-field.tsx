@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { SelectFieldProps } from "./select-field.types";
+import { SelectFieldProps } from "lib/select-field/select-field.types";
 
 export function SelectField(props: SelectFieldProps) {
   return (
