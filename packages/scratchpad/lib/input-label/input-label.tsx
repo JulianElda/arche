@@ -3,13 +3,16 @@ import { InputLabelProps } from "./input-label.types";
 
 export function InputLabel(props: InputLabelProps) {
   return (
-    <label
-      htmlFor={props.id}
-      className={clsx(
-        "font-heading font-semibold",
-        props.hideLabel && "sr-only"
-      )}>
-      {props.label}
-    </label>
+    <div className="flex">
+      <label
+        htmlFor={props.id}
+        className={clsx(
+          "font-heading mr-auto font-semibold",
+          props.hideLabel && "sr-only"
+        )}>
+        {props.label}
+      </label>
+      {props.value && <label>{props.value}</label>}
+    </div>
   );
 }

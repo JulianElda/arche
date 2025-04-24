@@ -10,11 +10,29 @@ export function InputField(props: InputFieldProps) {
       if (value === "") {
         props.onChange(value);
       } else if (isValidNumber(value)) {
-        props.onChange(parseInt(value));
+        const nextValue = parseInt(value);
+        if (
+          props.max &&
+          props.min &&
+          nextValue < props.max &&
+          props.min < nextValue
+        ) {
+          props.onChange(nextValue);
+        } else if (props.max && nextValue < props.max) {
+          props.onChange(nextValue);
+        } else if (props.min && props.min < nextValue) {
+          props.onChange(nextValue);
+        } else {
+          props.onChange(nextValue);
+        }
       } else {
         props.onChange(0);
       }
-    } else if (props.type === "text" || props.type === "search") {
+    } else if (
+      props.type === "text" ||
+      props.type === "search" ||
+      props.type === "range"
+    ) {
       props.onChange(value);
     }
   };
@@ -26,8 +44,16 @@ export function InputField(props: InputFieldProps) {
       name={props.id}
       data-testid={props.id}
       value={props.value}
-      max={props.type === "number" ? props.max : undefined}
-      min={props.type === "number" ? props.min : undefined}
+      max={
+        props.type === "number" || props.type === "range"
+          ? props.max
+          : undefined
+      }
+      min={
+        props.type === "number" || props.type === "range"
+          ? props.min
+          : undefined
+      }
       maxLength={props.maxLength ?? undefined}
       disabled={props.disabled === true}
       placeholder={props.placeholder}
@@ -35,7 +61,9 @@ export function InputField(props: InputFieldProps) {
       onChange={(event) => onChange(event.target.value)}
       onKeyDown={(event) => props.onKeyDown?.(event.key)}
       className={clsx(
-        "form-input block w-full appearance-none border-1 border-gray-400 bg-white p-2 px-3 text-gray-900 ring-inset focus:border-sky-300 focus:ring-1 focus:ring-sky-300 focus:ring-inset dark:bg-slate-700 dark:text-gray-100",
+        props.type === "range"
+          ? "h-2 w-full rounded-md bg-gray-500 accent-sky-500"
+          : "form-input block w-full appearance-none border-1 border-gray-400 bg-white p-2 px-3 text-gray-900 ring-inset focus:border-sky-300 focus:ring-1 focus:ring-sky-300 focus:ring-inset dark:bg-slate-700 dark:text-gray-100",
         props.withIconLeft === true ? "rounded-l-md" : "rounded-md"
       )}
     />

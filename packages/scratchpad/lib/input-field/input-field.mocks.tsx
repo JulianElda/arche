@@ -26,3 +26,11 @@ export const inputFieldProps4: InputFieldProps = {
   max: 64,
   min: 8,
 };
+
+export const inputFieldProps5: InputFieldProps = {
+  id: "input-id-5",
+  type: "range" as InputFieldTypes,
+  value: 10,
+  max: 64,
+  min: 8,
+};

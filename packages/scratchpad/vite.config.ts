@@ -9,13 +9,7 @@ export default defineConfig({
   plugins: [
     react(),
     dts({
-      include: ["lib"],
-      exclude: [
-        "lib/**/*.mocks.tsx",
-        "lib/**/*.stories.tsx",
-        "lib/**/*.test.tsx",
-        "lib/*test*.ts",
-      ],
+      tsconfigPath: "./tsconfig.lib.json",
     }),
   ],
   test: {

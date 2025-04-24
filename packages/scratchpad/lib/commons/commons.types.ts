@@ -3,4 +3,4 @@ export type Option = {
   label: string;
 };
 
-export type InputFieldTypes = "text" | "number" | "search";
+export type InputFieldTypes = "text" | "number" | "search" | "range";
