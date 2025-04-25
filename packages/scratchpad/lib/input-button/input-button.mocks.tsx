@@ -3,7 +3,7 @@ import { InputButtonProps } from "./input-button.types";
 
 const copySvg = (
   <svg
-    className="-ml-0.5 h-5 w-5 text-gray-400"
+    className="-ml-0.5 h-5 w-5"
     viewBox="0 0 384 512"
     fill="currentColor"
     aria-hidden="true">
