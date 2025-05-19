@@ -16,6 +16,8 @@ import { TextArea } from "lib/textarea/textarea";
 
 import { useDarkMode } from "lib/commons/useDarkMode";
 
+import "./assets/styles/styles.css";
+
 export {
   Button,
   Card,

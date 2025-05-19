@@ -1,6 +1,6 @@
 {
   "name": "@julianelda/scratchpad",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "type": "module",
   "main": "./dist/scratchpad.js",
   "module": "./dist/scratchpad.js",
