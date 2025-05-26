@@ -1,25 +1,22 @@
-import { Button, Card, Footer } from "lib";
+import { Input, Card, Footer } from "lib";
+import { inputProps2 } from "lib/input/input.mocks";
+import { useState } from "react";
 
 function App() {
+  const [value, setValue] = useState<number>(inputProps2.value as number);
+
+  const double = value * 2;
   return (
     <div className="mx-auto max-w-lg pt-16">
       <Card>
         <div className="flex flex-col space-y-4">
-          <Button
-            id="button"
-            onClick={() => undefined}
-            style="primary"
-            text="Illustration"
-            type="button"
+          <Input
+            {...inputProps2}
+            type="number"
+            value={value}
+            onChange={(newValue) => setValue(newValue as number)}
           />
-
-          <Button
-            id="button-tu"
-            onClick={() => undefined}
-            style="secondary"
-            text="Illustration"
-            type="button"
-          />
+          <strong>{double}</strong>
         </div>
 
         <Footer
