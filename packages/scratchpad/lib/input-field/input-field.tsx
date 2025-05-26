@@ -10,7 +10,7 @@ export function InputField(props: InputFieldProps) {
       if (value === "") {
         props.onChange(value);
       } else if (isValidNumber(value)) {
-        const nextValue = parseInt(value);
+        const nextValue = parseFloat(value);
         if (
           props.max &&
           props.min &&
