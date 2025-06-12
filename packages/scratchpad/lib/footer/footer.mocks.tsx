@@ -1,8 +1,6 @@
 import { FooterProps } from "./footer.types";
 
 export const footerProps: FooterProps = {
-  label: "Julius Polar@GitHub",
+  label: "Julius Polar",
   link: "https://github.com/JulianElda/scratchpad",
-  darkTheme: true,
-  toggleDarkTheme: () => undefined,
 };

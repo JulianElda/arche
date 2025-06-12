@@ -4,14 +4,6 @@ import { withThemeByClassName } from "@storybook/addon-themes";
 import "./storybook-tailwind.css";
 
 const preview: Preview = {
-  parameters: {
-    controls: {
-      matchers: {
-        color: /(background|color)$/i,
-        date: /Date$/i,
-      },
-    },
-  },
   decorators: [
     withThemeByClassName({
       themes: {

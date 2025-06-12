@@ -16,7 +16,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "storybook": "storybook dev -p 6006 --no-open",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "svgr": "svgr --jsx-runtime automatic --expand-props --typescript --no-prettier --out-dir lib/icons lib/assets/svg"
   },
   "dependencies": {
     "ajv": "^8.17.1",
@@ -38,6 +39,7 @@
     "@storybook/react": "^8.5.3",
     "@storybook/react-vite": "^8.5.3",
     "@storybook/test": "^8.5.3",
+    "@svgr/cli": "^8.1.0",
     "@tailwindcss/cli": "^4.1.4",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/postcss": "^4.0.3",

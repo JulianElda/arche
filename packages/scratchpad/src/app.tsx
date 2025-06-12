@@ -18,12 +18,11 @@ function App() {
           />
           <strong>{double}</strong>
         </div>
-
-        <Footer
-          label="Julius Polar@GitHub"
-          link="https://github.com/JulianElda/scratchpad"
-        />
       </Card>
+      <Footer
+        label="Julius Polar"
+        link="https://github.com/JulianElda/scratchpad"
+      />
     </div>
   );
 }
