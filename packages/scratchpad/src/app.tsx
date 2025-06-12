@@ -22,6 +22,7 @@ function App() {
       <Footer
         label="Julius Polar"
         link="https://github.com/JulianElda/scratchpad"
+        extraClass="max-w-lg"
       />
     </div>
   );

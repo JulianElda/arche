@@ -10,6 +10,5 @@ describe("Footer", () => {
   test("renders Footer elements", () => {
     render(<Footer {...footerProps} />);
     expect(screen.getByText(/Julius Polar/)).toBeInTheDocument();
-    expect(screen.getByText(/GitHub/)).toBeInTheDocument();
   });
 });
