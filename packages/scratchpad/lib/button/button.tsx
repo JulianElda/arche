@@ -10,11 +10,11 @@ export function Button(props: ButtonProps) {
       aria-label={props.text}
       onClick={() => props.onClick()}
       className={clsx(
-        "cursor-pointer appearance-none rounded-md p-2 text-lg font-semibold shadow-sm focus:ring-sky-300 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-sky-300 active:bg-sky-700",
+        "active:bg-primary-darker focus:ring-primary-lighter focus-visible:outline-primary-lighter cursor-pointer appearance-none rounded-md p-2 text-lg font-semibold shadow-sm focus-visible:outline focus-visible:outline-offset-2",
         props.style === "primary" &&
-          "border border-sky-500 bg-sky-700 text-white hover:bg-sky-500",
+          "border-primary hover:primary bg-primary-darker border text-white",
         props.style === "secondary" &&
-          "border border-gray-300 bg-white text-gray-900 hover:border-sky-500 hover:bg-sky-500 hover:text-white dark:bg-slate-700 dark:text-gray-50 dark:hover:bg-sky-500"
+          "hover:primary dark:hover:primary hover:border-primary border border-gray-300 bg-white text-gray-900 hover:text-white dark:bg-slate-700 dark:text-gray-50"
       )}>
       {props.text}
     </button>

@@ -6,7 +6,7 @@ export function Hyperlink(props: HyperlinkProps) {
       href={props.href}
       target="_blank"
       rel="noreferrer"
-      className="text-sky-950 decoration-dotted hover:text-sky-800 hover:underline dark:text-sky-100 dark:hover:text-sky-400">
+      className="text-primary-darkest dark:text-primary-lightest hover:text-primary-darker dark:hover:text-primary-lighter decoration-dotted hover:underline">
       {props.title}
       {props.asterisk === false ? "" : "*"}
     </a>
