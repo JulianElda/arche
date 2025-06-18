@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { InputSlider } from "lib/input-slider/input-slider";
 import { inputSliderProps1 } from "lib/input-slider/input-slider.mocks";
 

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { InputSelect } from "./input-select";
 import { inputSelectProps1, inputSelectProps2 } from "./input-select.mocks";
 
