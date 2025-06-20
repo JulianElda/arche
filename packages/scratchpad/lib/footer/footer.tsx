@@ -16,7 +16,7 @@ export function Footer(props: FooterProps) {
   return (
     <footer
       className={clsx(
-        "flex items-center bg-gray-50 p-2 sm:fixed sm:right-0 sm:bottom-0 sm:left-0 sm:mx-auto dark:bg-gray-800",
+        "bg-app-background-light dark:bg-app-background-dark flex items-center p-2 sm:fixed sm:right-0 sm:bottom-0 sm:left-0 sm:mx-auto",
         props.extraClass
       )}>
       <div className="flex flex-1 items-center gap-1">

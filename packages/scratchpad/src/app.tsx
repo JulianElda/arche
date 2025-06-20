@@ -1,22 +1,19 @@
-import { Input, Card, Footer } from "lib";
-import { inputProps2 } from "lib/input/input.mocks";
+import { Card, Footer, Checkbox } from "lib";
 import { useState } from "react";
 
 function App() {
-  const [value, setValue] = useState<number>(inputProps2.value as number);
+  const [value, setValue] = useState(true);
 
-  const double = value * 2;
   return (
     <div className="mx-auto max-w-lg pt-16">
       <Card>
         <div className="flex flex-col space-y-4">
-          <Input
-            {...inputProps2}
-            type="number"
+          <Checkbox
+            id=""
+            label="checkboxx"
             value={value}
-            onChange={(newValue) => setValue(newValue as number)}
+            onChange={() => setValue((val) => !val)}
           />
-          <strong>{double}</strong>
         </div>
       </Card>
       <Footer

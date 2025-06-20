@@ -62,8 +62,8 @@ export function InputField(props: InputFieldProps) {
       onKeyDown={(event) => props.onKeyDown?.(event.key)}
       className={clsx(
         props.type === "range"
-          ? "accent-primary h-2 w-full rounded-md bg-gray-500"
-          : "form-input focus:border-primary-lighter focus:ring-primary-lighter block w-full appearance-none border-1 border-gray-400 bg-white p-2 px-3 text-gray-900 ring-inset focus:ring-1 focus:ring-inset dark:bg-slate-700 dark:text-gray-100",
+          ? "accent-primary-500 bg-ink-gray h-2 w-full rounded-md"
+          : "form-input focus:border-primary-300 focus:ring-primary-300 border-ink-gray text-ink-black dark:bg-slate dark:text-app-text-dark block w-full appearance-none border-1 bg-white p-2 px-3 ring-inset focus:ring-1 focus:ring-inset",
         props.withIconLeft === true ? "rounded-l-md" : "rounded-md"
       )}
     />

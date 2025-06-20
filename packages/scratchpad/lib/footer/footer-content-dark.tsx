@@ -9,7 +9,7 @@ export function FooterContentDark(props: FooterContentDarkProps) {
     <button
       aria-label="Toggle light mode"
       data-testid="footer-toggle-light"
-      className="size-8 cursor-pointer rounded-md bg-white p-1 text-gray-900"
+      className="bg-app-background-light text-app-text-light size-8 cursor-pointer rounded-md p-1"
       onClick={() => props.onToggleDarkMode()}>
       <ThemeSun className="size-6 stroke-2" />
     </button>

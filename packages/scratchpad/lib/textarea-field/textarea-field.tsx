@@ -16,7 +16,7 @@ export function TextAreaField(props: TextAreaFieldProps) {
       autoFocus={!!props.autofocus}
       onChange={(event) => onChange(event.target.value)}
       onKeyDown={(event) => props.onKeyDown?.(event.key)}
-      className="form-textarea focus:border-primary-lighter focus:ring-primary-lighter block w-full appearance-none rounded-md border-1 border-gray-400 bg-white p-2 px-3 text-gray-900 ring-inset focus:ring-1 focus:ring-inset dark:bg-slate-700 dark:text-gray-100"
+      className="form-textarea focus:border-primary-300 focus:ring-primary-300 border-ink-gray text-ink-black dark:text-ink-white block w-full appearance-none rounded-md border-1 bg-white p-2 px-3 ring-inset focus:ring-1 focus:ring-inset dark:bg-slate-700"
     />
   );
 }

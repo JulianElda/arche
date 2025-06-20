@@ -9,7 +9,7 @@ export function SelectField(props: SelectFieldProps) {
       data-testid={props.id}
       value={props.value}
       className={clsx(
-        "form-select focus:ring-primary-lighter w-full appearance-none rounded-md border-1 border-gray-400 py-2 pr-8 pl-2 text-gray-900 focus:ring-1 focus:ring-inset dark:bg-slate-700 dark:text-gray-100",
+        "form-select focus:ring-primary-300 border-ink-gray text-ink-black dark:bg-slate dark:text-ink-white w-full appearance-none rounded-md border-1 py-2 pr-8 pl-2 focus:ring-1 focus:ring-inset",
         props.inInputField && "h-full rounded-l-none bg-transparent",
         !props.inInputField && "block pl-3"
       )}

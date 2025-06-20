@@ -17,7 +17,7 @@ export function ProgressBar(props: ProgressBarProps) {
         <div
           id={props.id}
           data-testid={props.id}
-          className="bg-primary h-2 rounded-md"
+          className="bg-primary-500 h-2 rounded-md"
           style={{
             width: `${currentPercent}%`,
           }}

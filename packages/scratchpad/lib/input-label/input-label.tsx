@@ -7,7 +7,7 @@ export function InputLabel(props: InputLabelProps) {
       <label
         htmlFor={props.id}
         className={clsx(
-          "font-heading mr-auto font-semibold",
+          "font-heading mr-auto font-bold",
           props.hideLabel && "sr-only"
         )}>
         {props.label}

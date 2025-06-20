@@ -26,7 +26,7 @@ export function InputButton(props: InputButtonProps) {
           type="button"
           aria-label={props.buttonAriaLabel}
           onClick={() => props.onButtonClick()}
-          className="hover:bg-primary active:bg-primary-darker focus:border-primary-lighter focus:ring-primary-lighter relative -ml-px inline-flex cursor-pointer items-center gap-x-1.5 rounded-r-md border-1 border-l-0 border-gray-400 px-3 py-2 text-sm font-semibold ring-inset hover:text-gray-700 focus:ring-1 focus:ring-inset">
+          className="hover:bg-primary-500 active:bg-primary-700 focus:border-primary-300 focus:ring-primary-300 border-ink-gray hover:text-ink-white relative -ml-px inline-flex cursor-pointer appearance-none items-center gap-x-1.5 rounded-r-md border-1 border-l-0 px-3 py-2 text-sm font-bold ring-inset focus:ring-1 focus:ring-inset">
           {props.icon}
         </button>
       </div>

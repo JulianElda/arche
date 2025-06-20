@@ -12,7 +12,7 @@ export function Checkbox(props: CheckboxProps) {
           data-testid={props.id}
           checked={props.value}
           onChange={(event) => props.onChange(event.target.checked)}
-          className="form-checkbox focus:border-primary-lighter focus:ring-primary-lighter inline-block h-4 w-4 rounded-md border-0 bg-white p-1 ring-1 ring-gray-300 ring-inset focus:ring-1 focus:ring-inset dark:bg-slate-700 dark:ring-gray-600"
+          className="form-checkbox focus:border-primary-300 focus:ring-primary-300 ring-ink-500 accent-primary-500 text-primary-500 dark:bg-ink-500 inline-block size-4 rounded-md border-0 bg-white p-1 ring-1 ring-inset focus:ring-1 focus:ring-inset"
         />
       </div>
       <div className="ml-1 leading-6">

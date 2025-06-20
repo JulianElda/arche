@@ -1,4 +1,7 @@
 @import "tailwindcss";
+
+@import "./../lib/assets/style/tokens.css";
+@import "./../lib/assets/style/styles.css";
 @import "@julianelda/stilo";
 
 @plugin "@tailwindcss/forms";

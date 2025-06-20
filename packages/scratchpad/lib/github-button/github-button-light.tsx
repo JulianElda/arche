@@ -11,7 +11,7 @@ export function GitHubButtonLight(props: GitHubButtonLightProps) {
       target="_blank"
       rel="noreferrer"
       aria-label={props.href}
-      className="size-8 rounded-md bg-slate-700 p-1">
+      className="bg-app-background-dark size-8 rounded-md p-1">
       <GithubMarkLight className="size-6" />
     </a>
   );
