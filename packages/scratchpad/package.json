@@ -1,6 +1,6 @@
 {
   "name": "@julianelda/scratchpad",
-  "version": "1.10.0",
+  "version": "1.10.1",
   "type": "module",
   "main": "./dist/scratchpad.js",
   "module": "./dist/scratchpad.js",
@@ -20,6 +20,8 @@
     "svgr": "svgr --jsx-runtime automatic --expand-props --typescript --no-prettier --out-dir lib/icons lib/assets/svg"
   },
   "dependencies": {
+    "@julianelda/chroma": "^1.0.0",
+    "@julianelda/scratchpad": "^1.10.0",
     "ajv": "^8.17.1",
     "js-cookie": "^3.0.5"
   },
@@ -30,7 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
-    "@julianelda/stilo": "^1.0.1",
+    "@julianelda/stilo": "^1.0.2",
     "@storybook/addon-a11y": "^9.0.11",
     "@storybook/addon-themes": "^9.0.11",
     "@storybook/react-vite": "^9.0.11",

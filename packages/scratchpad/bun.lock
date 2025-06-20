@@ -4,12 +4,14 @@
     "": {
       "name": "@julianelda/scratchpad",
       "dependencies": {
+        "@julianelda/chroma": "^1.0.0",
+        "@julianelda/scratchpad": "^1.10.0",
         "ajv": "^8.17.1",
         "js-cookie": "^3.0.5",
       },
       "devDependencies": {
         "@eslint/js": "^9.19.0",
-        "@julianelda/stilo": "^1.0.1",
+        "@julianelda/stilo": "^1.0.2",
         "@storybook/addon-a11y": "^9.0.11",
         "@storybook/addon-themes": "^9.0.11",
         "@storybook/react-vite": "^9.0.11",
@@ -212,7 +214,11 @@
 
     "@jridgewell/trace-mapping": ["@jridgewell/trace-mapping@0.3.25", "", { "dependencies": { "@jridgewell/resolve-uri": "^3.1.0", "@jridgewell/sourcemap-codec": "^1.4.14" } }, "sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ=="],
 
-    "@julianelda/stilo": ["@julianelda/stilo@1.0.1", "", {}, "sha512-Lg4lFvSamG1eKcWb+/xzSyW/NUi3Rz1wtahluVFwDjYr6u65ZJWPDqEU9PLDVeOCclGjo1OKK8KMn82u3z9rkg=="],
+    "@julianelda/chroma": ["@julianelda/chroma@1.0.0", "", {}, "sha512-hNqjlL8w8mtPeyexkhdiQOv8Xcs+r3jnuYFX4tohR0tNnI73eNeJlJL1KDZTNUrhVZBzPNg2srhqEEXForAhFg=="],
+
+    "@julianelda/scratchpad": ["@julianelda/scratchpad@1.10.0", "", { "dependencies": { "ajv": "^8.17.1", "js-cookie": "^3.0.5" }, "peerDependencies": { "clsx": "^2.1.1", "react": "^19.0.0", "react-dom": "^19.0.0" } }, "sha512-jRi7p/oKYV1rQ7aOrXlBxzdCdPhn/0zcc/oSRISeU2g7O/DQR7xb0XJ+VnryAZr1z2dHiDTu/YTgS3UU1zFFvw=="],
+
+    "@julianelda/stilo": ["@julianelda/stilo@1.0.2", "", {}, "sha512-/FP8ciVnP1FBw5X9nVeng43cbV57AxOFNv1whJAdLlh+9jY9DQL4NxR6chtCuEi3rJFfFUZ7YwaZ4pe2lpwi8w=="],
 
     "@microsoft/api-extractor": ["@microsoft/api-extractor@7.52.5", "", { "dependencies": { "@microsoft/api-extractor-model": "7.30.5", "@microsoft/tsdoc": "~0.15.1", "@microsoft/tsdoc-config": "~0.17.1", "@rushstack/node-core-library": "5.13.0", "@rushstack/rig-package": "0.5.3", "@rushstack/terminal": "0.15.2", "@rushstack/ts-command-line": "5.0.0", "lodash": "~4.17.15", "minimatch": "~3.0.3", "resolve": "~1.22.1", "semver": "~7.5.4", "source-map": "~0.6.1", "typescript": "5.8.2" }, "bin": { "api-extractor": "bin/api-extractor" } }, "sha512-6WWgjjg6FkoDWpF/O3sjB05OkszpI5wtKJqd8fUIR/JJUv8IqNCGr1lJUZJnc1HegcT9gAvyf98KfH0wFncU0w=="],
 
