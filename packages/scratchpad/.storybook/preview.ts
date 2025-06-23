@@ -14,7 +14,7 @@ const preview: Preview = {
     }),
   ],
 
-  tags: ["autodocs"],
+  //tags: ["autodocs"],
 
   parameters: {
     a11y: {

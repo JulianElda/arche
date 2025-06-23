@@ -29,7 +29,9 @@ export const TestElements: Story = {
     await expect(
       canvas.getByLabelText(buttonPropsPrimary.text)
     ).toBeInTheDocument();
-    await expect(canvas.getByRole("button")).toBeInTheDocument();
+    await expect(
+      canvas.getByRole("button", { name: buttonPropsPrimary.text })
+    ).toBeInTheDocument();
   },
 };
 

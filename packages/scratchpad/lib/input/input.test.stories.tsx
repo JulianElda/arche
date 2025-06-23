@@ -38,7 +38,23 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Text_HasInitialValue: Story = {
+export const TestElements: Story = {
+  name: "render elements",
+  args: {
+    ...inputProps1,
+    onChange: action("onChange"),
+  },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByLabelText(inputProps1.label)).toBeInTheDocument();
+    await expect(canvas.getByText(inputProps1.label)).toBeInTheDocument();
+    await expect(canvas.getByTestId(inputProps1.id)).toBeInTheDocument();
+    await expect(
+      canvas.getByDisplayValue(inputProps1.value)
+    ).toBeInTheDocument();
+  },
+};
+
+export const TextInitialValue: Story = {
   name: "text: has initial value",
   args: {
     ...inputProps1,
@@ -51,7 +67,7 @@ export const Text_HasInitialValue: Story = {
   },
 };
 
-export const Text_ChangeValue: Story = {
+export const TextChangeValue: Story = {
   name: "text: change value",
   args: {
     ...inputProps1,
@@ -94,7 +110,7 @@ export const Text_ChangeValue: Story = {
   },
 };
 
-export const Number_HasInitialValue: Story = {
+export const NumberHasInitialValue: Story = {
   name: "number: has initial value",
   args: {
     ...inputProps2,
@@ -107,7 +123,7 @@ export const Number_HasInitialValue: Story = {
   },
 };
 
-export const Number_ChangeValue: Story = {
+export const NumberChangeValue: Story = {
   name: "number: change value",
   args: {
     ...inputProps2,
