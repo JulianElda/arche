@@ -1,6 +1,6 @@
 {
   "name": "@julianelda/scratchpad",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "type": "module",
   "main": "./dist/scratchpad.js",
   "module": "./dist/scratchpad.js",
@@ -20,8 +20,6 @@
     "svgr": "svgr --jsx-runtime automatic --expand-props --typescript --no-prettier --out-dir lib/icons lib/assets/svg"
   },
   "dependencies": {
-    "@julianelda/chroma": "^1.0.0",
-    "@julianelda/scratchpad": "^1.10.0",
     "ajv": "^8.17.1",
     "js-cookie": "^3.0.5"
   },
@@ -32,10 +30,12 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
+    "@julianelda/chroma": "^1.0.0",
     "@julianelda/stilo": "^1.0.2",
-    "@storybook/addon-a11y": "^9.0.11",
-    "@storybook/addon-themes": "^9.0.11",
-    "@storybook/react-vite": "^9.0.11",
+    "@storybook/addon-a11y": "^9.0.12",
+    "@storybook/addon-docs": "^9.0.12",
+    "@storybook/addon-themes": "^9.0.12",
+    "@storybook/react-vite": "^9.0.12",
     "@svgr/cli": "^8.1.0",
     "@tailwindcss/cli": "^4.1.4",
     "@tailwindcss/forms": "^0.5.10",
@@ -60,7 +60,7 @@
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.18",
-    "eslint-plugin-storybook": "^9.0.11",
+    "eslint-plugin-storybook": "^9.0.12",
     "globals": "^15.14.0",
     "jsdom": "^26.0.0",
     "postcss": "^8.5.1",
@@ -69,7 +69,7 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "storybook": "^9.0.11",
+    "storybook": "^9.0.12",
     "tailwindcss": "^4.1.4",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.22.0",

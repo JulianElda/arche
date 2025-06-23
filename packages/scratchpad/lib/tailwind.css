@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@julianelda/chroma";
 
 @import "./assets/style/styles.css";
 
