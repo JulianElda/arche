@@ -1,6 +1,8 @@
 import js from "@eslint/js";
-import { globalIgnores } from "eslint/config";
+import perfectionist from "eslint-plugin-perfectionist";
+import tailwind from "eslint-plugin-tailwindcss";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
+import { globalIgnores } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
@@ -18,6 +20,8 @@ export default tseslint.config([
   tseslint.configs.stylistic,
   tseslint.configs.eslintRecommended,
   eslintPluginUnicorn.configs.recommended,
+  tailwind.configs["flat/recommended"],
+  perfectionist.configs["recommended-natural"],
   {
     rules: {
       "@typescript-eslint/consistent-type-imports": "error",
