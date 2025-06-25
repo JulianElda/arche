@@ -4,11 +4,6 @@ import basicConfig from "./eslint.config.mjs";
 
 export default [
   ...basicConfig,
-  {
-    files: ["**/*.{ts,tsx}"],
-    extends: [
-      reactHooks.configs["recommended-latest"],
-      reactRefresh.configs.vite,
-    ],
-  },
+  reactHooks.configs["recommended-latest"],
+  reactRefresh.configs.vite,
 ];
