@@ -1,0 +1,22 @@
+{
+  "name": "@julianelda/lexis",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": "./eslint.config.mjs",
+    "./react": "./eslint.config.react.mjs"
+  },
+  "files": [
+    "eslint.config.mjs",
+    "eslint.config.react.mjs"
+  ],
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "eslint": "^9.29.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-unicorn": "^59.0.1",
+    "globals": "^16.2.0",
+    "typescript-eslint": "^8.34.1"
+  }
+}
