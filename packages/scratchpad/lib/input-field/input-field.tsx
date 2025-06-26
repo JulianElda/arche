@@ -40,7 +40,6 @@ export function InputField(properties: InputFieldProperties) {
 
   return (
     <input
-      autoFocus={!!properties.autofocus}
       className={clsx(
         properties.type === "range"
           ? "accent-primary-500 bg-ink-gray h-2 w-full rounded-md"

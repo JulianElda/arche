@@ -14,7 +14,6 @@ export function InputSelect(properties: InputSelectProperties) {
       />
       <div className="relative mt-1 rounded-md shadow-xs">
         <InputField
-          autofocus={properties.autofocus}
           id={properties.inputId}
           onChange={(value) => properties.onInputChange?.(value)}
           onKeyDown={(value) => properties.onInputKeydown?.(value)}

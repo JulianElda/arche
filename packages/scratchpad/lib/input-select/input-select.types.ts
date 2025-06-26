@@ -1,7 +1,6 @@
 import type { InputFieldTypes, Option } from "lib/commons/commons.types";
 
 export interface InputSelectProperties {
-  autofocus?: boolean;
   hideLabel?: boolean;
   inputId: string;
   inputLabel: string;

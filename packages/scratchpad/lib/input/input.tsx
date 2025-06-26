@@ -13,7 +13,6 @@ export function Input(properties: InputProperties) {
       />
       <div className="mt-1">
         <InputField
-          autofocus={properties.autofocus}
           disabled={properties.disabled}
           id={properties.id}
           max={properties.max}

@@ -14,7 +14,6 @@ export function InputButton(properties: InputButtonProperties) {
       <div className="mt-1 flex">
         <div className="relative flex grow items-stretch focus-within:z-10">
           <InputField
-            autofocus={properties.autofocus}
             id={properties.id}
             onChange={(value) => properties.onChange?.(value)}
             onKeyDown={(value) => properties.onKeyDown?.(value)}

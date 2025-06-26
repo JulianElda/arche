@@ -1,7 +1,6 @@
 import type { InputFieldTypes } from "lib/commons/commons.types";
 
 export interface InputFieldProperties {
-  autofocus?: boolean;
   disabled?: boolean;
   id: string;
   max?: number;

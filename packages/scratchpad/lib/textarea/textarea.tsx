@@ -13,7 +13,6 @@ export function TextArea(properties: TextAreaProperties) {
       />
       <div className="mt-1">
         <TextAreaField
-          autofocus={properties.autofocus}
           id={properties.id}
           onChange={(value) => properties.onChange?.(value)}
           onKeyDown={(value) => properties.onKeyDown?.(value)}
