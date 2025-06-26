@@ -1,5 +1,4 @@
 import js from "@eslint/js";
-import eslintParserTypeScript from "@typescript-eslint/parser";
 import perfectionist from "eslint-plugin-perfectionist";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import { globalIgnores } from "eslint/config";
@@ -13,7 +12,6 @@ export default tseslint.config([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
-      parser: eslintParserTypeScript,
     },
   },
   js.configs.recommended,
