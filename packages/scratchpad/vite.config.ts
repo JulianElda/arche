@@ -40,8 +40,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
-    setupFiles: "./lib/test-setup.ts",
-    workspace: [
+    projects: [
       {
         extends: true,
         plugins: [
@@ -67,5 +66,6 @@ export default defineConfig({
         },
       },
     ],
+    setupFiles: "./lib/test-setup.ts",
   },
 });
