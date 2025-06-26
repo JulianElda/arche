@@ -1,10 +1,10 @@
-export type SelectFieldProps = {
+export interface SelectFieldProperties {
   id: string;
-  value: string;
-  options: {
-    value: string;
-    label: string;
-  }[];
   inInputField?: boolean;
   onChange: (value: string) => void;
-};
+  options: {
+    label: string;
+    value: string;
+  }[];
+  value: string;
+}

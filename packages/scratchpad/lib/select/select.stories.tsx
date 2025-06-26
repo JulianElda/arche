@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { Select } from "./select";
-import { selectProps1 } from "./select.mocks";
+import { selectProperties1 } from "./select.mocks";
 
 const meta = {
-  title: "Select",
   component: Select,
   decorators: [
     (Story) => (
@@ -12,22 +12,23 @@ const meta = {
       </div>
     ),
   ],
+  title: "Select",
 } satisfies Meta<typeof Select>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const BasicSelect: Story = {
-  name: "Select",
   args: {
-    ...selectProps1,
+    ...selectProperties1,
   },
+  name: "Select",
 };
 
 export const SelectWithoutLabel: Story = {
-  name: "Select without label",
   args: {
-    ...selectProps1,
+    ...selectProperties1,
     hideLabel: true,
   },
+  name: "Select without label",
 };

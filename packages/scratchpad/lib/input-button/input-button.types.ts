@@ -1,12 +1,12 @@
-import { InputFieldProps } from "lib/input-field/input-field.types";
-import { InputLabelProps } from "lib/input-label/input-label.types";
+import type { InputFieldProperties } from "lib/input-field/input-field.types";
+import type { InputLabelProperties } from "lib/input-label/input-label.types";
 
-type IconButtonProps = {
-  icon?: React.ReactNode;
+export type InputButtonProperties = IconButtonProperties &
+  InputFieldProperties &
+  InputLabelProperties;
+
+interface IconButtonProperties {
   buttonAriaLabel: string;
+  icon?: React.ReactNode;
   onButtonClick: () => void;
-};
-
-export type InputButtonProps = InputFieldProps &
-  InputLabelProps &
-  IconButtonProps;
+}

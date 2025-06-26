@@ -1,16 +1,16 @@
-import { InputFieldTypes } from "lib/commons/commons.types";
+import type { InputFieldTypes } from "lib/commons/commons.types";
 
-export type InputFieldProps = {
-  id: string;
-  type: InputFieldTypes;
-  value: string | number;
-  placeholder?: string;
-  disabled?: boolean;
+export interface InputFieldProperties {
   autofocus?: boolean;
-  onChange?: (value: string | number) => void;
-  onKeyDown?: (value: string | number) => void;
-  withIconLeft?: boolean;
+  disabled?: boolean;
+  id: string;
   max?: number;
-  min?: number;
   maxLength?: number;
-};
+  min?: number;
+  onChange?: (value: number | string) => void;
+  onKeyDown?: (value: number | string) => void;
+  placeholder?: string;
+  type: InputFieldTypes;
+  value: number | string;
+  withIconLeft?: boolean;
+}

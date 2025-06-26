@@ -1,5 +1,5 @@
-export type HyperlinkProps = {
+export interface HyperlinkProperties {
+  asterisk?: boolean;
   href: string;
   title: string;
-  asterisk?: boolean;
-};
+}

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { Footer } from "./footer";
-import { footerProps } from "./footer.mocks";
+import { footerProperties } from "./footer.mocks";
 
 const meta = {
-  title: "Footer",
   component: Footer,
   decorators: [
     (Story) => (
@@ -12,14 +12,15 @@ const meta = {
       </div>
     ),
   ],
+  title: "Footer",
 } satisfies Meta<typeof Footer>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const FooterStandard: Story = {
-  name: "Footer",
   args: {
-    ...footerProps,
+    ...footerProperties,
   },
+  name: "Footer",
 };

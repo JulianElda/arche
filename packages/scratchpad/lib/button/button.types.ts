@@ -1,7 +1,7 @@
-export type ButtonProps = {
-  type: "button" | "submit";
-  style: "primary" | "secondary";
+export interface ButtonProperties {
   id: string;
-  text: string;
   onClick: () => void;
-};
+  style: "primary" | "secondary";
+  text: string;
+  type: "button" | "submit";
+}

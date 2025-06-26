@@ -1,28 +1,29 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { CheckboxProps } from "lib/checkbox/checkbox.types";
+import type { CheckboxProperties } from "lib/checkbox/checkbox.types";
+
 import { useState } from "react";
 import { expect } from "storybook/test";
+
 import { Checkbox } from "./checkbox";
-import { checkboxProps } from "./checkbox.mocks";
+import { checkboxProperties } from "./checkbox.mocks";
 
-const CheckboxTemplate = (args: CheckboxProps) => {
-  const [value, setValue] = useState<boolean>(args.value ?? true);
+const CheckboxTemplate = (arguments_: CheckboxProperties) => {
+  const [value, setValue] = useState<boolean>(arguments_.value ?? true);
 
-  const handleChange = (newVal: boolean) => {
-    setValue(newVal);
+  const handleChange = (newValue: boolean) => {
+    setValue(newValue);
   };
 
   return (
     <Checkbox
-      {...args}
-      value={value}
+      {...arguments_}
       onChange={handleChange}
+      value={value}
     />
   );
 };
 
 const meta = {
-  title: "Tests/Checkbox",
   component: CheckboxTemplate,
   decorators: [
     (Story) => (
@@ -32,80 +33,85 @@ const meta = {
     ),
   ],
   tags: ["!autodocs"],
+  title: "Tests/Checkbox",
 } satisfies Meta<typeof Checkbox>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const TestElements: Story = {
-  name: "render elements",
   args: {
-    ...checkboxProps,
+    ...checkboxProperties,
   },
+  name: "render elements",
   play: async ({ canvas }) => {
-    await expect(canvas.getByTestId(checkboxProps.id)).toBeInTheDocument();
+    await expect(canvas.getByTestId(checkboxProperties.id)).toBeInTheDocument();
     await expect(
-      canvas.getByLabelText(checkboxProps.label)
+      canvas.getByLabelText(checkboxProperties.label)
     ).toBeInTheDocument();
-    await expect(canvas.getByText(checkboxProps.label)).toBeInTheDocument();
     await expect(
-      canvas.getByRole("checkbox", { name: checkboxProps.label })
+      canvas.getByText(checkboxProperties.label)
+    ).toBeInTheDocument();
+    await expect(
+      canvas.getByRole("checkbox", { name: checkboxProperties.label })
     ).toBeInTheDocument();
   },
 };
 
 export const TestElementsWithoutLabel: Story = {
-  name: "render elements with hidden label",
   args: {
-    ...checkboxProps,
+    ...checkboxProperties,
     hideLabel: true,
   },
+  name: "render elements with hidden label",
   play: async ({ canvas }) => {
-    await expect(canvas.getByTestId(checkboxProps.id)).toBeInTheDocument();
+    await expect(canvas.getByTestId(checkboxProperties.id)).toBeInTheDocument();
     await expect(
-      canvas.getByLabelText(checkboxProps.label)
+      canvas.getByLabelText(checkboxProperties.label)
     ).toBeInTheDocument();
-    await expect(canvas.getByText(checkboxProps.label)).toBeInTheDocument();
     await expect(
-      canvas.getByRole("checkbox", { name: checkboxProps.label })
+      canvas.getByText(checkboxProperties.label)
+    ).toBeInTheDocument();
+    await expect(
+      canvas.getByRole("checkbox", { name: checkboxProperties.label })
     ).toBeInTheDocument();
   },
 };
 
 export const CheckboxInitialChecked: Story = {
-  name: "initial value checked",
   args: {
-    ...checkboxProps,
+    ...checkboxProperties,
   },
+  name: "initial value checked",
   play: async ({ canvas }) => {
-    await expect(canvas.getByTestId(checkboxProps.id)).toBeChecked();
+    await expect(canvas.getByTestId(checkboxProperties.id)).toBeChecked();
   },
 };
 
 export const CheckboxInitialNotChecked: Story = {
-  name: "initial value not checked",
   args: {
-    ...checkboxProps,
+    ...checkboxProperties,
     value: false,
   },
+  name: "initial value not checked",
   play: async ({ canvas }) => {
-    await expect(canvas.getByTestId(checkboxProps.id)).not.toBeChecked();
+    await expect(canvas.getByTestId(checkboxProperties.id)).not.toBeChecked();
   },
 };
 
 export const CheckboxChangeValue: Story = {
-  name: "change value",
   args: {
-    ...checkboxProps,
+    ...checkboxProperties,
   },
+  name: "change value",
   play: async ({ canvas, userEvent }) => {
-    await userEvent.click(canvas.getByTestId(checkboxProps.id));
-    await expect(canvas.getByTestId(checkboxProps.id)).not.toBeChecked();
-    await userEvent.click(canvas.getByTestId(checkboxProps.id));
-    await expect(canvas.getByTestId(checkboxProps.id)).toBeChecked();
+    await userEvent.click(canvas.getByTestId(checkboxProperties.id));
+    await expect(canvas.getByTestId(checkboxProperties.id)).not.toBeChecked();
+    await userEvent.click(canvas.getByTestId(checkboxProperties.id));
+    await expect(canvas.getByTestId(checkboxProperties.id)).toBeChecked();
 
     // click on the label
-    await userEvent.click(canvas.getByText(checkboxProps.label));
-    await expect(canvas.getByTestId(checkboxProps.id)).not.toBeChecked();
+    await userEvent.click(canvas.getByText(checkboxProperties.label));
+    await expect(canvas.getByTestId(checkboxProperties.id)).not.toBeChecked();
   },
 };

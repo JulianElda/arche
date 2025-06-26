@@ -1,9 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { Input } from "./input";
-import { inputProps1, inputProps2, inputProps3 } from "./input.mocks";
+import {
+  inputProperties1,
+  inputProperties2,
+  inputProperties3,
+} from "./input.mocks";
 
 const meta = {
-  title: "Input",
   component: Input,
   decorators: [
     (Story) => (
@@ -12,58 +16,59 @@ const meta = {
       </div>
     ),
   ],
+  title: "Input",
 } satisfies Meta<typeof Input>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const InputText: Story = {
-  name: "Input type text",
   args: {
-    ...inputProps1,
+    ...inputProperties1,
     hideLabel: false,
   },
+  name: "Input type text",
 };
 
 export const InputAutofocus: Story = {
-  name: "Input with autofocus",
   args: {
-    ...inputProps1,
-    hideLabel: false,
+    ...inputProperties1,
     autofocus: true,
+    hideLabel: false,
   },
+  name: "Input with autofocus",
 };
 
 export const InputNumber: Story = {
-  name: "Input type number",
   args: {
-    ...inputProps2,
+    ...inputProperties2,
     hideLabel: false,
   },
+  name: "Input type number",
 };
 
 export const InputSearch: Story = {
-  name: "Input type search",
   args: {
-    ...inputProps3,
+    ...inputProperties3,
     hideLabel: false,
   },
+  name: "Input type search",
 };
 
 export const InputHiddenLabel: Story = {
-  name: "Input without label",
   args: {
-    ...inputProps1,
+    ...inputProperties1,
     hideLabel: true,
   },
+  name: "Input without label",
 };
 
 export const InputWithPlaceholder: Story = {
-  name: "Input with placeholder",
   args: {
-    ...inputProps1,
+    ...inputProperties1,
     hideLabel: false,
-    value: "",
     placeholder: "Type here",
+    value: "",
   },
+  name: "Input with placeholder",
 };

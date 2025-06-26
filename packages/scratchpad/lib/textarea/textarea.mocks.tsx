@@ -1,15 +1,13 @@
-import {
-  textAreaFieldProps1,
-  textAreaFieldProps2,
-} from "lib/textarea-field/textarea-field.mocks";
-import { TextAreaProps } from "lib/textarea/textarea.types";
+import type { TextAreaProperties } from "lib/textarea/textarea.types";
 
-export const textAreaProps1: TextAreaProps = {
-  ...textAreaFieldProps1,
+import { textAreaFieldProperties1 } from "lib/textarea-field/textarea-field.mocks";
+
+export const textAreaProperties1: TextAreaProperties = {
+  ...textAreaFieldProperties1,
   label: "Textarea text",
 };
 
-export const textAreaProps2: TextAreaProps = {
-  ...textAreaFieldProps2,
+export const textAreaProperties2: TextAreaProperties = {
+  ...textAreaFieldProperties1,
   label: "Textarea number",
 };

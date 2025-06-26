@@ -1,71 +1,72 @@
+import type { InputFieldProperties } from "lib/input-field/input-field.types";
+
 import { clsx } from "clsx";
 import { isValidNumber } from "lib/commons/commons";
-import { InputFieldProps } from "lib/input-field/input-field.types";
 
-export function InputField(props: InputFieldProps) {
+export function InputField(properties: InputFieldProperties) {
   const onChange = (value: string) => {
-    if (!props.onChange) return;
+    if (!properties.onChange) return;
 
-    if (props.type === "number") {
+    if (properties.type === "number") {
       if (value === "") {
-        props.onChange(value);
+        properties.onChange(value);
       } else if (isValidNumber(value)) {
-        const nextValue = parseFloat(value);
+        const nextValue = Number.parseFloat(value);
         if (
-          props.max &&
-          props.min &&
-          nextValue < props.max &&
-          props.min < nextValue
+          properties.max &&
+          properties.min &&
+          nextValue < properties.max &&
+          properties.min < nextValue
         ) {
-          props.onChange(nextValue);
-        } else if (props.max && nextValue < props.max) {
-          props.onChange(nextValue);
-        } else if (props.min && props.min < nextValue) {
-          props.onChange(nextValue);
+          properties.onChange(nextValue);
+        } else if (properties.max && nextValue < properties.max) {
+          properties.onChange(nextValue);
+        } else if (properties.min && properties.min < nextValue) {
+          properties.onChange(nextValue);
         } else {
-          props.onChange(nextValue);
+          properties.onChange(nextValue);
         }
       } else {
-        props.onChange(0);
+        properties.onChange(0);
       }
     } else if (
-      props.type === "text" ||
-      props.type === "search" ||
-      props.type === "range"
+      properties.type === "text" ||
+      properties.type === "search" ||
+      properties.type === "range"
     ) {
-      props.onChange(value);
+      properties.onChange(value);
     }
   };
 
   return (
     <input
-      type={props.type}
-      id={props.id}
-      name={props.id}
-      data-testid={props.id}
-      value={props.value}
-      max={
-        props.type === "number" || props.type === "range"
-          ? props.max
-          : undefined
-      }
-      min={
-        props.type === "number" || props.type === "range"
-          ? props.min
-          : undefined
-      }
-      maxLength={props.maxLength ?? undefined}
-      disabled={props.disabled === true}
-      placeholder={props.placeholder}
-      autoFocus={!!props.autofocus}
-      onChange={(event) => onChange(event.target.value)}
-      onKeyDown={(event) => props.onKeyDown?.(event.key)}
+      autoFocus={!!properties.autofocus}
       className={clsx(
-        props.type === "range"
+        properties.type === "range"
           ? "accent-primary-500 bg-ink-gray h-2 w-full rounded-md"
           : "form-input focus:border-primary-300 focus:ring-primary-300 border-ink-gray text-ink-black dark:bg-slate dark:text-app-text-dark block w-full appearance-none border-1 bg-white p-2 px-3 ring-inset focus:ring-1 focus:ring-inset",
-        props.withIconLeft === true ? "rounded-l-md" : "rounded-md"
+        properties.withIconLeft === true ? "rounded-l-md" : "rounded-md"
       )}
+      data-testid={properties.id}
+      disabled={properties.disabled === true}
+      id={properties.id}
+      max={
+        properties.type === "number" || properties.type === "range"
+          ? properties.max
+          : undefined
+      }
+      maxLength={properties.maxLength ?? undefined}
+      min={
+        properties.type === "number" || properties.type === "range"
+          ? properties.min
+          : undefined
+      }
+      name={properties.id}
+      onChange={(event) => onChange(event.target.value)}
+      onKeyDown={(event) => properties.onKeyDown?.(event.key)}
+      placeholder={properties.placeholder}
+      type={properties.type}
+      value={properties.value}
     />
   );
 }

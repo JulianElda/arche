@@ -1,29 +1,29 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect } from "storybook/test";
-import { Select } from "./select";
-import { selectProps1 } from "./select.mocks";
+import type { SelectProperties } from "lib/select/select.types";
+
 import { useState } from "react";
-import { SelectProps } from "lib/select/select.types";
-import userEvent from "@testing-library/user-event";
+import { expect } from "storybook/test";
 
-const SelectTemplate = (args: SelectProps) => {
-  const [value, setValue] = useState(args.value ?? "");
+import { Select } from "./select";
+import { selectProperties1 } from "./select.mocks";
 
-  const handleChange = (newVal: string) => {
-    setValue(newVal);
+const SelectTemplate = (arguments_: SelectProperties) => {
+  const [value, setValue] = useState(arguments_.value ?? "");
+
+  const handleChange = (newValue: string) => {
+    setValue(newValue);
   };
 
   return (
     <Select
-      {...args}
-      value={value}
+      {...arguments_}
       onChange={handleChange}
+      value={value}
     />
   );
 };
 
 const meta = {
-  title: "Tests/Select",
   component: SelectTemplate,
   decorators: [
     (Story) => (
@@ -32,80 +32,85 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof Select>;
+  title: "Tests/Select",
+} satisfies Meta<typeof SelectTemplate>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const TestElements: Story = {
-  name: "render elements with label",
   args: {
-    ...selectProps1,
+    ...selectProperties1,
   },
+  name: "render elements with label",
   play: async ({ canvas }) => {
-    await expect(canvas.getByTestId(selectProps1.id)).toBeInTheDocument();
-    await expect(canvas.getByLabelText(selectProps1.label)).toBeInTheDocument();
+    await expect(canvas.getByTestId(selectProperties1.id)).toBeInTheDocument();
     await expect(
-      canvas.getByDisplayValue(selectProps1.options[0].label)
+      canvas.getByLabelText(selectProperties1.label)
     ).toBeInTheDocument();
     await expect(
-      canvas.getByRole("combobox", { name: selectProps1.label })
+      canvas.getByDisplayValue(selectProperties1.options[0].label)
     ).toBeInTheDocument();
-    selectProps1.options.forEach(async (option) => {
+    await expect(
+      canvas.getByRole("combobox", { name: selectProperties1.label })
+    ).toBeInTheDocument();
+    for (const option of selectProperties1.options) {
       await expect(
         canvas.getByRole("option", { name: option.label })
       ).toBeInTheDocument();
-    });
+    }
   },
 };
 
 export const TestElementsWithoutLabel: Story = {
-  name: "render elements without label",
   args: {
-    ...selectProps1,
+    ...selectProperties1,
     hideLabel: true,
   },
+  name: "render elements without label",
   play: async ({ canvas }) => {
-    await expect(canvas.getByTestId(selectProps1.id)).toBeInTheDocument();
-    await expect(canvas.getByLabelText(selectProps1.label)).toBeInTheDocument();
+    await expect(canvas.getByTestId(selectProperties1.id)).toBeInTheDocument();
     await expect(
-      canvas.getByDisplayValue(selectProps1.options[0].label)
+      canvas.getByLabelText(selectProperties1.label)
     ).toBeInTheDocument();
     await expect(
-      canvas.getByRole("combobox", { name: selectProps1.label })
+      canvas.getByDisplayValue(selectProperties1.options[0].label)
     ).toBeInTheDocument();
-    selectProps1.options.forEach(async (option) => {
+    await expect(
+      canvas.getByRole("combobox", { name: selectProperties1.label })
+    ).toBeInTheDocument();
+    for (const option of selectProperties1.options) {
       await expect(
         canvas.getByRole("option", { name: option.label })
       ).toBeInTheDocument();
-    });
+    }
   },
 };
 
 export const TestInitialValue: Story = {
-  name: "has initial value",
   args: {
-    ...selectProps1,
+    ...selectProperties1,
   },
+  name: "has initial value",
   play: async ({ canvas }) => {
-    await expect(canvas.getByTestId(selectProps1.id)).toHaveValue(
-      selectProps1.value
+    await expect(canvas.getByTestId(selectProperties1.id)).toHaveValue(
+      selectProperties1.value
     );
   },
 };
 
 export const TestChangeValue: Story = {
-  name: "change value",
   args: {
-    ...selectProps1,
+    ...selectProperties1,
   },
-  play: async ({ canvas }) => {
+  name: "change value",
+  play: async ({ canvas, userEvent }) => {
     await userEvent.selectOptions(
-      canvas.getByTestId(selectProps1.id),
-      selectProps1.options[1].label
+      canvas.getByTestId(selectProperties1.id),
+      selectProperties1.options[1].label
     );
-    await expect(canvas.getByTestId(selectProps1.id)).toHaveValue(
-      selectProps1.options[1].value
+    await expect(canvas.getByTestId(selectProperties1.id)).toHaveValue(
+      selectProperties1.options[1].value
     );
   },
 };

@@ -1,7 +1,7 @@
-export type CheckboxProps = {
+export interface CheckboxProperties {
+  hideLabel?: boolean;
   id: string;
   label: string;
-  value: boolean;
-  hideLabel?: boolean;
   onChange: (value: boolean) => void;
-};
+  value: boolean;
+}

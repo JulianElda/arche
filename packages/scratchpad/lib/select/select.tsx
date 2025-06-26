@@ -1,21 +1,22 @@
+import type { SelectProperties } from "lib/select/select.types";
+
 import { InputLabel } from "lib/input-label/input-label";
 import { SelectField } from "lib/select-field/select-field";
-import { SelectProps } from "lib/select/select.types";
 
-export function Select(props: SelectProps) {
+export function Select(properties: SelectProperties) {
   return (
     <div className="flex-1">
       <InputLabel
-        id={props.id}
-        label={props.label}
-        hideLabel={!!props.hideLabel}
+        hideLabel={Boolean(properties.hideLabel)}
+        id={properties.id}
+        label={properties.label}
       />
       <div className="mt-1">
         <SelectField
-          id={props.id}
-          value={props.value}
-          options={props.options}
-          onChange={props.onChange}
+          id={properties.id}
+          onChange={properties.onChange}
+          options={properties.options}
+          value={properties.value}
         />
       </div>
     </div>

@@ -1,17 +1,17 @@
 import { GithubMarkLight } from "lib/icons";
 
-type GitHubButtonLightProps = {
+interface GitHubButtonLightProperties {
   href: string;
-};
+}
 
-export function GitHubButtonLight(props: GitHubButtonLightProps) {
+export function GitHubButtonLight(properties: GitHubButtonLightProperties) {
   return (
     <a
-      href={props.href}
-      target="_blank"
+      aria-label={properties.href}
+      className="bg-app-background-dark size-8 rounded-md p-1"
+      href={properties.href}
       rel="noreferrer"
-      aria-label={props.href}
-      className="bg-app-background-dark size-8 rounded-md p-1">
+      target="_blank">
       <GithubMarkLight className="size-6" />
     </a>
   );

@@ -1,28 +1,30 @@
-import { InputFieldTypes } from "lib/commons/commons.types";
+import type { InputFieldTypes } from "lib/commons/commons.types";
+
 import {
   selectFieldOptions1,
   selectFieldOptions2,
 } from "lib/select-field/select-field.mocks";
-import { InputSelectProps } from "./input-select.types";
 
-export const inputSelectProps1: InputSelectProps = {
-  type: "text" as InputFieldTypes,
+import type { InputSelectProperties } from "./input-select.types";
+
+export const inputSelectProperties1: InputSelectProperties = {
   inputId: "input-id-1",
-  selectId: "select-id-1",
   inputLabel: "Currency amount",
-  selectLabel: "Currency select",
   inputValue: "100",
-  selectValue: selectFieldOptions1[0].value,
   options: [...selectFieldOptions1],
+  selectId: "select-id-1",
+  selectLabel: "Currency select",
+  selectValue: selectFieldOptions1[0].value,
+  type: "text" as InputFieldTypes,
 };
 
-export const inputSelectProps2: InputSelectProps = {
-  type: "text" as InputFieldTypes,
+export const inputSelectProperties2: InputSelectProperties = {
   inputId: "input-id-2",
-  selectId: "select-id-2",
   inputLabel: "Currency amount",
-  selectLabel: "Currency select",
   inputValue: "100",
-  selectValue: selectFieldOptions2[2].value,
   options: [...selectFieldOptions2],
+  selectId: "select-id-2",
+  selectLabel: "Currency select",
+  selectValue: selectFieldOptions2[2].value,
+  type: "text" as InputFieldTypes,
 };

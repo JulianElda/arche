@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { InputButton } from "./input-button";
 import {
-  inputButtonProps1,
-  inputButtonProps2,
-  inputButtonProps3,
-  inputButtonProps4,
+  inputButtonProperties1,
+  inputButtonProperties2,
+  inputButtonProperties3,
+  inputButtonProperties4,
 } from "./input-button.mocks";
 
 const meta = {
-  title: "InputButton",
   component: InputButton,
   decorators: [
     (Story) => (
@@ -17,35 +17,36 @@ const meta = {
       </div>
     ),
   ],
+  title: "InputButton",
 } satisfies Meta<typeof InputButton>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const IconInputButton: Story = {
-  name: "Input with icon button",
   args: {
-    ...inputButtonProps1,
+    ...inputButtonProperties1,
   },
+  name: "Input with icon button",
 };
 
 export const TextInputButton: Story = {
-  name: "Input with text button",
   args: {
-    ...inputButtonProps2,
+    ...inputButtonProperties2,
   },
+  name: "Input with text button",
 };
 
 export const NumberInputButton: Story = {
-  name: "Input number with icon button",
   args: {
-    ...inputButtonProps3,
+    ...inputButtonProperties3,
   },
+  name: "Input number with icon button",
 };
 
 export const SearchInputButton: Story = {
-  name: "Input search with icon button",
   args: {
-    ...inputButtonProps4,
+    ...inputButtonProperties4,
   },
+  name: "Input search with icon button",
 };

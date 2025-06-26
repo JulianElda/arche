@@ -1,6 +1,6 @@
-export type Option = {
-  value: string;
-  label: string;
-};
+export type InputFieldTypes = "number" | "range" | "search" | "text";
 
-export type InputFieldTypes = "text" | "number" | "search" | "range";
+export interface Option {
+  label: string;
+  value: string;
+}

@@ -1,17 +1,17 @@
 import { GithubMarkDark } from "lib/icons";
 
-type GitHubButtonDarkProps = {
+interface GitHubButtonDarkProperties {
   href: string;
-};
+}
 
-export function GitHubButtonDark(props: GitHubButtonDarkProps) {
+export function GitHubButtonDark(properties: GitHubButtonDarkProperties) {
   return (
     <a
-      href={props.href}
-      target="_blank"
+      aria-label={properties.href}
+      className="bg-app-background-light size-8 rounded-md p-1"
+      href={properties.href}
       rel="noreferrer"
-      aria-label={props.href}
-      className="bg-app-background-light size-8 rounded-md p-1">
+      target="_blank">
       <GithubMarkDark className="size-6" />
     </a>
   );

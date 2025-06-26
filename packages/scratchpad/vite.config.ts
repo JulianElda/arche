@@ -1,21 +1,30 @@
 /// <reference types="vitest/config" />
 /// <reference types="vitest" />
+import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import react from "@vitejs/plugin-react";
-import { resolve } from "path";
+import path, { resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
-import path from "path";
-
-// https://vitejs.dev/config/
-import { fileURLToPath } from "node:url";
-import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 const dirname =
-  typeof __dirname !== "undefined"
-    ? __dirname
-    : path.dirname(fileURLToPath(import.meta.url));
+  typeof __dirname === "undefined"
+    ? path.dirname(fileURLToPath(import.meta.url))
+    : __dirname;
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
+  build: {
+    copyPublicDir: false,
+    lib: {
+      entry: resolve(__dirname, "lib/index.ts"),
+      fileName: "scratchpad",
+      formats: ["es"],
+      name: "scratchpad",
+    },
+    rollupOptions: {
+      external: ["react", "react-dom"],
+    },
+  },
   plugins: [
     react(),
     dts({
@@ -23,9 +32,14 @@ export default defineConfig({
       tsconfigPath: "./tsconfig.lib.json",
     }),
   ],
+  resolve: {
+    alias: {
+      lib: path.resolve(__dirname, "lib"),
+    },
+  },
   test: {
-    globals: true,
     environment: "jsdom",
+    globals: true,
     setupFiles: "./lib/test-setup.ts",
     workspace: [
       {
@@ -38,37 +52,20 @@ export default defineConfig({
           }),
         ],
         test: {
-          name: "storybook",
           browser: {
             enabled: true,
             headless: true,
-            provider: "playwright",
             instances: [
               {
                 browser: "chromium",
               },
             ],
+            provider: "playwright",
           },
+          name: "storybook",
           setupFiles: [".storybook/vitest.setup.ts"],
         },
       },
     ],
-  },
-  resolve: {
-    alias: {
-      lib: path.resolve(__dirname, "lib"),
-    },
-  },
-  build: {
-    copyPublicDir: false,
-    lib: {
-      entry: resolve(__dirname, "lib/index.ts"),
-      name: "scratchpad",
-      fileName: "scratchpad",
-      formats: ["es"],
-    },
-    rollupOptions: {
-      external: ["react", "react-dom"],
-    },
   },
 });

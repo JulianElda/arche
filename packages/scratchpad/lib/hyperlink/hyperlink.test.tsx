@@ -1,38 +1,39 @@
 import { render, screen } from "@testing-library/react";
+
 import { Hyperlink } from "./hyperlink";
 import {
-  hyperlinkPropsDefault,
-  hyperlinkPropsAsterisk,
-  hyperlinkPropsNoAsterisk,
+  hyperlinkPropertiesAsterisk,
+  hyperlinkPropertiesDefault,
+  hyperlinkPropertiesNoAsterisk,
 } from "./hyperlink.mocks";
 
 describe("Hyperlink", () => {
   test("shows asterisks by default", () => {
-    render(<Hyperlink {...hyperlinkPropsDefault} />);
+    render(<Hyperlink {...hyperlinkPropertiesDefault} />);
     expect(screen.getByText(/GitHub/)).toHaveAttribute(
       "href",
-      hyperlinkPropsDefault.href
+      hyperlinkPropertiesDefault.href
     );
     expect(
-      screen.getByText(hyperlinkPropsDefault.title + "*")
+      screen.getByText(hyperlinkPropertiesDefault.title + "*")
     ).toBeInTheDocument();
   });
 
   test("shows asterisks", () => {
-    render(<Hyperlink {...hyperlinkPropsAsterisk} />);
+    render(<Hyperlink {...hyperlinkPropertiesAsterisk} />);
     expect(screen.getByText(/GitHub/)).toHaveAttribute(
       "href",
-      hyperlinkPropsAsterisk.href
+      hyperlinkPropertiesAsterisk.href
     );
     expect(
-      screen.getByText(hyperlinkPropsAsterisk.title + "*")
+      screen.getByText(hyperlinkPropertiesAsterisk.title + "*")
     ).toBeInTheDocument();
   });
 
   test("shows no asterisks", () => {
-    render(<Hyperlink {...hyperlinkPropsNoAsterisk} />);
+    render(<Hyperlink {...hyperlinkPropertiesNoAsterisk} />);
     expect(
-      screen.getByText(hyperlinkPropsNoAsterisk.title)
+      screen.getByText(hyperlinkPropertiesNoAsterisk.title)
     ).toBeInTheDocument();
   });
 });

@@ -1,9 +1,9 @@
-import { InputLabelProps } from "lib/input-label/input-label.types";
+import type { InputLabelProperties } from "lib/input-label/input-label.types";
 
-export type InputSliderProps = {
-  value: number;
-  min: number;
-  max: number;
+export type InputSliderProperties = InputLabelProperties & {
   disabled?: boolean;
-  onChange?: (value: string | number) => void;
-} & InputLabelProps;
+  max: number;
+  min: number;
+  onChange?: (value: number | string) => void;
+  value: number;
+};

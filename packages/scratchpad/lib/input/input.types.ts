@@ -1,4 +1,4 @@
-import { InputFieldProps } from "lib/input-field/input-field.types";
-import { InputLabelProps } from "lib/input-label/input-label.types";
+import type { InputFieldProperties } from "lib/input-field/input-field.types";
+import type { InputLabelProperties } from "lib/input-label/input-label.types";
 
-export type InputProps = InputFieldProps & InputLabelProps;
+export type InputProperties = InputFieldProperties & InputLabelProperties;

@@ -1,9 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { Button } from "./button";
-import { buttonPropsPrimary, buttonPropsSecondary } from "./button.mocks";
+import {
+  buttonPropertiesPrimary,
+  buttonPropertiesSecondary,
+} from "./button.mocks";
 
 const meta = {
-  title: "Button",
   component: Button,
   decorators: [
     (Story) => (
@@ -12,21 +15,22 @@ const meta = {
       </div>
     ),
   ],
+  title: "Button",
 } satisfies Meta<typeof Button>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const ButtonPrimary: Story = {
-  name: "Primary button",
   args: {
-    ...buttonPropsPrimary,
+    ...buttonPropertiesPrimary,
   },
+  name: "Primary button",
 };
 
 export const ButtonSecondary: Story = {
-  name: "Secondary button",
   args: {
-    ...buttonPropsSecondary,
+    ...buttonPropertiesSecondary,
   },
+  name: "Secondary button",
 };

@@ -1,15 +1,19 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { InputField } from "./input-field";
-import { inputFieldProps1, inputFieldProps2 } from "./input-field.mocks";
 import { useState } from "react";
+
+import { InputField } from "./input-field";
+import {
+  inputFieldProperties1,
+  inputFieldProperties2,
+} from "./input-field.mocks";
 
 describe("InputField", () => {
   test("renders InputField elements", () => {
-    render(<InputField {...inputFieldProps1} />);
-    expect(screen.getByTestId(inputFieldProps1.id)).toBeInTheDocument();
+    render(<InputField {...inputFieldProperties1} />);
+    expect(screen.getByTestId(inputFieldProperties1.id)).toBeInTheDocument();
     expect(
-      screen.getByDisplayValue(inputFieldProps1.value)
+      screen.getByDisplayValue(inputFieldProperties1.value)
     ).toBeInTheDocument();
   });
 
@@ -19,11 +23,11 @@ describe("InputField", () => {
       return (
         <InputField
           id="input-text-tester"
-          type="text"
-          value={value}
-          onChange={(newValue: string | number) => {
+          onChange={(newValue: number | string) => {
             setValue(newValue as string);
           }}
+          type="text"
+          value={value}
         />
       );
     };
@@ -93,11 +97,11 @@ describe("InputField", () => {
         <>
           <InputField
             id="input-number-tester"
-            type="number"
-            value={value}
-            onChange={(newValue: string | number) => {
+            onChange={(newValue: number | string) => {
               setValue(newValue as number);
             }}
+            type="number"
+            value={value}
           />
           <div data-testid="doubled">{double}</div>
         </>
@@ -106,17 +110,17 @@ describe("InputField", () => {
 
     test("callbacks number value and filters string", async () => {
       const onChangeMock = vi.fn();
-      const props: typeof inputFieldProps2 = {
-        ...inputFieldProps2,
-        value: 0,
+      const properties: typeof inputFieldProperties2 = {
+        ...inputFieldProperties2,
         onChange: onChangeMock,
+        value: 0,
       };
       const user = userEvent.setup();
-      render(<InputField {...props} />);
+      render(<InputField {...properties} />);
 
-      await user.type(screen.getByTestId(props.id), "1");
+      await user.type(screen.getByTestId(properties.id), "1");
       expect(onChangeMock).toHaveBeenLastCalledWith(1);
-      await user.type(screen.getByTestId(props.id), "a");
+      await user.type(screen.getByTestId(properties.id), "a");
       expect(onChangeMock).toHaveBeenLastCalledWith(1);
     });
 
@@ -125,7 +129,7 @@ describe("InputField", () => {
       render(<InputNumberTester initialValue={0} />);
 
       await user.type(screen.getByTestId("input-number-tester"), "value");
-      expect(screen.getByTestId("input-number-tester")).toHaveValue(null);
+      expect(screen.getByTestId("input-number-tester")).toBeNull();
       expect(screen.getByTestId("doubled")).toHaveTextContent("0");
     });
 

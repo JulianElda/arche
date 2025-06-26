@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { Card } from "./card";
 
 const meta = {
-  title: "Card",
   component: Card,
   decorators: [
     (Story) => (
@@ -11,14 +11,15 @@ const meta = {
       </div>
     ),
   ],
+  title: "Card",
 } satisfies Meta<typeof Card>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const CardWithContent: Story = {
-  name: "Card",
   args: {
     children: <p>Card content</p>,
   },
+  name: "Card",
 };

@@ -1,8 +1,10 @@
-import { CheckboxProps } from "./checkbox.types";
+import type { CheckboxProperties } from "./checkbox.types";
 
-export const checkboxProps: CheckboxProps = {
+export const checkboxProperties: CheckboxProperties = {
   id: "checkbox-id",
   label: "Checkbox label",
+  onChange: () => {
+    console.log("");
+  },
   value: true,
-  onChange: () => undefined,
 };

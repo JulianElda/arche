@@ -1,17 +1,15 @@
+import useCookie from "lib/commons/use-cookie";
 import { useEffect, useState } from "react";
-import useCookie from "lib/commons/useCookie";
 
 const COOKIE_KEY = "dark-theme";
 const DARKMODE_CLASS = "dark";
 
-export function useDarkMode(
-  initialValue: boolean = false
-): [boolean, () => void] {
+export function useDarkMode(initialValue = false): [boolean, () => void] {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(initialValue);
   const [cookieValue, setCookieValue] = useCookie(COOKIE_KEY);
 
   useEffect(() => {
-    const prefersDark = window.matchMedia?.(
+    const prefersDark = globalThis.matchMedia?.(
       "(prefers-color-scheme: dark)"
     ).matches;
 

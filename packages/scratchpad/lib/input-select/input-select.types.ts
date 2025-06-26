@@ -1,17 +1,17 @@
-import { InputFieldTypes, Option } from "lib/commons/commons.types";
+import type { InputFieldTypes, Option } from "lib/commons/commons.types";
 
-export type InputSelectProps = {
-  type: InputFieldTypes;
-  inputId: string;
-  selectId: string;
-  hideLabel?: boolean;
-  inputLabel: string;
-  selectLabel: string;
-  inputValue: string | number;
-  selectValue: string;
-  options: Option[];
+export interface InputSelectProperties {
   autofocus?: boolean;
-  onInputChange?: (value: string | number) => void;
-  onInputKeydown?: (key: string | number) => void;
+  hideLabel?: boolean;
+  inputId: string;
+  inputLabel: string;
+  inputValue: number | string;
+  onInputChange?: (value: number | string) => void;
+  onInputKeydown?: (key: number | string) => void;
   onSelectChange?: (value: string) => void;
-};
+  options: Option[];
+  selectId: string;
+  selectLabel: string;
+  selectValue: string;
+  type: InputFieldTypes;
+}

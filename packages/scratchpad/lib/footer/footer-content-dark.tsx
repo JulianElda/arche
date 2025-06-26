@@ -1,16 +1,16 @@
 import { ThemeSun } from "lib/icons";
 
-type FooterContentDarkProps = {
+interface FooterContentDarkProperties {
   onToggleDarkMode: () => void;
-};
+}
 
-export function FooterContentDark(props: FooterContentDarkProps) {
+export function FooterContentDark(properties: FooterContentDarkProperties) {
   return (
     <button
       aria-label="Toggle light mode"
-      data-testid="footer-toggle-light"
       className="bg-app-background-light text-app-text-light size-8 cursor-pointer rounded-md p-1"
-      onClick={() => props.onToggleDarkMode()}>
+      data-testid="footer-toggle-light"
+      onClick={() => properties.onToggleDarkMode()}>
       <ThemeSun className="size-6 stroke-2" />
     </button>
   );

@@ -1,4 +1,8 @@
-export type FooterProps = {
+export interface FooterProperties {
+  /**
+   * additional class
+   */
+  extraClass?: string;
   /**
    * shown next to GitHub button
    */
@@ -7,8 +11,4 @@ export type FooterProps = {
    * link on GitHub button and label
    */
   link: string;
-  /**
-   * additional class
-   */
-  extraClass?: string;
-};
+}

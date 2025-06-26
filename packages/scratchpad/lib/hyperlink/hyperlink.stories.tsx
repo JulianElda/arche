@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { Hyperlink } from "./hyperlink";
 import {
-  hyperlinkPropsAsterisk,
-  hyperlinkPropsNoAsterisk,
+  hyperlinkPropertiesAsterisk,
+  hyperlinkPropertiesNoAsterisk,
 } from "./hyperlink.mocks";
 
 const meta = {
-  title: "Hyperlink",
   component: Hyperlink,
   decorators: [
     (Story) => (
@@ -15,21 +15,22 @@ const meta = {
       </div>
     ),
   ],
+  title: "Hyperlink",
 } satisfies Meta<typeof Hyperlink>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const HyperlinkWithAsterisk: Story = {
-  name: "Hyperlink",
   args: {
-    ...hyperlinkPropsAsterisk,
+    ...hyperlinkPropertiesAsterisk,
   },
+  name: "Hyperlink",
 };
 
 export const HyperlinkWithoutAsterisk: Story = {
-  name: "Hyperlink without asterisk",
   args: {
-    ...hyperlinkPropsNoAsterisk,
+    ...hyperlinkPropertiesNoAsterisk,
   },
+  name: "Hyperlink without asterisk",
 };

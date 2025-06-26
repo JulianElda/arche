@@ -1,6 +1,6 @@
-export type InputLabelProps = {
+export interface InputLabelProperties {
+  hideLabel?: boolean;
   id: string;
   label: string;
-  hideLabel?: boolean;
-  value?: string | number;
-};
+  value?: number | string;
+}

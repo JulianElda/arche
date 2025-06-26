@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { ProgressBar } from "lib/progress-bar/progress-bar";
 import {
-  progressBarProps1,
-  progressBarProps2,
+  progressBarProperties1,
+  progressBarProperties2,
 } from "lib/progress-bar/progress-bar.mocks";
 
 const meta = {
-  title: "ProgressBar",
   component: ProgressBar,
   decorators: [
     (Story) => (
@@ -15,21 +15,22 @@ const meta = {
       </div>
     ),
   ],
+  title: "ProgressBar",
 } satisfies Meta<typeof ProgressBar>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const ProgressBarNoLabel: Story = {
-  name: "Progress bar",
   args: {
-    ...progressBarProps2,
+    ...progressBarProperties2,
   },
+  name: "Progress bar",
 };
 
 export const ProgressBarWithLabel: Story = {
-  name: "Progress bar with label",
   args: {
-    ...progressBarProps1,
+    ...progressBarProperties1,
   },
+  name: "Progress bar with label",
 };

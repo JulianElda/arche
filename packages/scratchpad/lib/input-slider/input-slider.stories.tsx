@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+
 import { InputSlider } from "lib/input-slider/input-slider";
-import { inputSliderProps1 } from "lib/input-slider/input-slider.mocks";
+import { inputSliderProperties1 } from "lib/input-slider/input-slider.mocks";
 
 const meta = {
-  title: "InputSlider",
   component: InputSlider,
   decorators: [
     (Story) => (
@@ -12,14 +12,15 @@ const meta = {
       </div>
     ),
   ],
+  title: "InputSlider",
 } satisfies Meta<typeof InputSlider>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const InputSliderMinMax: Story = {
-  name: "Input type text",
   args: {
-    ...inputSliderProps1,
+    ...inputSliderProperties1,
   },
+  name: "Input type text",
 };

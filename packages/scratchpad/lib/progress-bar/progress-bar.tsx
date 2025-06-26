@@ -1,31 +1,32 @@
-import { InputLabel } from "lib/input-label/input-label";
-import { ProgressBarProps } from "lib/progress-bar/progress-bar.types";
+import type { ProgressBarProperties } from "lib/progress-bar/progress-bar.types";
 
-export function ProgressBar(props: ProgressBarProps) {
-  const totalRange = props.max - props.min;
-  const currentRange = props.value - props.min;
+import { InputLabel } from "lib/input-label/input-label";
+
+export function ProgressBar(properties: ProgressBarProperties) {
+  const totalRange = properties.max - properties.min;
+  const currentRange = properties.value - properties.min;
   const currentPercent = Math.floor((currentRange * 100) / totalRange);
 
   return (
     <div className="flex-1">
       <InputLabel
-        id={props.id}
-        label={props.label}
-        hideLabel={!!props.hideLabel}
+        hideLabel={Boolean(properties.hideLabel)}
+        id={properties.id}
+        label={properties.label}
       />
       <div className="mt-1 h-2 rounded-md bg-gray-200 dark:bg-gray-500">
         <div
-          id={props.id}
-          data-testid={props.id}
+          aria-label={properties.label}
+          aria-valuemax={properties.max}
+          aria-valuemin={properties.min}
+          aria-valuenow={properties.value}
           className="bg-primary-500 h-2 rounded-md"
+          data-testid={properties.id}
+          id={properties.id}
+          role="progressbar"
           style={{
             width: `${currentPercent}%`,
           }}
-          role="progressbar"
-          aria-valuemax={props.max}
-          aria-valuemin={props.min}
-          aria-valuenow={props.value}
-          aria-label={props.label}
         />
       </div>
     </div>

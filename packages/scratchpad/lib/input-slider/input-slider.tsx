@@ -1,25 +1,26 @@
-import { InputSliderProps } from "lib/input-slider/input-slider.types";
-import { InputLabel } from "lib/input-label/input-label";
-import { InputField } from "lib/input-field/input-field";
+import type { InputSliderProperties } from "lib/input-slider/input-slider.types";
 
-export function InputSlider(props: InputSliderProps) {
+import { InputField } from "lib/input-field/input-field";
+import { InputLabel } from "lib/input-label/input-label";
+
+export function InputSlider(properties: InputSliderProperties) {
   return (
     <div className="flex-1">
       <InputLabel
-        id={props.id}
-        label={props.label}
-        hideLabel={!!props.hideLabel}
-        value={props.value}
+        hideLabel={!!properties.hideLabel}
+        id={properties.id}
+        label={properties.label}
+        value={properties.value}
       />
       <div>
         <InputField
+          disabled={properties.disabled}
+          id={properties.id}
+          max={properties.max}
+          min={properties.min}
+          onChange={(value) => properties.onChange?.(value)}
           type="range"
-          id={props.id}
-          value={props.value}
-          max={props.max}
-          min={props.min}
-          disabled={props.disabled}
-          onChange={(value) => props.onChange?.(value)}
+          value={properties.value}
         />
       </div>
     </div>

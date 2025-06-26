@@ -1,18 +1,18 @@
-import { HyperlinkProps } from "./hyperlink.types";
+import type { HyperlinkProperties } from "./hyperlink.types";
 
-export const hyperlinkPropsDefault: HyperlinkProps = {
+export const hyperlinkPropertiesDefault: HyperlinkProperties = {
   href: "https://julianelda.github.io",
   title: "GitHub",
 };
 
-export const hyperlinkPropsAsterisk: HyperlinkProps = {
-  href: "https://julianelda.github.io",
-  title: "GitHub",
+export const hyperlinkPropertiesAsterisk: HyperlinkProperties = {
   asterisk: true,
-};
-
-export const hyperlinkPropsNoAsterisk: HyperlinkProps = {
   href: "https://julianelda.github.io",
   title: "GitHub",
+};
+
+export const hyperlinkPropertiesNoAsterisk: HyperlinkProperties = {
   asterisk: false,
+  href: "https://julianelda.github.io",
+  title: "GitHub",
 };

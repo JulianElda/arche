@@ -1,4 +1,3 @@
 export const isValidNumber = function (value: string) {
-  if (isNaN(Number(value))) return false;
-  else return true;
+  return Number.isNaN(Number(value)) ? false : true;
 };

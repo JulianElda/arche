@@ -7,16 +7,16 @@
  * mockMatchMedia(false)
  */
 export const mockMatchMedia = (matches: boolean): void => {
-  Object.defineProperty(window, "matchMedia", {
-    writable: true,
+  Object.defineProperty(globalThis, "matchMedia", {
     value: vitest.fn().mockImplementation((query) => ({
+      addEventListener: vitest.fn(),
+      dispatchEvent: vitest.fn(),
       matches,
       media: query,
-      onchange: null,
-      addEventListener: vitest.fn(),
+      onchange: undefined,
       removeEventListener: vitest.fn(),
-      dispatchEvent: vitest.fn(),
     })),
+    writable: true,
   });
 };
 
@@ -36,19 +36,20 @@ export const mockStorage = (name: "localStorage" | "sessionStorage"): void => {
     }
 
     getItem(key: string) {
-      return this.store[key] || null;
+      return this.store[key] || undefined;
+    }
+
+    removeItem(key: string) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+      delete this.store[key];
     }
 
     setItem(key: string, value: unknown) {
       this.store[key] = value + "";
     }
-
-    removeItem(key: string) {
-      delete this.store[key];
-    }
   }
 
-  Object.defineProperty(window, name, {
+  Object.defineProperty(globalThis, name, {
     value: new StorageMock(),
   });
 };

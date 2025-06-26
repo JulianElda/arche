@@ -1,18 +1,19 @@
-import { clsx } from "clsx";
-import { InputLabelProps } from "lib/input-label/input-label.types";
+import type { InputLabelProperties } from "lib/input-label/input-label.types";
 
-export function InputLabel(props: InputLabelProps) {
+import { clsx } from "clsx";
+
+export function InputLabel(properties: InputLabelProperties) {
   return (
     <div className="flex">
       <label
-        htmlFor={props.id}
         className={clsx(
           "font-heading mr-auto font-bold",
-          props.hideLabel && "sr-only"
-        )}>
-        {props.label}
+          properties.hideLabel && "sr-only"
+        )}
+        htmlFor={properties.id}>
+        {properties.label}
       </label>
-      {props.value && <label>{props.value}</label>}
+      {properties.value && <label>{properties.value}</label>}
     </div>
   );
 }

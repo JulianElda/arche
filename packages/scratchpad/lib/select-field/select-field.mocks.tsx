@@ -1,53 +1,57 @@
 export const selectFieldOptions1 = [
   {
-    value: "EUR",
     label: "Euro",
+    value: "EUR",
   },
   {
-    value: "GBP",
     label: "British Pound",
+    value: "GBP",
   },
   {
-    value: "JPY",
     label: "Japanese Yen",
+    value: "JPY",
   },
   {
-    value: "USD",
     label: "United States Dollar",
+    value: "USD",
   },
 ];
 
 export const selectFieldOptions2 = [
   {
-    value: "EUR",
     label: "EUR",
+    value: "EUR",
   },
   {
-    value: "GBP",
     label: "GBP",
+    value: "GBP",
   },
   {
-    value: "JPY",
     label: "JPY",
+    value: "JPY",
   },
   {
-    value: "USD",
     label: "USD",
+    value: "USD",
   },
 ];
 
-export const selectFieldProps1 = {
+export const selectFieldProperties1 = {
   id: "select-id-1",
-  value: selectFieldOptions1[0].value,
-  options: [...selectFieldOptions1],
   inInputField: false,
-  onChange: () => undefined,
+  onChange: () => {
+    console.log();
+  },
+  options: [...selectFieldOptions1],
+  value: selectFieldOptions1[0].value,
 };
 
-export const selectFieldProps2 = {
+export const selectFieldProperties2 = {
   id: "select-id-2",
-  value: selectFieldOptions2[2].value,
-  options: [...selectFieldOptions2],
   inInputField: false,
-  onChange: () => undefined,
+  onChange: () => {
+    console.log();
+  },
+  options: [...selectFieldOptions2],
+  value: selectFieldOptions2[2].value,
 };
