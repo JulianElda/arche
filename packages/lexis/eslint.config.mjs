@@ -1,6 +1,6 @@
 import js from "@eslint/js";
+import eslintParserTypeScript from "@typescript-eslint/parser";
 import perfectionist from "eslint-plugin-perfectionist";
-import tailwind from "eslint-plugin-tailwindcss";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 import { globalIgnores } from "eslint/config";
 import globals from "globals";
@@ -13,6 +13,7 @@ export default tseslint.config([
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+      parser: eslintParserTypeScript,
     },
   },
   js.configs.recommended,
@@ -20,7 +21,6 @@ export default tseslint.config([
   tseslint.configs.stylistic,
   tseslint.configs.eslintRecommended,
   eslintPluginUnicorn.configs.recommended,
-  tailwind.configs["flat/recommended"],
   perfectionist.configs["recommended-natural"],
   {
     rules: {
