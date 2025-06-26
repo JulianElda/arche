@@ -7,7 +7,7 @@ export function InputSlider(properties: InputSliderProperties) {
   return (
     <div className="flex-1">
       <InputLabel
-        hideLabel={!!properties.hideLabel}
+        hideLabel={Boolean(properties.hideLabel)}
         id={properties.id}
         label={properties.label}
         value={properties.value}

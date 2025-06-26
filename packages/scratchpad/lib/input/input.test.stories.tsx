@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { InputProperties } from "lib/input/input.types";
 
+import { Input } from "lib/input/input";
+import { inputProperties1, inputProperties2 } from "lib/input/input.mocks";
 import { useState } from "react";
 import { action } from "storybook/actions";
 import { expect } from "storybook/test";
-
-import { Input } from "./input";
-import { inputProperties1, inputProperties2 } from "./input.mocks";
 
 const InputTemplate = (arguments_: InputProperties) => {
   const [value, setValue] = useState(arguments_.value || "");
@@ -54,6 +53,9 @@ export const TestElements: Story = {
     await expect(canvas.getByTestId(inputProperties1.id)).toBeInTheDocument();
     await expect(
       canvas.getByDisplayValue(inputProperties1.value)
+    ).toBeInTheDocument();
+    await expect(
+      canvas.getByRole("textbox", { name: inputProperties1.label })
     ).toBeInTheDocument();
   },
 };
@@ -157,5 +159,10 @@ export const NumberChangeValue: Story = {
     await userEvent.clear(canvas.getByTestId(inputProperties2.id));
     await userEvent.type(canvas.getByTestId(inputProperties2.id), "3.14");
     await expect(canvas.getByTestId(inputProperties2.id)).toHaveValue(3.14);
+
+    // incomplete float
+    await userEvent.clear(canvas.getByTestId(inputProperties2.id));
+    await userEvent.type(canvas.getByTestId(inputProperties2.id), "3.");
+    await expect(canvas.getByTestId(inputProperties2.id)).toHaveValue(3);
   },
 };

@@ -18,7 +18,7 @@ export function Checkbox(properties: CheckboxProperties) {
       </div>
       <div className="ml-1 leading-6">
         <InputLabel
-          hideLabel={!!properties.hideLabel}
+          hideLabel={Boolean(properties.hideLabel)}
           id={properties.id}
           label={properties.label}
         />

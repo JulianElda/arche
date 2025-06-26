@@ -7,8 +7,7 @@ export function Hyperlink(properties: HyperlinkProperties) {
       href={properties.href}
       rel="noreferrer"
       target="_blank">
-      {properties.title}
-      {properties.asterisk === false ? "" : "*"}
+      {`${properties.title}${properties.asterisk === false ? "" : "*"}`}
     </a>
   );
 }

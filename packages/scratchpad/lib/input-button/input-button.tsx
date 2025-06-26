@@ -7,7 +7,7 @@ export function InputButton(properties: InputButtonProperties) {
   return (
     <div className="flex-1">
       <InputLabel
-        hideLabel={!!properties.hideLabel}
+        hideLabel={Boolean(properties.hideLabel)}
         id={properties.id}
         label={properties.label}
       />
@@ -25,6 +25,7 @@ export function InputButton(properties: InputButtonProperties) {
         <button
           aria-label={properties.buttonAriaLabel}
           className="hover:bg-primary-500 active:bg-primary-700 focus:border-primary-300 focus:ring-primary-300 border-ink-gray hover:text-ink-white relative -ml-px inline-flex cursor-pointer appearance-none items-center gap-x-1.5 rounded-r-md border-1 border-l-0 px-3 py-2 text-sm font-bold ring-inset focus:ring-1 focus:ring-inset"
+          data-testid={properties.id + "-button"}
           onClick={() => properties.onButtonClick()}
           type="button">
           {properties.icon}
