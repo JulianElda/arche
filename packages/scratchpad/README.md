@@ -3,7 +3,7 @@
 > React components and styles. Designed and developed by Julius Polar.
 
 [![npm version](https://img.shields.io/npm/v/@julianelda/scratchpad)](https://www.npmjs.com/package/@julianelda/scratchpad)
-[![license](https://img.shields.io/github/license/julianelda/scratchpad)](https://github.com/julianelda/scratchpad/blob/main/LICENSE)
+[![license](https://img.shields.io/github/license/julianelda/scratchpad)](https://github.com/julianelda/scratchpad/blob/master/LICENSE)
 
 # Usage
 
