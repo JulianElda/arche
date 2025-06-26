@@ -1,4 +1,4 @@
-import { Card, Footer, Checkbox } from "lib";
+import { Card, Checkbox, Footer } from "lib";
 import { useState } from "react";
 
 function App() {
@@ -11,15 +11,15 @@ function App() {
           <Checkbox
             id=""
             label="checkboxx"
+            onChange={() => setValue((value_) => !value_)}
             value={value}
-            onChange={() => setValue((val) => !val)}
           />
         </div>
       </Card>
       <Footer
+        extraClass="max-w-lg"
         label="Julius Polar"
         link="https://github.com/JulianElda/scratchpad"
-        extraClass="max-w-lg"
       />
     </div>
   );

@@ -6,8 +6,10 @@ import path, { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+
+const __dirname = import.meta.dirname;
 const dirname =
-  typeof __dirname === "undefined"
+  __dirname === undefined
     ? path.dirname(fileURLToPath(import.meta.url))
     : __dirname;
 
