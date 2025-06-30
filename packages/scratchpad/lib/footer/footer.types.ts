@@ -4,11 +4,7 @@ export interface FooterProperties {
    */
   extraClass?: string;
   /**
-   * shown next to GitHub button
-   */
-  label: string;
-  /**
-   * link on GitHub button and label
+   * link on GitHub button
    */
   link: string;
 }

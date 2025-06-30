@@ -27,9 +27,9 @@ export function Footer(properties: FooterProperties) {
           <GitHubButtonLight href={properties.link} />
         )}
         <Hyperlink
-          asterisk={false}
-          href={properties.link}
-          title={properties.label}
+          asterisk={true}
+          href="https://julianelda.io"
+          title="Julius Polar"
         />
       </div>
       {isDarkMode ? (
