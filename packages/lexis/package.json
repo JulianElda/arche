@@ -1,18 +1,22 @@
 {
   "name": "@julianelda/lexis",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "type": "module",
   "exports": {
     ".": "./eslint.config.mjs",
-    "./react": "./eslint.config.react.mjs"
+    "./react": "./eslint.config.react.mjs",
+    "./tsx-tailwind": "./eslint.config.tsx-tailwind.mjs"
   },
   "files": [
     "eslint.config.mjs",
-    "eslint.config.react.mjs"
+    "eslint.config.react.mjs",
+    "eslint.config.tsx-tailwind.mjs"
   ],
   "peerDependencies": {
     "@eslint/js": "^9.29.0",
+    "@typescript-eslint/parser": "^8.35.1",
     "eslint": "^9.29.0",
+    "eslint-plugin-better-tailwindcss": "^3.4.3",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-perfectionist": "^4.15.0",
     "eslint-plugin-react-hooks": "^5.2.0",
