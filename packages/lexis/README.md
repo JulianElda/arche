@@ -97,7 +97,7 @@ import prettier from "@julianelda/lexis/prettier";
  */
 const config = {
   ...prettier,
-  ...
+  plugins: ["prettier-plugin-tailwindcss"]
 };
 
 export default config;

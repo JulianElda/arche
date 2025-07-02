@@ -1,6 +1,6 @@
 {
   "name": "@julianelda/lexis",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "module",
   "exports": {
     ".": "./eslint.config.mjs",
