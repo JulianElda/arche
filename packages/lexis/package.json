@@ -1,16 +1,18 @@
 {
   "name": "@julianelda/lexis",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "type": "module",
   "exports": {
     ".": "./eslint.config.mjs",
     "./react": "./eslint.config.react.mjs",
-    "./tsx-tailwind": "./eslint.config.tsx-tailwind.mjs"
+    "./tsx-tailwind": "./eslint.config.tsx-tailwind.mjs",
+    "./prettier": "./prettier.config.js"
   },
   "files": [
     "eslint.config.mjs",
     "eslint.config.react.mjs",
-    "eslint.config.tsx-tailwind.mjs"
+    "eslint.config.tsx-tailwind.mjs",
+    "prettier.config.js"
   ],
   "peerDependencies": {
     "@eslint/js": "^9.29.0",
@@ -23,6 +25,8 @@
     "eslint-plugin-react-refresh": "^0.4.20",
     "eslint-plugin-unicorn": "^59.0.1",
     "globals": "^16.2.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwind": "^2.2.12",
     "typescript-eslint": "^8.35.0"
   }
 }
