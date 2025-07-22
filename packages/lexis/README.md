@@ -68,14 +68,22 @@ export default config;
 ```ts
 import lexis from "@julianelda/lexis/react";
 import tailwind from "@julianelda/lexis/tsx-tailwind";
+import tsParser from "@typescript-eslint/parser";
 
 const config = [
 
   ...lexis,
   ...tailwind,
+  {
+    files: ["**/*.{ts,tsx,cts,mts}"],
+    languageOptions: {
+      parser: tsParser,
+    },
+  },
   settings: {
     "better-tailwindcss": {
-      entryPoint: "src/tailwind.css"
+      entryPoint: "src/tailwind.css",
+      tsconfig: "tsconfig.json",
     }
   },
   {
@@ -97,7 +105,7 @@ import prettier from "@julianelda/lexis/prettier";
  */
 const config = {
   ...prettier,
-  plugins: ["prettier-plugin-tailwindcss"]
+  plugins: ["prettier-plugin-tailwindcss"],
 };
 
 export default config;
