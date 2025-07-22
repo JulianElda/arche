@@ -1,12 +1,9 @@
 {
-  "name": "@julianelda/lexis",
-  "version": "1.2.0",
-  "type": "module",
   "exports": {
     ".": "./eslint.config.mjs",
+    "./prettier": "./prettier.config.js",
     "./react": "./eslint.config.react.mjs",
-    "./tsx-tailwind": "./eslint.config.tsx-tailwind.mjs",
-    "./prettier": "./prettier.config.js"
+    "./tsx-tailwind": "./eslint.config.tsx-tailwind.mjs"
   },
   "files": [
     "eslint.config.mjs",
@@ -14,7 +11,9 @@
     "eslint.config.tsx-tailwind.mjs",
     "prettier.config.js"
   ],
+  "name": "@julianelda/lexis",
   "peerDependencies": {
+    "@biomejs/biome": "^2.1.2",
     "@eslint/js": "^9.31.0",
     "@prettier/plugin-oxc": "^0.0.4",
     "@typescript-eslint/parser": "^8.38.0",
@@ -28,5 +27,7 @@
     "globals": "^16.3.0",
     "prettier": "^3.6.2",
     "typescript-eslint": "^8.38.0"
-  }
+  },
+  "type": "module",
+  "version": "1.3.0"
 }
