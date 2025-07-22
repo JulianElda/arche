@@ -1,11 +1,13 @@
 {
   "exports": {
     ".": "./eslint.config.mjs",
+    "./biome": "./biome.json",
     "./prettier": "./prettier.config.js",
     "./react": "./eslint.config.react.mjs",
     "./tsx-tailwind": "./eslint.config.tsx-tailwind.mjs"
   },
   "files": [
+    "biome.json",
     "eslint.config.mjs",
     "eslint.config.react.mjs",
     "eslint.config.tsx-tailwind.mjs",
@@ -29,5 +31,5 @@
     "typescript-eslint": "^8.38.0"
   },
   "type": "module",
-  "version": "1.3.0"
+  "version": "1.3.1"
 }
