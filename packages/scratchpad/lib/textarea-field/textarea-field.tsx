@@ -9,7 +9,13 @@ export function TextAreaField(properties: TextAreaFieldProperties) {
 
   return (
     <textarea
-      className="form-textarea focus:border-primary-300 focus:ring-primary-300 border-ink-gray text-ink-black dark:text-ink-white block w-full appearance-none rounded-md border-1 bg-white p-2 px-3 ring-inset focus:ring-1 focus:ring-inset dark:bg-slate-700"
+      className={`
+        block w-full form-textarea appearance-none rounded-md border-1
+        border-ink-gray bg-white p-2 px-3 text-ink-black ring-inset
+        focus:border-primary-300 focus:ring-1 focus:ring-primary-300
+        focus:ring-inset
+        dark:bg-slate-700 dark:text-ink-white
+      `}
       data-testid={properties.id}
       id={properties.id}
       name={properties.id}

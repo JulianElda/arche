@@ -4,7 +4,12 @@ interface CardProperties {
 
 export function Card(properties: CardProperties) {
   return (
-    <div className="bg-card-background-light dark:bg-card-background-dark rounded-md p-1 shadow-sm sm:p-4">
+    <div
+      className={`
+        rounded-md bg-card-background-light p-1 shadow-sm
+        sm:p-4
+        dark:bg-card-background-dark
+      `}>
       {properties.children}
     </div>
   );

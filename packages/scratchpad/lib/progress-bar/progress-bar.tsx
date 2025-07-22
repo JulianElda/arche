@@ -14,13 +14,17 @@ export function ProgressBar(properties: ProgressBarProperties) {
         id={properties.id}
         label={properties.label}
       />
-      <div className="mt-1 h-2 rounded-md bg-gray-200 dark:bg-gray-500">
+      <div
+        className={`
+          mt-1 h-2 rounded-md bg-gray-200
+          dark:bg-gray-500
+        `}>
         <div
           aria-label={properties.label}
           aria-valuemax={properties.max}
           aria-valuemin={properties.min}
           aria-valuenow={properties.value}
-          className="bg-primary-500 h-2 rounded-md"
+          className="h-2 rounded-md bg-primary-500"
           data-testid={properties.id}
           id={properties.id}
           role="progressbar"

@@ -7,6 +7,7 @@ export function InputLabel(properties: InputLabelProperties) {
     <div className="flex">
       <label
         className={clsx(
+          // eslint-disable-next-line better-tailwindcss/no-unregistered-classes
           "font-heading mr-auto font-bold",
           properties.hideLabel && "sr-only"
         )}

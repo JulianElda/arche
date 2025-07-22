@@ -8,7 +8,7 @@ export function GitHubButtonDark(properties: GitHubButtonDarkProperties) {
   return (
     <a
       aria-label={properties.href}
-      className="bg-app-background-light size-8 rounded-md p-1"
+      className="size-8 rounded-md bg-app-background-light p-1"
       href={properties.href}
       rel="noreferrer"
       target="_blank">

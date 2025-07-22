@@ -17,7 +17,11 @@ export function Footer(properties: FooterProperties) {
   return (
     <footer
       className={clsx(
-        "bg-app-background-light dark:bg-app-background-dark flex items-center p-2 sm:fixed sm:right-0 sm:bottom-0 sm:left-0 sm:mx-auto",
+        `
+          flex items-center bg-app-background-light p-2
+          sm:fixed sm:right-0 sm:bottom-0 sm:left-0 sm:mx-auto
+          dark:bg-app-background-dark
+        `,
         properties.extraClass
       )}>
       <div className="flex flex-1 items-center gap-1">
