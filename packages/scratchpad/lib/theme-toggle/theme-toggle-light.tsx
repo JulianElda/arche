@@ -1,10 +1,10 @@
 import { ThemeMoon } from "lib/icons";
 
-interface FooterContentLightProperties {
+interface ThemeToggleLightProperties {
   onToggleDarkMode: () => void;
 }
 
-export function FooterContentLight(properties: FooterContentLightProperties) {
+export function ThemeToggleLight(properties: ThemeToggleLightProperties) {
   return (
     <button
       aria-label="Toggle dark mode"
