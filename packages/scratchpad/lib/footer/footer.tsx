@@ -1,6 +1,5 @@
 import type { FooterProperties } from "lib/footer/footer.types";
 
-import { clsx } from "clsx";
 import { useDarkMode } from "lib/commons/use-dark-mode";
 import { FooterContentDark } from "lib/footer/footer-content-dark";
 import { FooterContentLight } from "lib/footer/footer-content-light";
@@ -16,14 +15,11 @@ export function Footer(properties: FooterProperties) {
 
   return (
     <footer
-      className={clsx(
-        `
-          flex items-center bg-app-background-light p-2
-          sm:fixed sm:right-0 sm:bottom-0 sm:left-0 sm:mx-auto
-          dark:bg-app-background-dark
-        `,
-        properties.extraClass
-      )}>
+      className={`
+        fixed inset-x-0 bottom-0 mx-auto flex w-full items-center
+        bg-app-background-light p-2
+        dark:bg-app-background-dark
+      `}>
       <div className="flex flex-1 items-center gap-1">
         {isDarkMode ? (
           <GitHubButtonDark href={properties.link} />
