@@ -16,8 +16,7 @@ export function Footer(properties: FooterProperties) {
   return (
     <footer
       className={`
-        fixed inset-x-0 bottom-0 mx-auto flex w-full items-center
-        bg-app-background-light p-2
+        flex w-full items-center bg-app-background-light p-2
         dark:bg-app-background-dark
       `}>
       <div className="flex flex-1 items-center gap-1">
