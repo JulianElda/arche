@@ -12,6 +12,7 @@ type Story = StoryObj<typeof meta>;
 
 export const GitHubButtonLight: Story = {
   args: {
+    isDarkMode: false,
     link: "https://julianelda.io",
   },
   globals: {
@@ -22,6 +23,7 @@ export const GitHubButtonLight: Story = {
 
 export const GitHubButtonDark: Story = {
   args: {
+    isDarkMode: true,
     link: "https://julianelda.io",
   },
   globals: {

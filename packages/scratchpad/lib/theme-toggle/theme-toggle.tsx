@@ -1,12 +1,12 @@
-import { useDarkMode } from "lib/commons/use-dark-mode";
+import type { ThemeToggleProperties } from "lib/theme-toggle/theme-toggle.types";
+
 import { ThemeToggleDark } from "lib/theme-toggle/theme-toggle-dark";
 import { ThemeToggleLight } from "lib/theme-toggle/theme-toggle-light";
 
-export function ThemeToggle() {
-  const [isDarkMode, toggle] = useDarkMode();
-  return isDarkMode ? (
-    <ThemeToggleDark onToggleDarkMode={toggle} />
+export function ThemeToggle(properties: ThemeToggleProperties) {
+  return properties.isDarkMode ? (
+    <ThemeToggleDark onToggleDarkMode={properties.onToggleDarkMode} />
   ) : (
-    <ThemeToggleLight onToggleDarkMode={toggle} />
+    <ThemeToggleLight onToggleDarkMode={properties.onToggleDarkMode} />
   );
 }

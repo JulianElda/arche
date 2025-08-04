@@ -1,5 +1,6 @@
 import type { FooterProperties } from "lib/footer/footer.types";
 
+import { useDarkMode } from "lib/commons/use-dark-mode";
 import { GitHubButton } from "lib/github-button/github-button";
 import { Hyperlink } from "lib/hyperlink/hyperlink";
 import { ThemeToggle } from "lib/theme-toggle/theme-toggle";
@@ -8,6 +9,8 @@ import { ThemeToggle } from "lib/theme-toggle/theme-toggle";
  * Footer with dark mode and GitHub button.
  */
 export function Footer(properties: FooterProperties) {
+  const [isDarkMode, toggleDarkMode] = useDarkMode();
+
   return (
     <footer
       className={`
@@ -15,14 +18,20 @@ export function Footer(properties: FooterProperties) {
         dark:bg-app-background-dark
       `}>
       <div className="flex flex-1 items-center gap-1">
-        <GitHubButton link={properties.link} />
+        <GitHubButton
+          isDarkMode={isDarkMode}
+          link={properties.link}
+        />
         <Hyperlink
           asterisk={true}
           href="https://julianelda.io"
           title="Julius Polar"
         />
       </div>
-      <ThemeToggle />
+      <ThemeToggle
+        isDarkMode={isDarkMode}
+        onToggleDarkMode={toggleDarkMode}
+      />
     </footer>
   );
 }
