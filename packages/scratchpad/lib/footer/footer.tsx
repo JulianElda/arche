@@ -8,7 +8,7 @@ import { GitHubButtonLight } from "lib/github-button/github-button-light";
 import { Hyperlink } from "lib/hyperlink/hyperlink";
 
 /**
- * Footer with dark mode and GitHub button. Add max-w-* to extraClass
+ * Footer with dark mode and GitHub button.
  */
 export function Footer(properties: FooterProperties) {
   const [isDarkMode, toggle] = useDarkMode();
