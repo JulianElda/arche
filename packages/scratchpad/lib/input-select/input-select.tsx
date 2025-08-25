@@ -14,9 +14,13 @@ export function InputSelect(properties: InputSelectProperties) {
       />
       <div className="relative mt-1 rounded-md shadow-xs">
         <InputField
+          disabled={properties.inputDisabled}
           id={properties.inputId}
+          max={properties.inputMax}
+          min={properties.inputMin}
           onChange={(value) => properties.onInputChange?.(value)}
           onKeyDown={(value) => properties.onInputKeydown?.(value)}
+          placeholder={properties.inputPlaceholder}
           type={properties.type}
           value={properties.inputValue}
         />
