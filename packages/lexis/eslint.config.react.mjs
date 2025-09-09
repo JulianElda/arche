@@ -24,13 +24,9 @@ export default [
   },
 
   {
-    overrides: [
-      {
-        files: ["*.{jsx,tsx}"],
-        rules: {
-          "unicorn/no-null": "off",
-        },
-      },
-    ],
+    files: ["*.{jsx,tsx}"],
+    rules: {
+      "unicorn/no-null": "off",
+    },
   },
 ];
