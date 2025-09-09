@@ -24,7 +24,7 @@ export default [
   },
 
   {
-    files: ["*.{jsx,tsx}"],
+    files: ["**/*.{jsx,tsx}"],
     rules: {
       "unicorn/no-null": "off",
     },
