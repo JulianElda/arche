@@ -8,7 +8,7 @@ import basicConfig from "./eslint.config.mjs";
 
 export default [
   ...basicConfig,
-  eslintReact.configs["recommended-typescript"],
+  eslintReact.configs["all"],
   reactHooks.configs["recommended-latest"],
   reactRefresh.configs.vite,
   jsxA11y.flatConfigs.strict,
@@ -29,4 +29,6 @@ export default [
       "unicorn/no-null": "off",
     },
   },
+
+  { rules: { "@eslint-react/naming-convention/filename": "off" } },
 ];
