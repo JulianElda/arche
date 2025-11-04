@@ -22,56 +22,14 @@ const config = [
 export default config
 ```
 
-## React
-
-```ts
-import lexis from "@julianelda/lexis/react";
-
-const config = [
-  ...lexis,
-  {
-    ...
-  }
-]
-
-export default config
-```
-
-## Next.js
-
-```ts
-import lexis from "@julianelda/lexis/react";
-import next from "@next/eslint-plugin-next";
-
-const config = [
-  {
-    plugins: {
-      "@next/next": next,
-    },
-    rules: {
-      ...next.configs.recommended.rules,
-      ...next.configs["core-web-vitals"].rules,
-    },
-  },
-  ...lexis,
-  {
-    ...
-  },
-];
-
-export default config;
-
-```
-
 ## React + Tailwind
 
 ```ts
-import lexis from "@julianelda/lexis/react";
+import lexis from "@julianelda/lexis";
 import tailwind from "@julianelda/lexis/tsx-tailwind";
 import tsParser from "@typescript-eslint/parser";
 
 const config = [
-
   ...lexis,
   ...tailwind,
   {
@@ -109,4 +67,12 @@ const config = {
 };
 
 export default config;
+```
+
+# oxlint Usage
+
+```json
+{
+  "extends": ["./node_modules/@julianelda/lexis/.oxlintrc.json"]
+}
 ```
