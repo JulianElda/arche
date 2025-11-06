@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Button } from "./button";
-import {
-  buttonPropertiesPrimary,
-  buttonPropertiesSecondary,
-} from "./button.mocks";
+import { buttonPropsPrimary, buttonPropsSecondary } from "./button.mocks";
 
 const meta = {
   component: Button,
@@ -23,14 +20,14 @@ type Story = StoryObj<typeof meta>;
 
 export const ButtonPrimary: Story = {
   args: {
-    ...buttonPropertiesPrimary,
+    ...buttonPropsPrimary,
   },
   name: "Primary button",
 };
 
 export const ButtonSecondary: Story = {
   args: {
-    ...buttonPropertiesSecondary,
+    ...buttonPropsSecondary,
   },
   name: "Secondary button",
 };

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { TextArea } from "./textarea";
-import { textAreaProperties1, textAreaProperties2 } from "./textarea.mocks";
+import { textAreaProps1, textAreaProps2 } from "./textarea.mocks";
 
 const meta = {
   component: TextArea,
@@ -20,7 +20,7 @@ type Story = StoryObj<typeof meta>;
 
 export const TextAreaText: Story = {
   args: {
-    ...textAreaProperties1,
+    ...textAreaProps1,
     hideLabel: false,
   },
   name: "Textarea text",
@@ -28,7 +28,7 @@ export const TextAreaText: Story = {
 
 export const TextAreaNumber: Story = {
   args: {
-    ...textAreaProperties2,
+    ...textAreaProps2,
     hideLabel: false,
   },
   name: "Textarea number",
@@ -36,7 +36,7 @@ export const TextAreaNumber: Story = {
 
 export const TextAreaHiddenLabel: Story = {
   args: {
-    ...textAreaProperties1,
+    ...textAreaProps1,
     hideLabel: true,
   },
   name: "Textarea hidden label",

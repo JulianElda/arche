@@ -1,8 +1,10 @@
-import type { SelectFieldProperties } from "lib/select-field/select-field.types";
+import type { SelectFieldProps } from "lib/select-field/select-field.types";
 
 import { clsx } from "clsx";
 
-export function SelectField(properties: SelectFieldProperties) {
+export function SelectField(props: SelectFieldProps) {
+  const { id, inInputField, onChange, options, value } = props;
+
   return (
     <select
       className={clsx(
@@ -12,15 +14,15 @@ export function SelectField(properties: SelectFieldProperties) {
           focus:ring-1 focus:ring-primary-300 focus:ring-inset
           dark:bg-slate dark:text-ink-white
         `,
-        properties.inInputField && "h-full rounded-l-none bg-transparent",
-        !properties.inInputField && "block pl-3"
+        inInputField && "h-full rounded-l-none bg-transparent",
+        !inInputField && "block pl-3"
       )}
-      data-testid={properties.id}
-      id={properties.id}
-      name={properties.id}
-      onChange={(event) => properties.onChange(event.target.value)}
-      value={properties.value}>
-      {[...properties.options].map((option) => (
+      data-testid={id}
+      id={id}
+      name={id}
+      onChange={(event) => onChange(event.target.value)}
+      value={value}>
+      {[...options].map((option) => (
         <option
           key={option.value}
           value={option.value}>

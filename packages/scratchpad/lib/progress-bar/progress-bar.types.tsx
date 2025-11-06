@@ -1,6 +1,6 @@
-import type { InputLabelProperties } from "lib/input-label/input-label.types";
+import type { InputLabelProps } from "lib/input-label/input-label.types";
 
-export type ProgressBarProperties = InputLabelProperties & {
+export type ProgressBarProps = InputLabelProps & {
   max: number;
   min: number;
   value: number;

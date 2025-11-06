@@ -1,4 +1,4 @@
-export interface SelectFieldProperties {
+export interface SelectFieldProps {
   id: string;
   inInputField?: boolean;
   onChange: (value: string) => void;

@@ -1,4 +1,4 @@
-import type { FooterProperties } from "lib/footer/footer.types";
+import type { FooterProps } from "lib/footer/footer.types";
 
 import { useDarkMode } from "lib/commons/use-dark-mode";
 import { GitHubButton } from "lib/github-button/github-button";
@@ -8,7 +8,9 @@ import { ThemeToggle } from "lib/theme-toggle/theme-toggle";
 /**
  * Footer with dark mode and GitHub button.
  */
-export function Footer(properties: FooterProperties) {
+export function Footer(props: FooterProps) {
+  const { link } = props;
+
   const [isDarkMode, toggleDarkMode] = useDarkMode();
 
   return (
@@ -20,7 +22,7 @@ export function Footer(properties: FooterProperties) {
       <div className="flex flex-1 items-center gap-1">
         <GitHubButton
           isDarkMode={isDarkMode}
-          link={properties.link}
+          link={link}
         />
         <Hyperlink
           asterisk={true}

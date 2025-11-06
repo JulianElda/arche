@@ -1,28 +1,28 @@
 import {
-  inputFieldProperties1,
-  inputFieldProperties2,
-  inputFieldProperties3,
-  inputFieldProperties4,
+  inputFieldProps1,
+  inputFieldProps2,
+  inputFieldProps3,
+  inputFieldProps4,
 } from "lib/input-field/input-field.mocks";
 
-import type { InputProperties } from "./input.types";
+import type { InputProps } from "./input.types";
 
-export const inputProperties1: InputProperties = {
-  ...inputFieldProperties1,
+export const inputProps1: InputProps = {
+  ...inputFieldProps1,
   label: "Input text",
 };
 
-export const inputProperties2: InputProperties = {
-  ...inputFieldProperties2,
+export const inputProps2: InputProps = {
+  ...inputFieldProps2,
   label: "Input number",
 };
 
-export const inputProperties3: InputProperties = {
-  ...inputFieldProperties3,
+export const inputProps3: InputProps = {
+  ...inputFieldProps3,
   label: "Input search",
 };
 
-export const inputProperties4: InputProperties = {
-  ...inputFieldProperties4,
+export const inputProps4: InputProps = {
+  ...inputFieldProps4,
   label: "Input number with limit",
 };

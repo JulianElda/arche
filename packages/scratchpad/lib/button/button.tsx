@@ -1,11 +1,13 @@
-import type { ButtonProperties } from "lib/button/button.types";
+import type { ButtonProps } from "lib/button/button.types";
 
 import { clsx } from "clsx";
 
-export function Button(properties: ButtonProperties) {
+export function Button(props: ButtonProps) {
+  const { id, onClick, style, text, type } = props;
+
   return (
     <button
-      aria-label={properties.text}
+      aria-label={text}
       className={clsx(
         `
           cursor-pointer appearance-none rounded-lg p-2 text-lg shadow-sm
@@ -16,20 +18,20 @@ export function Button(properties: ButtonProperties) {
           active:bg-primary-700
           dark:hover:bg-primary-500
         `,
-        properties.style === "primary" &&
+        style === "primary" &&
           "border-primary-700 bg-primary-700 text-ink-white",
-        properties.style === "secondary" &&
+        style === "secondary" &&
           `
             border border-ink-500 bg-card-background-light text-ink-black
             hover:text-white
             dark:bg-slate dark:text-ink-white
           `
       )}
-      data-testid={properties.id}
-      id={properties.id}
-      onClick={() => properties.onClick()}
-      type={properties.type || "button"}>
-      {properties.text}
+      data-testid={id}
+      id={id}
+      onClick={() => onClick()}
+      type={type || "button"}>
+      {text}
     </button>
   );
 }

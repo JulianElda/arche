@@ -1,4 +1,4 @@
-export interface FooterProperties {
+export interface FooterProps {
   /**
    * link on GitHub button
    */

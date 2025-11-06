@@ -4,9 +4,9 @@ import { expect } from "storybook/test";
 
 import { Hyperlink } from "./hyperlink";
 import {
-  hyperlinkPropertiesAsterisk,
-  hyperlinkPropertiesDefault,
-  hyperlinkPropertiesNoAsterisk,
+  hyperlinkPropsAsterisk,
+  hyperlinkPropsDefault,
+  hyperlinkPropsNoAsterisk,
 } from "./hyperlink.mocks";
 
 const meta = {
@@ -26,45 +26,46 @@ type Story = StoryObj<typeof meta>;
 
 export const HyperlinkDefault: Story = {
   args: {
-    ...hyperlinkPropertiesDefault,
+    ...hyperlinkPropsDefault,
   },
   name: "Hyperlink",
   play: async ({ canvas }) => {
     await expect(
-      canvas.getByText(hyperlinkPropertiesDefault.title + "*")
-    ).toHaveAttribute("href", hyperlinkPropertiesDefault.href);
+      canvas.getByText(hyperlinkPropsDefault.title + "*")
+    ).toHaveAttribute("href", hyperlinkPropsDefault.href);
     await expect(
-      canvas.getByText(hyperlinkPropertiesDefault.title + "*")
+      canvas.getByText(hyperlinkPropsDefault.title + "*")
     ).toBeInTheDocument();
   },
 };
 
 export const HyperlinkWithAsterisk: Story = {
   args: {
-    ...hyperlinkPropertiesAsterisk,
+    ...hyperlinkPropsAsterisk,
   },
   name: "Hyperlink with asterisk",
   play: async ({ canvas }) => {
     await expect(
-      canvas.getByText(hyperlinkPropertiesDefault.title + "*")
-    ).toHaveAttribute("href", hyperlinkPropertiesDefault.href);
+      canvas.getByText(hyperlinkPropsDefault.title + "*")
+    ).toHaveAttribute("href", hyperlinkPropsDefault.href);
     await expect(
-      canvas.getByText(hyperlinkPropertiesDefault.title + "*")
+      canvas.getByText(hyperlinkPropsDefault.title + "*")
     ).toBeInTheDocument();
   },
 };
 
 export const HyperlinkWithoutAsterisk: Story = {
   args: {
-    ...hyperlinkPropertiesNoAsterisk,
+    ...hyperlinkPropsNoAsterisk,
   },
   name: "Hyperlink without asterisk",
   play: async ({ canvas }) => {
+    await expect(canvas.getByText(hyperlinkPropsDefault.title)).toHaveAttribute(
+      "href",
+      hyperlinkPropsDefault.href
+    );
     await expect(
-      canvas.getByText(hyperlinkPropertiesDefault.title)
-    ).toHaveAttribute("href", hyperlinkPropertiesDefault.href);
-    await expect(
-      canvas.getByText(hyperlinkPropertiesDefault.title)
+      canvas.getByText(hyperlinkPropsDefault.title)
     ).toBeInTheDocument();
   },
 };

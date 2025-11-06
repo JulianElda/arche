@@ -5,9 +5,9 @@ import {
   selectFieldOptions2,
 } from "lib/select-field/select-field.mocks";
 
-import type { InputSelectProperties } from "./input-select.types";
+import type { InputSelectProps } from "./input-select.types";
 
-export const inputSelectProperties1: InputSelectProperties = {
+export const inputSelectProps1: InputSelectProps = {
   inputId: "input-id-1",
   inputLabel: "Currency amount",
   inputValue: "100",
@@ -18,7 +18,7 @@ export const inputSelectProperties1: InputSelectProperties = {
   type: "text" as InputFieldTypes,
 };
 
-export const inputSelectProperties2: InputSelectProperties = {
+export const inputSelectProps2: InputSelectProps = {
   inputId: "input-id-2",
   inputLabel: "Currency amount",
   inputValue: "100",

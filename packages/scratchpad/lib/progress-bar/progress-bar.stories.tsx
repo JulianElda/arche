@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { ProgressBar } from "lib/progress-bar/progress-bar";
 import {
-  progressBarProperties1,
-  progressBarProperties2,
+  progressBarProps1,
+  progressBarProps2,
 } from "lib/progress-bar/progress-bar.mocks";
 
 const meta = {
@@ -23,14 +23,14 @@ type Story = StoryObj<typeof meta>;
 
 export const ProgressBarNoLabel: Story = {
   args: {
-    ...progressBarProperties2,
+    ...progressBarProps2,
   },
   name: "Progress bar",
 };
 
 export const ProgressBarWithLabel: Story = {
   args: {
-    ...progressBarProperties1,
+    ...progressBarProps1,
   },
   name: "Progress bar with label",
 };

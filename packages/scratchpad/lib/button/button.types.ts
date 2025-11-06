@@ -1,4 +1,4 @@
-export interface ButtonProperties {
+export interface ButtonProps {
   id: string;
   onClick: () => void;
   style: "primary" | "secondary";

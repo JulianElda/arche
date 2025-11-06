@@ -1,4 +1,4 @@
-export interface GitHubButtonProperties {
+export interface GitHubButtonProps {
   /**
    * dark/light mode icon
    */

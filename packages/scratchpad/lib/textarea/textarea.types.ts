@@ -1,4 +1,4 @@
-import type { InputLabelProperties } from "lib/input-label/input-label.types";
-import type { TextAreaFieldProperties } from "lib/textarea-field/textarea-field.types";
+import type { InputLabelProps } from "lib/input-label/input-label.types";
+import type { TextAreaFieldProps } from "lib/textarea-field/textarea-field.types";
 
-export type TextAreaProperties = InputLabelProperties & TextAreaFieldProperties;
+export type TextAreaProps = InputLabelProps & TextAreaFieldProps;

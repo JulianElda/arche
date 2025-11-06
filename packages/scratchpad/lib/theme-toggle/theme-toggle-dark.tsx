@@ -1,10 +1,12 @@
 import { ThemeSun } from "lib/icons";
 
-interface ThemeToggleDarkProperties {
+interface ThemeToggleDarkProps {
   onToggleDarkMode: () => void;
 }
 
-export function ThemeToggleDark(properties: ThemeToggleDarkProperties) {
+export function ThemeToggleDark(props: ThemeToggleDarkProps) {
+  const { onToggleDarkMode } = props;
+
   return (
     <button
       aria-label="Toggle light mode"
@@ -13,7 +15,7 @@ export function ThemeToggleDark(properties: ThemeToggleDarkProperties) {
         text-app-text-light
       `}
       data-testid="footer-toggle-light"
-      onClick={() => properties.onToggleDarkMode()}>
+      onClick={() => onToggleDarkMode()}>
       <ThemeSun className="size-6 stroke-2" />
     </button>
   );

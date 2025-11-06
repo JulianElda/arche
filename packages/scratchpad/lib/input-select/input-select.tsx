@@ -1,40 +1,58 @@
-import type { InputSelectProperties } from "lib/input-select/input-select.types";
+import type { InputSelectProps } from "lib/input-select/input-select.types";
 
 import { InputField } from "lib/input-field/input-field";
 import { InputLabel } from "lib/input-label/input-label";
 import { SelectField } from "lib/select-field/select-field";
 
-export function InputSelect(properties: InputSelectProperties) {
+export function InputSelect(props: InputSelectProps) {
+  const {
+    hideLabel,
+    inputDisabled,
+    inputId,
+    inputLabel,
+    inputMaxLength,
+    inputPlaceholder,
+    inputValue,
+    onInputChange,
+    onInputKeydown,
+    onSelectChange,
+    options,
+    selectId,
+    selectLabel,
+    selectValue,
+    type,
+  } = props;
+
   return (
     <div className="flex-1">
       <InputLabel
-        hideLabel={properties.hideLabel}
-        id={properties.inputId}
-        label={properties.inputLabel}
+        hideLabel={hideLabel}
+        id={inputId}
+        label={inputLabel}
       />
       <div className="relative mt-1 rounded-md shadow-xs">
         <InputField
-          disabled={properties.inputDisabled}
-          id={properties.inputId}
-          maxLength={properties.inputMaxLength}
-          onChange={(value) => properties.onInputChange?.(value)}
-          onKeyDown={(value) => properties.onInputKeydown?.(value)}
-          placeholder={properties.inputPlaceholder}
-          type={properties.type}
-          value={properties.inputValue}
+          disabled={inputDisabled}
+          id={inputId}
+          maxLength={inputMaxLength}
+          onChange={(value) => onInputChange?.(value)}
+          onKeyDown={(value) => onInputKeydown?.(value)}
+          placeholder={inputPlaceholder}
+          type={type}
+          value={inputValue}
         />
         <div className="absolute inset-y-0 right-0 flex items-center">
           <InputLabel
             hideLabel={true}
-            id={properties.selectId}
-            label={properties.selectLabel}
+            id={selectId}
+            label={selectLabel}
           />
           <SelectField
-            id={properties.selectId}
+            id={selectId}
             inInputField={true}
-            onChange={(value) => properties.onSelectChange?.(value)}
-            options={properties.options}
-            value={properties.selectValue}
+            onChange={(value) => onSelectChange?.(value)}
+            options={options}
+            value={selectValue}
           />
         </div>
       </div>

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn } from "storybook/test";
 
 import { Button } from "./button";
-import { buttonPropertiesPrimary } from "./button.mocks";
+import { buttonPropsPrimary } from "./button.mocks";
 
 const meta = {
   component: Button,
@@ -23,30 +23,28 @@ type Story = StoryObj<typeof meta>;
 
 export const TestElements: Story = {
   args: {
-    ...buttonPropertiesPrimary,
+    ...buttonPropsPrimary,
   },
   name: "render elements",
   play: async ({ canvas }) => {
+    await expect(canvas.getByTestId(buttonPropsPrimary.id)).toBeInTheDocument();
     await expect(
-      canvas.getByTestId(buttonPropertiesPrimary.id)
+      canvas.getByLabelText(buttonPropsPrimary.text)
     ).toBeInTheDocument();
     await expect(
-      canvas.getByLabelText(buttonPropertiesPrimary.text)
-    ).toBeInTheDocument();
-    await expect(
-      canvas.getByRole("button", { name: buttonPropertiesPrimary.text })
+      canvas.getByRole("button", { name: buttonPropsPrimary.text })
     ).toBeInTheDocument();
   },
 };
 
 export const TestClick: Story = {
   args: {
-    ...buttonPropertiesPrimary,
+    ...buttonPropsPrimary,
     onClick: fn(),
   },
   name: "callback when clicked",
   play: async ({ args, canvas, userEvent }) => {
-    await userEvent.click(canvas.getByTestId(buttonPropertiesPrimary.id));
+    await userEvent.click(canvas.getByTestId(buttonPropsPrimary.id));
     await expect(args.onClick).toHaveBeenCalled();
   },
 };

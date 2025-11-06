@@ -1,4 +1,4 @@
-export interface ThemeToggleProperties {
+export interface ThemeToggleProps {
   isDarkMode: boolean;
   onToggleDarkMode: () => void;
 }

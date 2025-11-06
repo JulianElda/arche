@@ -40,7 +40,6 @@ export const mockStorage = (name: "localStorage" | "sessionStorage"): void => {
     }
 
     removeItem(key: string) {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete this.store[key];
     }
 

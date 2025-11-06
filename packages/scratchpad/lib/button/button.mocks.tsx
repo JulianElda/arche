@@ -1,6 +1,6 @@
-import type { ButtonProperties } from "./button.types";
+import type { ButtonProps } from "./button.types";
 
-export const buttonPropertiesPrimary: ButtonProperties = {
+export const buttonPropsPrimary: ButtonProps = {
   id: "primary-button",
   onClick: () => {
     console.log("");
@@ -10,7 +10,7 @@ export const buttonPropertiesPrimary: ButtonProperties = {
   type: "button",
 };
 
-export const buttonPropertiesSecondary: ButtonProperties = {
+export const buttonPropsSecondary: ButtonProps = {
   id: "secondary-button",
   onClick: () => {
     console.log("");

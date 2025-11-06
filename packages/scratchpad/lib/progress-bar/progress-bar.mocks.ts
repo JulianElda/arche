@@ -1,6 +1,6 @@
-import type { ProgressBarProperties } from "lib/progress-bar/progress-bar.types";
+import type { ProgressBarProps } from "lib/progress-bar/progress-bar.types";
 
-export const progressBarProperties1: ProgressBarProperties = {
+export const progressBarProps1: ProgressBarProps = {
   id: "progress-bar-1",
   label: "Progress with label",
   max: 100,
@@ -8,7 +8,7 @@ export const progressBarProperties1: ProgressBarProperties = {
   value: 66,
 };
 
-export const progressBarProperties2: ProgressBarProperties = {
+export const progressBarProps2: ProgressBarProps = {
   hideLabel: true,
   id: "progress-bar-2",
   label: "Progress bar",

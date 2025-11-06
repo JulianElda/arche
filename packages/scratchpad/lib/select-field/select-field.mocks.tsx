@@ -36,7 +36,7 @@ export const selectFieldOptions2 = [
   },
 ];
 
-export const selectFieldProperties1 = {
+export const selectFieldProps1 = {
   id: "select-id-1",
   inInputField: false,
   onChange: () => {
@@ -46,7 +46,7 @@ export const selectFieldProperties1 = {
   value: selectFieldOptions1[0].value,
 };
 
-export const selectFieldProperties2 = {
+export const selectFieldProps2 = {
   id: "select-id-2",
   inInputField: false,
   onChange: () => {

@@ -1,4 +1,4 @@
-export interface CheckboxProperties {
+export interface CheckboxProps {
   hideLabel?: boolean;
   id: string;
   label: string;

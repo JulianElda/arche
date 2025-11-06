@@ -1,6 +1,3 @@
-import type { InputFieldProperties } from "lib/input-field/input-field.types";
+import type { InputFieldProps } from "lib/input-field/input-field.types";
 
-export type TextAreaFieldProperties = Omit<
-  InputFieldProperties,
-  "type" | "withIconLeft"
->;
+export type TextAreaFieldProps = Omit<InputFieldProps, "type" | "withIconLeft">;

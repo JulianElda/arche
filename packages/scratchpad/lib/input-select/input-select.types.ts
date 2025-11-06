@@ -1,6 +1,6 @@
 import type { InputFieldTypes, Option } from "lib/commons/commons.types";
 
-export interface InputSelectProperties {
+export interface InputSelectProps {
   hideLabel?: boolean;
   inputDisabled?: boolean;
   inputId: string;

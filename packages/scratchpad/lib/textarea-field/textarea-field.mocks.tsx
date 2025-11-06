@@ -1,11 +1,11 @@
-import type { TextAreaFieldProperties } from "lib/textarea-field/textarea-field.types";
+import type { TextAreaFieldProps } from "lib/textarea-field/textarea-field.types";
 
-export const textAreaFieldProperties1: TextAreaFieldProperties = {
+export const textAreaFieldProps1: TextAreaFieldProps = {
   id: "textarea-id-1",
   value: "Textarea value",
 };
 
-export const textAreaFieldProperties2: TextAreaFieldProperties = {
+export const textAreaFieldProps2: TextAreaFieldProps = {
   id: "textarea-id-2",
   value: 100,
 };

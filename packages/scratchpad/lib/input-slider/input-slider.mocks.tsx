@@ -1,6 +1,6 @@
-import type { InputSliderProperties } from "lib/input-slider/input-slider.types";
+import type { InputSliderProps } from "lib/input-slider/input-slider.types";
 
-export const inputSliderProperties1: InputSliderProperties = {
+export const inputSliderProps1: InputSliderProps = {
   id: "input-slider-1",
   label: "Input slider with min&max",
   max: 32,

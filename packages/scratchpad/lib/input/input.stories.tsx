@@ -1,11 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Input } from "./input";
-import {
-  inputProperties1,
-  inputProperties2,
-  inputProperties3,
-} from "./input.mocks";
+import { inputProps1, inputProps2, inputProps3 } from "./input.mocks";
 
 const meta = {
   component: Input,
@@ -24,7 +20,7 @@ type Story = StoryObj<typeof meta>;
 
 export const InputText: Story = {
   args: {
-    ...inputProperties1,
+    ...inputProps1,
     hideLabel: false,
   },
   name: "Input type text",
@@ -32,7 +28,7 @@ export const InputText: Story = {
 
 export const InputNumber: Story = {
   args: {
-    ...inputProperties2,
+    ...inputProps2,
     hideLabel: false,
   },
   name: "Input type number",
@@ -40,7 +36,7 @@ export const InputNumber: Story = {
 
 export const InputSearch: Story = {
   args: {
-    ...inputProperties3,
+    ...inputProps3,
     hideLabel: false,
   },
   name: "Input type search",
@@ -48,7 +44,7 @@ export const InputSearch: Story = {
 
 export const InputHiddenLabel: Story = {
   args: {
-    ...inputProperties1,
+    ...inputProps1,
     hideLabel: true,
   },
   name: "Input without label",
@@ -56,7 +52,7 @@ export const InputHiddenLabel: Story = {
 
 export const InputWithPlaceholder: Story = {
   args: {
-    ...inputProperties1,
+    ...inputProps1,
     hideLabel: false,
     placeholder: "Type here",
     value: "",

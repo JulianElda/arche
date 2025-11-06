@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { SelectProperties } from "lib/select/select.types";
+import type { SelectProps } from "lib/select/select.types";
 
 import { useState } from "react";
 import { expect } from "storybook/test";
 
 import { Select } from "./select";
-import { selectProperties1 } from "./select.mocks";
+import { selectProps1 } from "./select.mocks";
 
-const SelectTemplate = (arguments_: SelectProperties) => {
+const SelectTemplate = (arguments_: SelectProps) => {
   const [value, setValue] = useState(arguments_.value ?? "");
 
   const handleChange = (newValue: string) => {
@@ -40,21 +40,20 @@ type Story = StoryObj<typeof meta>;
 
 export const TestElements: Story = {
   args: {
-    ...selectProperties1,
+    ...selectProps1,
   },
   name: "render elements with label",
   play: async ({ canvas }) => {
-    await expect(canvas.getByTestId(selectProperties1.id)).toBeInTheDocument();
+    await expect(canvas.getByTestId(selectProps1.id)).toBeInTheDocument();
+    await expect(canvas.getByLabelText(selectProps1.label)).toBeInTheDocument();
     await expect(
-      canvas.getByLabelText(selectProperties1.label)
+      canvas.getByDisplayValue(selectProps1.options[0].label)
     ).toBeInTheDocument();
     await expect(
-      canvas.getByDisplayValue(selectProperties1.options[0].label)
+      canvas.getByRole("combobox", { name: selectProps1.label })
     ).toBeInTheDocument();
-    await expect(
-      canvas.getByRole("combobox", { name: selectProperties1.label })
-    ).toBeInTheDocument();
-    for (const option of selectProperties1.options) {
+    for (const option of selectProps1.options) {
+      // oxlint-disable-next-line no-await-in-loop
       await expect(
         canvas.getByRole("option", { name: option.label })
       ).toBeInTheDocument();
@@ -64,22 +63,21 @@ export const TestElements: Story = {
 
 export const TestElementsWithoutLabel: Story = {
   args: {
-    ...selectProperties1,
+    ...selectProps1,
     hideLabel: true,
   },
   name: "render elements without label",
   play: async ({ canvas }) => {
-    await expect(canvas.getByTestId(selectProperties1.id)).toBeInTheDocument();
+    await expect(canvas.getByTestId(selectProps1.id)).toBeInTheDocument();
+    await expect(canvas.getByLabelText(selectProps1.label)).toBeInTheDocument();
     await expect(
-      canvas.getByLabelText(selectProperties1.label)
+      canvas.getByDisplayValue(selectProps1.options[0].label)
     ).toBeInTheDocument();
     await expect(
-      canvas.getByDisplayValue(selectProperties1.options[0].label)
+      canvas.getByRole("combobox", { name: selectProps1.label })
     ).toBeInTheDocument();
-    await expect(
-      canvas.getByRole("combobox", { name: selectProperties1.label })
-    ).toBeInTheDocument();
-    for (const option of selectProperties1.options) {
+    for (const option of selectProps1.options) {
+      // oxlint-disable-next-line no-await-in-loop
       await expect(
         canvas.getByRole("option", { name: option.label })
       ).toBeInTheDocument();
@@ -89,28 +87,28 @@ export const TestElementsWithoutLabel: Story = {
 
 export const TestInitialValue: Story = {
   args: {
-    ...selectProperties1,
+    ...selectProps1,
   },
   name: "has initial value",
   play: async ({ canvas }) => {
-    await expect(canvas.getByTestId(selectProperties1.id)).toHaveValue(
-      selectProperties1.value
+    await expect(canvas.getByTestId(selectProps1.id)).toHaveValue(
+      selectProps1.value
     );
   },
 };
 
 export const TestChangeValue: Story = {
   args: {
-    ...selectProperties1,
+    ...selectProps1,
   },
   name: "change value",
   play: async ({ canvas, userEvent }) => {
     await userEvent.selectOptions(
-      canvas.getByTestId(selectProperties1.id),
-      selectProperties1.options[1].label
+      canvas.getByTestId(selectProps1.id),
+      selectProps1.options[1].label
     );
-    await expect(canvas.getByTestId(selectProperties1.id)).toHaveValue(
-      selectProperties1.options[1].value
+    await expect(canvas.getByTestId(selectProps1.id)).toHaveValue(
+      selectProps1.options[1].value
     );
   },
 };

@@ -1,18 +1,20 @@
-import type { ProgressBarProperties } from "lib/progress-bar/progress-bar.types";
+import type { ProgressBarProps } from "lib/progress-bar/progress-bar.types";
 
 import { InputLabel } from "lib/input-label/input-label";
 
-export function ProgressBar(properties: ProgressBarProperties) {
-  const totalRange = properties.max - properties.min;
-  const currentRange = properties.value - properties.min;
+export function ProgressBar(props: ProgressBarProps) {
+  const { hideLabel, id, label, max, min, value } = props;
+
+  const totalRange = max - min;
+  const currentRange = value - min;
   const currentPercent = Math.floor((currentRange * 100) / totalRange);
 
   return (
     <div className="flex-1">
       <InputLabel
-        hideLabel={Boolean(properties.hideLabel)}
-        id={properties.id}
-        label={properties.label}
+        hideLabel={Boolean(hideLabel)}
+        id={id}
+        label={label}
       />
       <div
         className={`
@@ -20,13 +22,13 @@ export function ProgressBar(properties: ProgressBarProperties) {
           dark:bg-gray-500
         `}>
         <div
-          aria-label={properties.label}
-          aria-valuemax={properties.max}
-          aria-valuemin={properties.min}
-          aria-valuenow={properties.value}
+          aria-label={label}
+          aria-valuemax={max}
+          aria-valuemin={min}
+          aria-valuenow={value}
           className="h-2 rounded-md bg-primary-500"
-          data-testid={properties.id}
-          id={properties.id}
+          data-testid={id}
+          id={id}
           role="progressbar"
           style={{
             width: `${currentPercent}%`,

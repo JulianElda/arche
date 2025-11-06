@@ -1,12 +1,26 @@
-import type { InputFieldProperties } from "lib/input-field/input-field.types";
+import type { InputFieldProps } from "lib/input-field/input-field.types";
 
 import { clsx } from "clsx";
 
-export function InputField(properties: InputFieldProperties) {
+export function InputField(props: InputFieldProps) {
+  const {
+    disabled,
+    id,
+    max,
+    maxLength,
+    min,
+    onChange,
+    onKeyDown,
+    placeholder,
+    type,
+    value,
+    withIconLeft,
+  } = props;
+
   return (
     <input
       className={clsx(
-        properties.type === "range"
+        type === "range"
           ? "h-2 w-full rounded-md bg-ink-gray accent-primary-500"
           : `
             form-input block w-full appearance-none border-1 border-ink-gray
@@ -15,28 +29,20 @@ export function InputField(properties: InputFieldProperties) {
             focus:ring-inset
             dark:bg-slate dark:text-app-text-dark
           `,
-        properties.withIconLeft === true ? "rounded-l-md" : "rounded-md"
+        withIconLeft === true ? "rounded-l-md" : "rounded-md"
       )}
-      data-testid={properties.id}
-      disabled={properties.disabled === true}
-      id={properties.id}
-      max={
-        properties.type === "number" || properties.type === "range"
-          ? properties.max
-          : undefined
-      }
-      maxLength={properties.maxLength ?? undefined}
-      min={
-        properties.type === "number" || properties.type === "range"
-          ? properties.min
-          : undefined
-      }
-      name={properties.id}
-      onChange={(event) => properties.onChange?.(event.target.value)}
-      onKeyDown={(event) => properties.onKeyDown?.(event.key)}
-      placeholder={properties.placeholder}
-      type={properties.type}
-      value={properties.value}
+      data-testid={id}
+      disabled={disabled === true}
+      id={id}
+      max={type === "number" || type === "range" ? max : undefined}
+      maxLength={maxLength ?? undefined}
+      min={type === "number" || type === "range" ? min : undefined}
+      name={id}
+      onChange={(event) => onChange?.(event.target.value)}
+      onKeyDown={(event) => onKeyDown?.(event.key)}
+      placeholder={placeholder}
+      type={type}
+      value={value}
     />
   );
 }

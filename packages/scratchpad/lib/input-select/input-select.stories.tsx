@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { InputSelect } from "./input-select";
-import {
-  inputSelectProperties1,
-  inputSelectProperties2,
-} from "./input-select.mocks";
+import { inputSelectProps1, inputSelectProps2 } from "./input-select.mocks";
 
 const meta = {
   component: InputSelect,
@@ -23,21 +20,21 @@ type Story = StoryObj<typeof meta>;
 
 export const InputWithSelect1: Story = {
   args: {
-    ...inputSelectProperties1,
+    ...inputSelectProps1,
   },
   name: "Input with select",
 };
 
 export const InputWithSelect2: Story = {
   args: {
-    ...inputSelectProperties2,
+    ...inputSelectProps2,
   },
   name: "Input with shorter select",
 };
 
 export const InputSelectHiddenLabel: Story = {
   args: {
-    ...inputSelectProperties1,
+    ...inputSelectProps1,
     hideLabel: true,
   },
   name: "Input select hidden label",

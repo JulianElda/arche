@@ -1,26 +1,26 @@
 import type { InputFieldTypes } from "lib/commons/commons.types";
 
-import type { InputFieldProperties } from "./input-field.types";
+import type { InputFieldProps } from "./input-field.types";
 
-export const inputFieldProperties1: InputFieldProperties = {
+export const inputFieldProps1: InputFieldProps = {
   id: "input-id-1",
   type: "text" as InputFieldTypes,
   value: "Input value",
 };
 
-export const inputFieldProperties2: InputFieldProperties = {
+export const inputFieldProps2: InputFieldProps = {
   id: "input-id-2",
   type: "number" as InputFieldTypes,
   value: 100,
 };
 
-export const inputFieldProperties3: InputFieldProperties = {
+export const inputFieldProps3: InputFieldProps = {
   id: "input-id-3",
   type: "search" as InputFieldTypes,
   value: "Search query",
 };
 
-export const inputFieldProperties4: InputFieldProperties = {
+export const inputFieldProps4: InputFieldProps = {
   id: "input-id-4",
   max: 64,
   min: 8,
@@ -28,7 +28,7 @@ export const inputFieldProperties4: InputFieldProperties = {
   value: 100,
 };
 
-export const inputFieldProperties5: InputFieldProperties = {
+export const inputFieldProps5: InputFieldProps = {
   id: "input-id-5",
   max: 64,
   min: 8,

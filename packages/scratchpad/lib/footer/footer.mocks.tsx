@@ -1,5 +1,5 @@
-import type { FooterProperties } from "./footer.types";
+import type { FooterProps } from "./footer.types";
 
-export const footerProperties: FooterProperties = {
+export const footerProps: FooterProps = {
   link: "https://github.com/JulianElda/scratchpad",
 };

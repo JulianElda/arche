@@ -3,7 +3,7 @@ import {
   selectFieldOptions2,
 } from "lib/select-field/select-field.mocks";
 
-export const selectProperties1 = {
+export const selectProps1 = {
   id: "select-id-1",
   label: "Select currency",
   onChange: () => {
@@ -13,7 +13,7 @@ export const selectProperties1 = {
   value: selectFieldOptions1[0].value,
 };
 
-export const selectProperties2 = {
+export const selectProps2 = {
   id: "select-id-2",
   label: "Select currency",
   onChange: () => {

@@ -1,6 +1,8 @@
-import type { HyperlinkProperties } from "lib/hyperlink/hyperlink.types";
+import type { HyperlinkProps } from "lib/hyperlink/hyperlink.types";
 
-export function Hyperlink(properties: HyperlinkProperties) {
+export function Hyperlink(props: HyperlinkProps) {
+  const { asterisk, href, title } = props;
+
   return (
     <a
       className={`
@@ -8,10 +10,10 @@ export function Hyperlink(properties: HyperlinkProperties) {
         hover:text-primary-700 hover:underline
         dark:text-primary-100 dark:hover:text-primary-300
       `}
-      href={properties.href}
+      href={href}
       rel="noreferrer"
       target="_blank">
-      {`${properties.title}${properties.asterisk === false ? "" : "*"}`}
+      {`${title}${asterisk === false ? "" : "*"}`}
     </a>
   );
 }

@@ -1,4 +1,4 @@
-export interface InputLabelProperties {
+export interface InputLabelProps {
   hideLabel?: boolean;
   id: string;
   label: string;

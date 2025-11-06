@@ -1,10 +1,6 @@
-import type { InputButtonProperties } from "lib/input-button/input-button.types";
+import type { InputButtonProps } from "lib/input-button/input-button.types";
 
-import {
-  inputProperties1,
-  inputProperties2,
-  inputProperties3,
-} from "lib/input/input.mocks";
+import { inputProps1, inputProps2, inputProps3 } from "lib/input/input.mocks";
 
 const copySvg = (
   <svg
@@ -29,8 +25,8 @@ const searchSvg = (
 
 const copyLabel = <span>copy</span>;
 
-export const inputButtonProperties1: InputButtonProperties = {
-  ...inputProperties1,
+export const inputButtonProps1: InputButtonProps = {
+  ...inputProps1,
   buttonAriaLabel: "copy",
   icon: copySvg,
   onButtonClick: () => {
@@ -38,8 +34,8 @@ export const inputButtonProperties1: InputButtonProperties = {
   },
 };
 
-export const inputButtonProperties2: InputButtonProperties = {
-  ...inputProperties1,
+export const inputButtonProps2: InputButtonProps = {
+  ...inputProps1,
   buttonAriaLabel: "copy",
   icon: copyLabel,
   onButtonClick: () => {
@@ -47,8 +43,8 @@ export const inputButtonProperties2: InputButtonProperties = {
   },
 };
 
-export const inputButtonProperties3: InputButtonProperties = {
-  ...inputProperties2,
+export const inputButtonProps3: InputButtonProps = {
+  ...inputProps2,
   buttonAriaLabel: "copy",
   icon: copySvg,
   onButtonClick: () => {
@@ -56,8 +52,8 @@ export const inputButtonProperties3: InputButtonProperties = {
   },
 };
 
-export const inputButtonProperties4: InputButtonProperties = {
-  ...inputProperties3,
+export const inputButtonProps4: InputButtonProps = {
+  ...inputProps3,
   buttonAriaLabel: "search",
   icon: searchSvg,
   onButtonClick: () => {

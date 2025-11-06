@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Checkbox } from "./checkbox";
-import { checkboxProperties } from "./checkbox.mocks";
+import { checkboxProps } from "./checkbox.mocks";
 
 const meta = {
   component: Checkbox,
@@ -20,14 +20,14 @@ type Story = StoryObj<typeof meta>;
 
 export const CheckboxChecked: Story = {
   args: {
-    ...checkboxProperties,
+    ...checkboxProps,
   },
   name: "Checkbox checked",
 };
 
 export const CheckboxUnchecked: Story = {
   args: {
-    ...checkboxProperties,
+    ...checkboxProps,
     value: false,
   },
   name: "Checkbox unchecked",
@@ -35,7 +35,7 @@ export const CheckboxUnchecked: Story = {
 
 export const CheckboxNoLabel: Story = {
   args: {
-    ...checkboxProperties,
+    ...checkboxProps,
     hideLabel: true,
   },
   name: "Checkbox without label",

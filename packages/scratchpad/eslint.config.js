@@ -1,10 +1,9 @@
-import lexis from "@julianelda/lexis/react";
+import lexis from "@julianelda/lexis";
 import tailwind from "@julianelda/lexis/tsx-tailwind";
 import tsParser from "@typescript-eslint/parser";
 import storybook from "eslint-plugin-storybook";
 
 export default [
-  ...lexis,
   ...tailwind,
   ...storybook.configs["flat/recommended"],
   {
@@ -21,4 +20,5 @@ export default [
       },
     },
   },
+  ...lexis,
 ];

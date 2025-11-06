@@ -1,11 +1,7 @@
-import type { TextAreaFieldProperties } from "lib/textarea-field/textarea-field.types";
+import type { TextAreaFieldProps } from "lib/textarea-field/textarea-field.types";
 
-export function TextAreaField(properties: TextAreaFieldProperties) {
-  const onChange = (value: string) => {
-    if (!properties.onChange) return;
-
-    properties.onChange(value);
-  };
+export function TextAreaField(props: TextAreaFieldProps) {
+  const { id, onChange, onKeyDown, value } = props;
 
   return (
     <textarea
@@ -16,12 +12,12 @@ export function TextAreaField(properties: TextAreaFieldProperties) {
         focus:ring-inset
         dark:bg-slate-700 dark:text-ink-white
       `}
-      data-testid={properties.id}
-      id={properties.id}
-      name={properties.id}
-      onChange={(event) => onChange(event.target.value)}
-      onKeyDown={(event) => properties.onKeyDown?.(event.key)}
-      value={properties.value}
+      data-testid={id}
+      id={id}
+      name={id}
+      onChange={(event) => onChange?.(event.target.value)}
+      onKeyDown={(event) => onKeyDown?.(event.key)}
+      value={value}
     />
   );
 }

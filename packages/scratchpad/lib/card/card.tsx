@@ -1,8 +1,10 @@
-interface CardProperties {
+interface CardProps {
   children: React.ReactNode;
 }
 
-export function Card(properties: CardProperties) {
+export function Card(props: CardProps) {
+  const { children } = props;
+
   return (
     <div
       className={`
@@ -10,7 +12,7 @@ export function Card(properties: CardProperties) {
         sm:p-4
         dark:bg-card-background-dark
       `}>
-      {properties.children}
+      {children}
     </div>
   );
 }

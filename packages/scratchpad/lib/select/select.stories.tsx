@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Select } from "./select";
-import { selectProperties1 } from "./select.mocks";
+import { selectProps1 } from "./select.mocks";
 
 const meta = {
   component: Select,
@@ -20,14 +20,14 @@ type Story = StoryObj<typeof meta>;
 
 export const BasicSelect: Story = {
   args: {
-    ...selectProperties1,
+    ...selectProps1,
   },
   name: "Select",
 };
 
 export const SelectWithoutLabel: Story = {
   args: {
-    ...selectProperties1,
+    ...selectProps1,
     hideLabel: true,
   },
   name: "Select without label",

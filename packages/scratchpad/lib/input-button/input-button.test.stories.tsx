@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import type { InputButtonProperties } from "lib/input-button/input-button.types";
+import type { InputButtonProps } from "lib/input-button/input-button.types";
 
 import { InputButton } from "lib/input-button/input-button";
 import {
-  inputButtonProperties1,
-  inputButtonProperties2,
+  inputButtonProps1,
+  inputButtonProps2,
 } from "lib/input-button/input-button.mocks";
 import { useState } from "react";
 import { expect, fn } from "storybook/test";
 
-const InputButtonTemplate = (arguments_: InputButtonProperties) => {
+const InputButtonTemplate = (arguments_: InputButtonProps) => {
   const [value, setValue] = useState(arguments_.value || "");
 
   const handleChange = (newValue: number | string) => {
@@ -44,35 +44,31 @@ type Story = StoryObj<typeof meta>;
 
 export const TestIconButtonElements: Story = {
   args: {
-    ...inputButtonProperties1,
+    ...inputButtonProps1,
     onChange: fn(),
   },
   name: "render icon button elements",
   play: async ({ canvas }) => {
     await expect(
-      canvas.getByLabelText(inputButtonProperties1.label)
+      canvas.getByLabelText(inputButtonProps1.label)
+    ).toBeInTheDocument();
+    await expect(canvas.getByText(inputButtonProps1.label)).toBeInTheDocument();
+    await expect(canvas.getByTestId(inputButtonProps1.id)).toBeInTheDocument();
+    await expect(
+      canvas.getByDisplayValue(inputButtonProps1.value)
     ).toBeInTheDocument();
     await expect(
-      canvas.getByText(inputButtonProperties1.label)
+      canvas.getByTestId(inputButtonProps1.id + "-button")
     ).toBeInTheDocument();
     await expect(
-      canvas.getByTestId(inputButtonProperties1.id)
+      canvas.getByLabelText(inputButtonProps1.buttonAriaLabel)
     ).toBeInTheDocument();
     await expect(
-      canvas.getByDisplayValue(inputButtonProperties1.value)
-    ).toBeInTheDocument();
-    await expect(
-      canvas.getByTestId(inputButtonProperties1.id + "-button")
-    ).toBeInTheDocument();
-    await expect(
-      canvas.getByLabelText(inputButtonProperties1.buttonAriaLabel)
-    ).toBeInTheDocument();
-    await expect(
-      canvas.getByRole("textbox", { name: inputButtonProperties1.label })
+      canvas.getByRole("textbox", { name: inputButtonProps1.label })
     ).toBeInTheDocument();
     await expect(
       canvas.getByRole("button", {
-        name: inputButtonProperties1.buttonAriaLabel,
+        name: inputButtonProps1.buttonAriaLabel,
       })
     ).toBeInTheDocument();
   },
@@ -80,35 +76,31 @@ export const TestIconButtonElements: Story = {
 
 export const TestElements: Story = {
   args: {
-    ...inputButtonProperties2,
+    ...inputButtonProps2,
     onChange: fn(),
   },
   name: "render text button elements",
   play: async ({ canvas }) => {
     await expect(
-      canvas.getByLabelText(inputButtonProperties2.label)
+      canvas.getByLabelText(inputButtonProps2.label)
+    ).toBeInTheDocument();
+    await expect(canvas.getByText(inputButtonProps2.label)).toBeInTheDocument();
+    await expect(canvas.getByTestId(inputButtonProps2.id)).toBeInTheDocument();
+    await expect(
+      canvas.getByDisplayValue(inputButtonProps2.value)
     ).toBeInTheDocument();
     await expect(
-      canvas.getByText(inputButtonProperties2.label)
+      canvas.getByTestId(inputButtonProps2.id + "-button")
     ).toBeInTheDocument();
     await expect(
-      canvas.getByTestId(inputButtonProperties2.id)
+      canvas.getByLabelText(inputButtonProps2.buttonAriaLabel)
     ).toBeInTheDocument();
     await expect(
-      canvas.getByDisplayValue(inputButtonProperties2.value)
-    ).toBeInTheDocument();
-    await expect(
-      canvas.getByTestId(inputButtonProperties2.id + "-button")
-    ).toBeInTheDocument();
-    await expect(
-      canvas.getByLabelText(inputButtonProperties2.buttonAriaLabel)
-    ).toBeInTheDocument();
-    await expect(
-      canvas.getByRole("textbox", { name: inputButtonProperties2.label })
+      canvas.getByRole("textbox", { name: inputButtonProps2.label })
     ).toBeInTheDocument();
     await expect(
       canvas.getByRole("button", {
-        name: inputButtonProperties2.buttonAriaLabel,
+        name: inputButtonProps2.buttonAriaLabel,
       })
     ).toBeInTheDocument();
   },
@@ -116,14 +108,12 @@ export const TestElements: Story = {
 
 export const TestClickButton: Story = {
   args: {
-    ...inputButtonProperties1,
+    ...inputButtonProps1,
     onButtonClick: fn(),
   },
   name: "click button",
   play: async ({ args, canvas, userEvent }) => {
-    await userEvent.click(
-      canvas.getByTestId(inputButtonProperties1.id + "-button")
-    );
+    await userEvent.click(canvas.getByTestId(inputButtonProps1.id + "-button"));
     await expect(args.onButtonClick).toHaveBeenCalled();
   },
 };

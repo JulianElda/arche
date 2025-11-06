@@ -1,6 +1,6 @@
-import type { InputLabelProperties } from "lib/input-label/input-label.types";
+import type { InputLabelProps } from "lib/input-label/input-label.types";
 
-export type InputSliderProperties = InputLabelProperties & {
+export type InputSliderProps = InputLabelProps & {
   disabled?: boolean;
   max: number;
   min: number;

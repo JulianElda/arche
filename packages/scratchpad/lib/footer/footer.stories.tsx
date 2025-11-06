@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Footer } from "./footer";
-import { footerProperties } from "./footer.mocks";
+import { footerProps } from "./footer.mocks";
 
 const meta = {
   component: Footer,
@@ -13,7 +13,7 @@ type Story = StoryObj<typeof meta>;
 
 export const FooterLightMode: Story = {
   args: {
-    ...footerProperties,
+    ...footerProps,
   },
   globals: {
     theme: "light",
