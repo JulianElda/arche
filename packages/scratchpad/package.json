@@ -1,6 +1,6 @@
 {
   "name": "@julianelda/scratchpad",
-  "version": "1.16.0",
+  "version": "1.17.0",
   "type": "module",
   "main": "./dist/scratchpad.js",
   "module": "./dist/scratchpad.js",
@@ -11,12 +11,11 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc --project ./tsconfig.lib.json && vite build",
+    "build": "tsgo --project ./tsconfig.lib.json && vite build",
     "lint": "oxlint --type-aware && eslint 'lib/**/*.{js,ts,tsx}'",
     "preview": "vite preview",
     "test": "vitest",
     "storybook": "storybook dev -p 6006 --no-open",
-    "build-storybook": "storybook build",
     "svgr": "svgr --jsx-runtime automatic --expand-props --typescript --no-prettier --out-dir lib/icons lib/assets/svg"
   },
   "dependencies": {
