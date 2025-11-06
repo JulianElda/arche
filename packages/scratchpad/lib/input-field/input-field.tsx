@@ -1,43 +1,8 @@
 import type { InputFieldProperties } from "lib/input-field/input-field.types";
 
 import { clsx } from "clsx";
-import { isValidNumber } from "lib/commons/commons";
 
 export function InputField(properties: InputFieldProperties) {
-  const onChange = (value: string) => {
-    if (!properties.onChange) return;
-
-    if (properties.type === "number") {
-      if (value === "") {
-        properties.onChange(value);
-      } else if (isValidNumber(value)) {
-        const nextValue = Number.parseFloat(value);
-        if (
-          properties.max &&
-          properties.min &&
-          nextValue < properties.max &&
-          properties.min < nextValue
-        ) {
-          properties.onChange(nextValue);
-        } else if (properties.max && nextValue < properties.max) {
-          properties.onChange(nextValue);
-        } else if (properties.min && properties.min < nextValue) {
-          properties.onChange(nextValue);
-        } else {
-          properties.onChange(nextValue);
-        }
-      } else {
-        properties.onChange(0);
-      }
-    } else if (
-      properties.type === "text" ||
-      properties.type === "search" ||
-      properties.type === "range"
-    ) {
-      properties.onChange(value);
-    }
-  };
-
   return (
     <input
       className={clsx(
@@ -67,7 +32,7 @@ export function InputField(properties: InputFieldProperties) {
           : undefined
       }
       name={properties.id}
-      onChange={(event) => onChange(event.target.value)}
+      onChange={(event) => properties.onChange?.(event.target.value)}
       onKeyDown={(event) => properties.onKeyDown?.(event.key)}
       placeholder={properties.placeholder}
       type={properties.type}

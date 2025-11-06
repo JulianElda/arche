@@ -15,9 +15,7 @@ export function Input(properties: InputProperties) {
         <InputField
           disabled={properties.disabled}
           id={properties.id}
-          max={properties.max}
           maxLength={properties.maxLength}
-          min={properties.min}
           onChange={(value) => properties.onChange?.(value)}
           onKeyDown={(value) => properties.onKeyDown?.(value)}
           placeholder={properties.placeholder}

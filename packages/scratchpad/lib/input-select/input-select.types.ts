@@ -5,8 +5,7 @@ export interface InputSelectProperties {
   inputDisabled?: boolean;
   inputId: string;
   inputLabel: string;
-  inputMax?: number;
-  inputMin?: number;
+  inputMaxLength?: number;
   inputPlaceholder?: string;
   inputValue: number | string;
   onInputChange?: (value: number | string) => void;
