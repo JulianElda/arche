@@ -10,6 +10,7 @@ import type { InputProps } from "./input.types";
 export const inputProps1: InputProps = {
   ...inputFieldProps1,
   label: "Input text",
+  placeholder: "Placeholder",
 };
 
 export const inputProps2: InputProps = {

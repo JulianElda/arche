@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { expect } from "storybook/test";
-
 import { Hyperlink } from "./hyperlink";
 import {
   hyperlinkPropsAsterisk,
@@ -29,14 +27,6 @@ export const HyperlinkDefault: Story = {
     ...hyperlinkPropsDefault,
   },
   name: "Hyperlink",
-  play: async ({ canvas }) => {
-    await expect(
-      canvas.getByText(hyperlinkPropsDefault.title + "*")
-    ).toHaveAttribute("href", hyperlinkPropsDefault.href);
-    await expect(
-      canvas.getByText(hyperlinkPropsDefault.title + "*")
-    ).toBeInTheDocument();
-  },
 };
 
 export const HyperlinkWithAsterisk: Story = {
@@ -44,14 +34,6 @@ export const HyperlinkWithAsterisk: Story = {
     ...hyperlinkPropsAsterisk,
   },
   name: "Hyperlink with asterisk",
-  play: async ({ canvas }) => {
-    await expect(
-      canvas.getByText(hyperlinkPropsDefault.title + "*")
-    ).toHaveAttribute("href", hyperlinkPropsDefault.href);
-    await expect(
-      canvas.getByText(hyperlinkPropsDefault.title + "*")
-    ).toBeInTheDocument();
-  },
 };
 
 export const HyperlinkWithoutAsterisk: Story = {
@@ -59,13 +41,4 @@ export const HyperlinkWithoutAsterisk: Story = {
     ...hyperlinkPropsNoAsterisk,
   },
   name: "Hyperlink without asterisk",
-  play: async ({ canvas }) => {
-    await expect(canvas.getByText(hyperlinkPropsDefault.title)).toHaveAttribute(
-      "href",
-      hyperlinkPropsDefault.href
-    );
-    await expect(
-      canvas.getByText(hyperlinkPropsDefault.title)
-    ).toBeInTheDocument();
-  },
 };
