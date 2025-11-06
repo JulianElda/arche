@@ -2,6 +2,7 @@
 /// <reference types="vitest" />
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
 import react from "@vitejs/plugin-react";
+import { playwright } from "@vitest/browser-playwright";
 import path, { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
@@ -13,7 +14,6 @@ const dirname =
     ? path.dirname(fileURLToPath(import.meta.url))
     : __dirname;
 
-// More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   build: {
     copyPublicDir: false,
@@ -61,7 +61,7 @@ export default defineConfig({
                 browser: "chromium",
               },
             ],
-            provider: "playwright",
+            provider: playwright(),
           },
           name: "storybook",
           setupFiles: [".storybook/vitest.setup.ts"],
