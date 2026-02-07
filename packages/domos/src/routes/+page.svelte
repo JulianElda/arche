@@ -1,15 +1,31 @@
 <script lang="ts">
   import Card from "$lib/card/card.svelte";
+  import Input from "$lib/input/input.svelte";
+  import Select from "$lib/select/select.svelte";
+
+  let inputValue: string = $state("input value");
+  let selectValue: string = $state("option1");
 </script>
 
 <Card>
-  <h1>Welcome to your library project</h1>
-  <p>
-    Create your package using @sveltejs/package and preview/showcase your work
-    with SvelteKit
-  </p>
-  <p>
-    Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the
-    documentation
-  </p>
+  <Input
+    id="input"
+    type="text"
+    label="Test input"
+    placeholder="Type something..."
+    value={inputValue}
+    onChange={(e) => (inputValue = e as string)} />
+  <p class="mt-4">INPUT VALUE: {inputValue}</p>
+
+  <Select
+    id="select"
+    label="Test select"
+    options={[
+      { value: "option1", label: "Option 1" },
+      { value: "option2", label: "Option 2" },
+      { value: "option3", label: "Option 3" },
+    ]}
+    value={selectValue}
+    onChange={(e) => (selectValue = e)} />
+  <p class="mt-4">SELECT VALUE: {selectValue}</p>
 </Card>

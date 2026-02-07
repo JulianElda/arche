@@ -1,6 +1,6 @@
 {
-  "name": "domos",
-  "version": "0.0.1",
+  "name": "@julianelda/domos",
+  "version": "0.0.2",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build && npm run prepack",
@@ -21,6 +21,8 @@
     "!dist/**/*.test.*",
     "!dist/**/*.spec.*"
   ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "sideEffects": [
     "**/*.css"
   ],
