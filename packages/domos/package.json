@@ -1,6 +1,6 @@
 {
   "name": "@julianelda/domos",
-  "version": "0.0.2",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite dev",
     "build": "vite build && npm run prepack",
@@ -41,6 +41,7 @@
   "devDependencies": {
     "@eslint/compat": "^2.0.2",
     "@eslint/js": "^9.39.2",
+    "@lucide/svelte": "^0.563.1",
     "@playwright/test": "^1.58.1",
     "@prettier/plugin-oxc": "^0.1.3",
     "@storybook/addon-a11y": "^10.2.7",
@@ -81,7 +82,6 @@
   ],
   "dependencies": {
     "@julianelda/chroma": "^1.0.0",
-    "@julianelda/stilo": "^1.0.2",
-    "clsx": "^2.1.1"
+    "@julianelda/stilo": "^1.0.2"
   }
 }

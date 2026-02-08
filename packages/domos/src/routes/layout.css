@@ -1,7 +1,1 @@
-@import "tailwindcss";
-@import "@julianelda/chroma";
-
-@custom-variant dark (&:is(.dark *));
-
-@plugin "@tailwindcss/forms";
-@plugin "@tailwindcss/typography";
+@import "./../lib/tailwind.css";
