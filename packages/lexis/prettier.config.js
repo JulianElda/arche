@@ -4,7 +4,7 @@ const config = {
   bracketSameLine: true,
   bracketSpacing: true,
   endOfLine: "lf",
-  plugins: ["@prettier/plugin-oxc"],
+  plugins: ["@prettier/plugin-oxc", "prettier-plugin-tailwindcss"],
   printWidth: 80,
   quoteProps: "as-needed",
   semi: true,

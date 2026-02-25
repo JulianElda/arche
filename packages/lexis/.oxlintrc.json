@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["typescript", "unicorn", "oxc", "react", "jsx-a11y"],
+  "jsPlugins": ["eslint-plugin-perfectionist"],
   "categories": {
     "perf": "error"
   },
@@ -15,6 +16,12 @@
     "typescript/no-explicit-any": "error",
     "typescript/prefer-for-of": "error",
     "unicorn/no-array-for-each": "error",
+    "unicorn/no-array-sort": "error",
+    "unicorn/no-array-reverse": "error",
+    "unicorn/no-immediate-mutation": "error",
+    "unicorn/no-instanceof-array": "error",
+    "unicorn/no-instanceof-builtins": "error",
+    "unicorn/no-negation-in-equality-check": "error",
     "unicorn/no-null": "error",
     "unicorn/numeric-separators-style": "error",
     "unicorn/prefer-global-this": "error",
