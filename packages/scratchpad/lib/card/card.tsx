@@ -6,12 +6,7 @@ export function Card(props: CardProps) {
   const { children } = props;
 
   return (
-    <div
-      className={`
-        rounded-md bg-card-background-light p-1 shadow-sm
-        sm:p-4
-        dark:bg-card-background-dark
-      `}>
+    <div className="bg-card-background-light dark:bg-card-background-dark rounded-md p-1 shadow-sm sm:p-4">
       {children}
     </div>
   );

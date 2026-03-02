@@ -22,13 +22,7 @@ export function InputField(props: InputFieldProps) {
       className={clsx(
         type === "range"
           ? "h-2 w-full rounded-md bg-ink-gray accent-primary-500"
-          : `
-            form-input block w-full appearance-none border-1 border-ink-gray
-            bg-white p-2 px-3 text-ink-black ring-inset
-            focus:border-primary-300 focus:ring-1 focus:ring-primary-300
-            focus:ring-inset
-            dark:bg-slate dark:text-app-text-dark
-          `,
+          : `form-input border-ink-gray text-ink-black focus:border-primary-300 focus:ring-primary-300 dark:bg-slate dark:text-app-text-dark block w-full appearance-none border-1 bg-white p-2 px-3 ring-inset focus:ring-1 focus:ring-inset`,
         withIconLeft === true ? "rounded-l-md" : "rounded-md"
       )}
       data-testid={id}

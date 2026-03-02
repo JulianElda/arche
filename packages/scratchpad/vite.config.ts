@@ -1,5 +1,7 @@
 /// <reference types="vitest/config" />
 /// <reference types="vitest" />
+
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import path, { resolve } from "node:path";
@@ -22,6 +24,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    tailwindcss(),
     react(),
     dts({
       //entryRoot: "./lib",
@@ -34,30 +37,24 @@ export default defineConfig({
     },
   },
   test: {
+    browser: {
+      enabled: true,
+      instances: [
+        {
+          browser: "chromium",
+        },
+      ],
+      provider: playwright({
+        launchOptions: {
+          executablePath: "/usr/bin/chromium",
+        },
+      }),
+    },
     coverage: {
       enabled: true,
       exclude: ["lib/**/*.mocks.{ts,tsx}"],
       provider: "v8",
     },
-    environment: "jsdom",
-    globals: true,
-    projects: [
-      {
-        extends: true,
-        test: {
-          browser: {
-            enabled: true,
-            instances: [
-              {
-                browser: "chromium",
-              },
-            ],
-            provider: playwright(),
-          },
-          name: "component",
-          setupFiles: "./lib/test-setup.ts",
-        },
-      },
-    ],
+    setupFiles: "./lib/test-setup.ts",
   },
 });

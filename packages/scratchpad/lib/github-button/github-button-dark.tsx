@@ -11,7 +11,7 @@ export function GitHubButtonDark(props: GitHubButtonDarkProps) {
     <div className="flex">
       <a
         aria-label={href}
-        className="size-8 rounded-md bg-app-background-light p-1"
+        className="bg-app-background-light size-8 rounded-md p-1"
         href={href}
         rel="noreferrer"
         target="_blank">

@@ -1,7 +1,7 @@
 import type { InputProps } from "lib/input/input.types";
 
 import { useState } from "react";
-import { expect, test } from "vitest";
+import { describe, expect, test } from "vitest";
 import { render } from "vitest-browser-react";
 
 import { Input } from "./input";

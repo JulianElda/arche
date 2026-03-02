@@ -14,11 +14,7 @@ export function Footer(props: FooterProps) {
   const [isDarkMode, toggleDarkMode] = useDarkMode();
 
   return (
-    <footer
-      className={`
-        flex w-full items-center bg-app-background-light p-2
-        dark:bg-app-background-dark
-      `}>
+    <footer className="bg-app-background-light dark:bg-app-background-dark flex w-full items-center p-2">
       <div className="flex flex-1 items-center gap-1">
         <GitHubButton
           isDarkMode={isDarkMode}

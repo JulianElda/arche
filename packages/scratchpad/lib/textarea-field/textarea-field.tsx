@@ -5,13 +5,7 @@ export function TextAreaField(props: TextAreaFieldProps) {
 
   return (
     <textarea
-      className={`
-        block w-full form-textarea appearance-none rounded-md border-1
-        border-ink-gray bg-white p-2 px-3 text-ink-black ring-inset
-        focus:border-primary-300 focus:ring-1 focus:ring-primary-300
-        focus:ring-inset
-        dark:bg-slate-700 dark:text-ink-white
-      `}
+      className="form-textarea border-ink-gray text-ink-black focus:border-primary-300 focus:ring-primary-300 dark:text-ink-white block w-full appearance-none rounded-md border bg-white p-2 px-3 ring-inset focus:ring-1 focus:ring-inset dark:bg-slate-700"
       data-testid={id}
       id={id}
       name={id}
