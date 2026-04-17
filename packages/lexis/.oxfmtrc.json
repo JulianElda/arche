@@ -14,7 +14,7 @@
   "bracketSameLine": true,
   "bracketSpacing": true,
   "singleAttributePerLine": true,
-  "experimentalSortImports": {
+  "sortImports": {
     "groups": [
       "type-import",
       ["value-builtin", "value-external"],
@@ -25,10 +25,10 @@
       "unknown"
     ]
   },
-  "experimentalSortPackageJson": {
+  "sortPackageJson": {
     "sortScripts": true
   },
-  "experimentalTailwindcss": {
+  "sortTailwindcss": {
     "attributes": ["class", "className"]
   }
 }
