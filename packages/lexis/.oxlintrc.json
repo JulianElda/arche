@@ -9,9 +9,6 @@
     "builtin": true,
     "es2026": true
   },
-  "options": {
-    "typeAware": true
-  },
   "ignorePatterns": ["dist"],
   "rules": {
     "curly": ["error", "all"],
