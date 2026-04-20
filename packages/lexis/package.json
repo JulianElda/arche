@@ -1,7 +1,8 @@
 {
   "name": "@julianelda/lexis",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "files": [
+    ".oxfmtrc.json",
     ".oxlintrc.json",
     "eslint.config.mjs",
     "prettier.config.js"
