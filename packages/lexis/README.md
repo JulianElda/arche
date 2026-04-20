@@ -71,8 +71,22 @@ export default config;
 
 # oxlint Usage
 
-```json
-{
-  "extends": ["./node_modules/@julianelda/lexis/.oxlintrc.json"]
-}
+```ts
+import lexis from "@julianelda/lexis/oxlint";
+import { defineConfig } from "oxlint";
+
+export default defineConfig({
+  ...lexis,
+});
+```
+
+# oxfmt Usage
+
+```ts
+import lexis from "@julianelda/lexis/oxfmt";
+import { defineConfig } from "oxfmt";
+
+export default defineConfig({
+  ...lexis,
+});
 ```

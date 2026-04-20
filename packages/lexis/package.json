@@ -1,16 +1,18 @@
 {
   "name": "@julianelda/lexis",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "files": [
-    ".oxfmtrc.json",
-    ".oxlintrc.json",
     "eslint.config.mjs",
-    "prettier.config.js"
+    "prettier.config.js",
+    "oxfmt.config.ts",
+    "oxlint.config.ts"
   ],
   "type": "module",
   "exports": {
     ".": "./eslint.config.mjs",
-    "./prettier": "./prettier.config.js"
+    "./prettier": "./prettier.config.js",
+    "./oxfmt": "./oxfmt.config.ts",
+    "./oxlint": "./oxlint.config.ts"
   },
   "peerDependencies": {
     "@eslint/js": "^10.0.1",
