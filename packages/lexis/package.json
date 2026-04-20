@@ -1,20 +1,22 @@
 {
+  "author": "Julius Polar <julius.polar@gmail.com>",
+  "license": "MIT",
+  "description": "My eslint, prettier, oxc rules",
+  "repository": "@julianelda/lexis",
   "name": "@julianelda/lexis",
   "version": "2.4.1",
   "files": [
-    ".oxlintrc.json",
-    ".oxfmtrc.json",
     "eslint.config.mjs",
     "prettier.config.js",
-    "oxfmt.config.ts",
-    "oxlint.config.ts"
+    "oxfmt.js",
+    "oxlint.js"
   ],
   "type": "module",
   "exports": {
     ".": "./eslint.config.mjs",
     "./prettier": "./prettier.config.js",
-    "./oxfmt": "./oxfmt.config.ts",
-    "./oxlint": "./oxlint.config.ts"
+    "./oxfmt": "./oxfmt.js",
+    "./oxlint": "./oxlint.js"
   },
   "peerDependencies": {
     "@eslint/js": "^10.0.1",
