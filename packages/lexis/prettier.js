@@ -1,18 +1,19 @@
-/** @type {import('prettier').Config} */
-const config = {
+export const prettierConfig = {
   arrowParens: "always",
   bracketSameLine: true,
   bracketSpacing: true,
   endOfLine: "lf",
-  plugins: ["@prettier/plugin-oxc", "prettier-plugin-tailwindcss"],
   printWidth: 80,
   quoteProps: "as-needed",
   semi: true,
   singleAttributePerLine: true,
   singleQuote: false,
   tabWidth: 2,
-  trailingComma: "es5",
+  trailingComma: "all",
   useTabs: false,
 };
 
-export default config;
+export default {
+  ...prettierConfig,
+  plugins: ["@prettier/plugin-oxc"],
+};

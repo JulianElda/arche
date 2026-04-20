@@ -1,6 +1,6 @@
 # lexis
 
-> My oxc, eslint, and prettier rules
+> My oxc and prettier rules
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![npm version](https://img.shields.io/npm/v/@julianelda/lexis)](https://www.npmjs.com/package/@julianelda/lexis)
@@ -24,55 +24,10 @@ import { defineConfig } from "oxfmt";
 
 export default defineConfig({
   ...lexis,
+  sortTailwindcss: {
+    attributes: ["className"],
+  },
 });
-```
-
-# Eslint Usage
-
-## Typescript
-
-```ts
-import lexis from "@julianelda/lexis";
-
-const config = [
-  ...lexis,
-  {
-    ...
-  }
-]
-
-export default config
-```
-
-## React + Tailwind
-
-```ts
-import lexis from "@julianelda/lexis";
-import tailwind from "@julianelda/lexis/tsx-tailwind";
-import tsParser from "@typescript-eslint/parser";
-
-const config = [
-  ...lexis,
-  ...tailwind,
-  {
-    files: ["**/*.{ts,tsx,cts,mts}"],
-    languageOptions: {
-      parser: tsParser,
-    },
-  },
-  settings: {
-    "better-tailwindcss": {
-      entryPoint: "src/tailwind.css",
-      tsconfig: "tsconfig.json",
-    }
-  },
-  {
-    ...
-  }
-];
-
-export default config;
-
 ```
 
 # Prettier Usage
