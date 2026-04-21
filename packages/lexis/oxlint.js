@@ -1,5 +1,6 @@
 export default {
   categories: {
+    correctness: "error",
     perf: "error",
   },
   env: {
