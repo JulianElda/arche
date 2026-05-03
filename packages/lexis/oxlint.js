@@ -13,7 +13,7 @@ export default {
     typeAware: true,
     typeCheck: true,
   },
-  plugins: ["typescript", "unicorn", "oxc", "react", "jsx-a11y"],
+  plugins: ["typescript", "unicorn", "oxc"],
   rules: {
     curly: ["error", "all"],
     "perfectionist/sort-array-includes": [
