@@ -1,3 +1,0 @@
-{
-  "extends": ["./node_modules/@julianelda/lexis/.oxlintrc.json"]
-}

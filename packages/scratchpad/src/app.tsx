@@ -1,5 +1,6 @@
-import { Card, Input, InputSelect } from "lib";
 import { useState } from "react";
+
+import { Card, Input, InputSelect } from "../lib";
 
 function App() {
   const [value, setValue] = useState(123);

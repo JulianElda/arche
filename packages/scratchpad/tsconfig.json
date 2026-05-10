@@ -21,9 +21,8 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "lib/*": ["./lib/*"]
-    },
-    "types": ["vitest/globals"]
+    }
   },
-  "include": ["src", "lib"],
+  "include": ["src", "lib", ".storybook"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

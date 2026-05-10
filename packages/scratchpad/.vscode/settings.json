@@ -1,14 +1,16 @@
 {
-  "files.associations": {
-    "*.css": "tailwindcss"
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "explicit",
+    "source.format.oxc": "explicit"
   },
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
+  "eslint.enable": false,
+  "files.associations": {
+    "*.css": "tailwindcss"
   },
-  "oxc.enable.oxlint": true,
-  "oxc.enable.oxfmt": true,
-  "typescript.experimental.useTsgo": true
+  "js/ts.experimental.useTsgo": true,
+  "prettier.enable": false,
+  "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview"
 }
