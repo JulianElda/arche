@@ -12,5 +12,5 @@
   },
   "js/ts.experimental.useTsgo": true,
   "prettier.enable": false,
-  "typescript.native-preview.tsdk": "node_modules/@typescript/native-preview"
+  "typescript.native-preview.tsdk": "/home/julian/workspace/scratchpad/node_modules/@typescript/native-preview"
 }

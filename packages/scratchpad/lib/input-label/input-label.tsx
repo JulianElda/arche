@@ -11,7 +11,7 @@ export function InputLabel(props: InputLabelProps) {
         className={clsx(
           // eslint-disable-next-line better-tailwindcss/no-unregistered-classes
           "font-heading mr-auto font-bold",
-          hideLabel && "sr-only"
+          hideLabel && "sr-only",
         )}
         htmlFor={id}>
         {label}

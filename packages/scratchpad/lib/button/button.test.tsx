@@ -6,7 +6,7 @@ import { Button } from "./button.tsx";
 
 test("renders elements", async () => {
   const { getByLabelText, getByRole, getByTestId } = await render(
-    <Button {...buttonPropsPrimary} />
+    <Button {...buttonPropsPrimary} />,
   );
   await expect.element(getByTestId(buttonPropsPrimary.id)).toBeInTheDocument();
   await expect
@@ -23,7 +23,7 @@ test("calls callback when clicked", async () => {
     <Button
       {...buttonPropsPrimary}
       onClick={onClick}
-    />
+    />,
   );
   await getByTestId(buttonPropsPrimary.id).click();
   expect(onClick).toHaveBeenCalled();

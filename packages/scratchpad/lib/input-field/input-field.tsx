@@ -22,8 +22,8 @@ export function InputField(props: InputFieldProps) {
       className={clsx(
         type === "range"
           ? "h-2 w-full rounded-md bg-ink-gray accent-primary-500"
-          : `form-input border-ink-gray text-ink-black focus:border-primary-300 focus:ring-primary-300 dark:bg-slate dark:text-app-text-dark block w-full appearance-none border-1 bg-white p-2 px-3 ring-inset focus:ring-1 focus:ring-inset`,
-        withIconLeft === true ? "rounded-l-md" : "rounded-md"
+          : `form-input border-ink-gray text-ink-black focus:border-primary-300 focus:ring-primary-300 dark:bg-slate dark:text-app-text-dark block w-full appearance-none border bg-white p-2 px-3 ring-inset focus:ring-1 focus:ring-inset`,
+        withIconLeft === true ? "rounded-l-md" : "rounded-md",
       )}
       data-testid={id}
       disabled={disabled === true}

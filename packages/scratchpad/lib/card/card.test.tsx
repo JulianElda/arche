@@ -7,7 +7,7 @@ test("renders content", async () => {
   const { getByText } = await render(
     <Card>
       <p>Test content</p>
-    </Card>
+    </Card>,
   );
   await expect.element(getByText("Test content")).toBeInTheDocument();
 });

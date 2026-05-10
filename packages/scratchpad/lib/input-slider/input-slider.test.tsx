@@ -6,7 +6,7 @@ import { inputSliderProps1 } from "./input-slider.mocks";
 
 test("render elements", async () => {
   const { getByLabelText, getByRole, getByTestId, getByText } = await render(
-    <InputSlider {...inputSliderProps1} />
+    <InputSlider {...inputSliderProps1} />,
   );
   await expect
     .element(getByLabelText(inputSliderProps1.label))
@@ -20,7 +20,7 @@ test("render elements", async () => {
     .element(
       getByRole("slider", {
         name: inputSliderProps1.label,
-      })
+      }),
     )
     .toBeInTheDocument();
 });

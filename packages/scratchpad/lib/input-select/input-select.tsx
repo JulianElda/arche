@@ -35,8 +35,8 @@ export function InputSelect(props: InputSelectProps) {
           disabled={inputDisabled}
           id={inputId}
           maxLength={inputMaxLength}
-          onChange={(value) => onInputChange?.(value)}
-          onKeyDown={(value) => onInputKeydown?.(value)}
+          onChange={onInputChange}
+          onKeyDown={onInputKeydown}
           placeholder={inputPlaceholder}
           type={type}
           value={inputValue}

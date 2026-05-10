@@ -7,9 +7,9 @@ type CookiesReturn = [
   () => void,
 ];
 
-export default function useCookie(cookieName: string): CookiesReturn {
+export function useCookie(cookieName: string): CookiesReturn {
   const [value, setValue] = useState<string | undefined>(
-    () => Cookies.get(cookieName) || undefined
+    () => Cookies.get(cookieName) || undefined,
   );
 
   const updateCookie = useCallback(
@@ -17,7 +17,7 @@ export default function useCookie(cookieName: string): CookiesReturn {
       Cookies.set(cookieName, newValue, options);
       setValue(newValue);
     },
-    [cookieName]
+    [cookieName],
   );
 
   const deleteCookie = useCallback(() => {

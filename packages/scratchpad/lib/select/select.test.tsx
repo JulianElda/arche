@@ -25,7 +25,7 @@ const SelectTemplate = (arguments_: SelectProps) => {
 
 test("renders elements with label", async () => {
   const { getByLabelText, getByRole, getByTestId } = await render(
-    <Select {...selectProps1} />
+    <Select {...selectProps1} />,
   );
 
   await expect.element(getByTestId(selectProps1.id)).toBeInTheDocument();
@@ -38,7 +38,7 @@ test("renders elements with label", async () => {
       await expect
         .element(getByRole("option", { name: option.label }))
         .toBeInTheDocument();
-    })
+    }),
   );
 });
 
@@ -47,7 +47,7 @@ test("renders elements without label", async () => {
     <Select
       {...selectProps1}
       hideLabel={true}
-    />
+    />,
   );
 
   await expect.element(getByTestId(selectProps1.id)).toBeInTheDocument();
@@ -60,7 +60,7 @@ test("renders elements without label", async () => {
       await expect
         .element(getByRole("option", { name: option.label }))
         .toBeInTheDocument();
-    })
+    }),
   );
 });
 

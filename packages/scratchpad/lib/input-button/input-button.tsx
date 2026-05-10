@@ -37,8 +37,8 @@ export function InputButton(props: InputButtonProps) {
             max={max}
             maxLength={maxLength}
             min={min}
-            onChange={(value) => onChange?.(value)}
-            onKeyDown={(value) => onKeyDown?.(value)}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
             placeholder={placeholder}
             type={type}
             value={value}

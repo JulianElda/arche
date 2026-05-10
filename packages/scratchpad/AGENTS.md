@@ -42,5 +42,5 @@
 - Do not resort to mocking imports unless there is no other solution.
 - Avoid abstraction in test codes. Only shared setup is acceptable.
 - Prefer inlining values like strings in the test, do not extract same values to a const.
-- Do not wrap tests in a file in a `describe()`.
+- Do not wrap all tests in a file in a `describe()`, e.g. no top level `describe("MyComponent", ...)` containing all the tests. Grouping tests is fine otherwise.
 - Use `test`, not `it`.

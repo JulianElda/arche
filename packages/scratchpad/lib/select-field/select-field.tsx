@@ -8,9 +8,9 @@ export function SelectField(props: SelectFieldProps) {
   return (
     <select
       className={clsx(
-        `form-select border-ink-gray text-ink-black focus:ring-primary-300 dark:bg-slate dark:text-ink-white w-full appearance-none rounded-md border-1 py-2 pr-8 pl-2 focus:ring-1 focus:ring-inset`,
+        `form-select border-ink-gray text-ink-black focus:ring-primary-300 dark:bg-slate dark:text-ink-white w-full appearance-none rounded-md border py-2 pr-8 pl-2 focus:ring-1 focus:ring-inset`,
         inInputField && "h-full rounded-l-none bg-transparent",
-        !inInputField && "block pl-3"
+        !inInputField && "block pl-3",
       )}
       data-testid={id}
       id={id}

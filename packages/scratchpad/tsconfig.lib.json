@@ -6,5 +6,12 @@
     "lib/**/*.stories.tsx",
     "lib/**/*.mocks.tsx",
     "lib/*test*.ts"
-  ]
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true
+  }
 }

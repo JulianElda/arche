@@ -25,7 +25,7 @@ const TextAreaTemplate = (arguments_: TextAreaProps) => {
 
 test("render elements", async () => {
   const { getByLabelText, getByTestId, getByText } = await render(
-    <TextArea {...textAreaProps1} />
+    <TextArea {...textAreaProps1} />,
   );
   await expect
     .element(getByLabelText(textAreaProps1.label))
@@ -43,7 +43,7 @@ test("initial value", async () => {
 
 test("change value", async () => {
   const { getByTestId } = await render(
-    <TextAreaTemplate {...textAreaProps1} />
+    <TextAreaTemplate {...textAreaProps1} />,
   );
   const textAreaElement = getByTestId(textAreaProps1.id);
 

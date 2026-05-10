@@ -6,7 +6,7 @@ import { inputButtonProps1, inputButtonProps2 } from "./input-button.mocks";
 
 test("render icon button elements", async () => {
   const { getByLabelText, getByTestId, getByText } = await render(
-    <InputButton {...inputButtonProps1} />
+    <InputButton {...inputButtonProps1} />,
   );
   await expect
     .element(getByLabelText(inputButtonProps1.label))
@@ -20,7 +20,7 @@ test("render icon button elements", async () => {
 
 test("render text button elements", async () => {
   const { getByLabelText, getByTestId, getByText } = await render(
-    <InputButton {...inputButtonProps2} />
+    <InputButton {...inputButtonProps2} />,
   );
   await expect
     .element(getByLabelText(inputButtonProps2.label))
@@ -41,7 +41,7 @@ test("button click triggers onButtonClick", async () => {
     <InputButton
       {...inputButtonProps1}
       onButtonClick={mockOnButtonClick}
-    />
+    />,
   );
   const buttonElement = getByTestId(inputButtonProps1.id + "-button");
 
@@ -55,7 +55,7 @@ test("input change triggers onChange", async () => {
     <InputButton
       {...inputButtonProps2}
       onChange={mockOnChange}
-    />
+    />,
   );
   const inputElement = getByTestId(inputButtonProps2.id);
 

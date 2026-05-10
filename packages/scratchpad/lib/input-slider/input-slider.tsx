@@ -20,7 +20,7 @@ export function InputSlider(props: InputSliderProps) {
           id={id}
           max={max}
           min={min}
-          onChange={(value) => onChange?.(value)}
+          onChange={onChange}
           type="range"
           value={value}
         />

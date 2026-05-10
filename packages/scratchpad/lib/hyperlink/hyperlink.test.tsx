@@ -28,7 +28,7 @@ test("renders with asterisks when specified", async () => {
 
 test("renders without asterisks when specified", async () => {
   const { getByText } = await render(
-    <Hyperlink {...hyperlinkPropsNoAsterisk} />
+    <Hyperlink {...hyperlinkPropsNoAsterisk} />,
   );
   const linkElement = getByText(hyperlinkPropsNoAsterisk.title);
   await expect.element(linkElement).toBeInTheDocument();

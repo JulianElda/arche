@@ -13,11 +13,11 @@ export function Button(props: ButtonProps) {
         style === "primary" &&
           "border-primary-700 bg-primary-700 text-ink-white",
         style === "secondary" &&
-          `border-ink-500 bg-card-background-light text-ink-black dark:bg-slate dark:text-ink-white border hover:text-white`
+          `border-ink-500 bg-card-background-light text-ink-black dark:bg-slate dark:text-ink-white border hover:text-white`,
       )}
       data-testid={id}
       id={id}
-      onClick={() => onClick()}
+      onClick={onClick}
       type={type || "button"}>
       {text}
     </button>

@@ -25,7 +25,7 @@ const CheckboxTemplate = (props: CheckboxProps) => {
 
 test("renders elements", async () => {
   const { getByLabelText, getByRole, getByTestId, getByText } = await render(
-    <Checkbox {...checkboxProps} />
+    <Checkbox {...checkboxProps} />,
   );
   await expect.element(getByTestId(checkboxProps.id)).toBeInTheDocument();
   await expect.element(getByLabelText(checkboxProps.label)).toBeInTheDocument();
@@ -40,7 +40,7 @@ test("renders elements with hidden label", async () => {
     <Checkbox
       {...checkboxProps}
       hideLabel={true}
-    />
+    />,
   );
   await expect.element(getByTestId(checkboxProps.id)).toBeInTheDocument();
   await expect.element(getByLabelText(checkboxProps.label)).toBeInTheDocument();
@@ -60,7 +60,7 @@ test("initial value not checked", async () => {
     <Checkbox
       {...checkboxProps}
       value={false}
-    />
+    />,
   );
   await expect.element(getByTestId(checkboxProps.id)).not.toBeChecked();
 });

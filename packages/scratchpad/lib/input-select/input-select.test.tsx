@@ -32,7 +32,7 @@ const InputSelectTemplate = (arguments_: InputSelectProps) => {
 
 test("render elements", async () => {
   const { getByLabelText, getByRole, getByTestId, getByText } = await render(
-    <InputSelect {...inputSelectProps1} />
+    <InputSelect {...inputSelectProps1} />,
   );
   await expect
     .element(getByLabelText(inputSelectProps1.inputLabel))
@@ -56,14 +56,14 @@ test("render elements", async () => {
     .element(
       getByRole("textbox", {
         name: inputSelectProps1.inputLabel,
-      })
+      }),
     )
     .toBeInTheDocument();
   await expect
     .element(
       getByRole("combobox", {
         name: inputSelectProps1.selectLabel,
-      })
+      }),
     )
     .toBeInTheDocument();
   await Promise.all(
@@ -71,7 +71,7 @@ test("render elements", async () => {
       await expect
         .element(getByRole("option", { name: option.label }))
         .toBeInTheDocument();
-    })
+    }),
   );
 });
 
@@ -80,7 +80,7 @@ test("render elements without label", async () => {
     <InputSelect
       {...inputSelectProps1}
       hideLabel={true}
-    />
+    />,
   );
   await expect
     .element(getByLabelText(inputSelectProps1.inputLabel))
@@ -104,14 +104,14 @@ test("render elements without label", async () => {
     .element(
       getByRole("textbox", {
         name: inputSelectProps1.inputLabel,
-      })
+      }),
     )
     .toBeInTheDocument();
   await expect
     .element(
       getByRole("combobox", {
         name: inputSelectProps1.selectLabel,
-      })
+      }),
     )
     .toBeInTheDocument();
   await Promise.all(
@@ -119,13 +119,13 @@ test("render elements without label", async () => {
       await expect
         .element(getByRole("option", { name: option.label }))
         .toBeInTheDocument();
-    })
+    }),
   );
 });
 
 test("input value change", async () => {
   const { getByTestId } = await render(
-    <InputSelectTemplate {...inputSelectProps1} />
+    <InputSelectTemplate {...inputSelectProps1} />,
   );
   const inputElement = getByTestId(inputSelectProps1.inputId);
   await inputElement.clear();
