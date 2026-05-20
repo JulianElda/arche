@@ -5,3 +5,5 @@
 
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
+
+@source "./**/*.{svelte,js,ts}";

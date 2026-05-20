@@ -1,9 +1,9 @@
 {
   "name": "@julianelda/domos",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build && npm run prepack",
+    "build": "vite build && bun run prepack",
     "preview": "vite preview",
     "prepare": "svelte-kit sync || echo ''",
     "prepack": "svelte-kit sync && svelte-package && publint",
@@ -48,7 +48,6 @@
     "@storybook/addon-svelte-csf": "^5.0.10",
     "@storybook/addon-themes": "^10.2.7",
     "@storybook/sveltekit": "^10.2.7",
-    "@sveltejs/adapter-auto": "^7.0.0",
     "@sveltejs/kit": "^2.50.2",
     "@sveltejs/package": "^2.5.7",
     "@sveltejs/vite-plugin-svelte": "^6.2.4",
