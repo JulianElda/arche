@@ -3,7 +3,4 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@plugin "@tailwindcss/forms";
-@plugin "@tailwindcss/typography";
-
 @source "./**/*.{svelte,js,ts}";
