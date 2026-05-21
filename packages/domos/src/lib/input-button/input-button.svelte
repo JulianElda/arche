@@ -1,6 +1,7 @@
 <script lang="ts">
   import InputField from "$lib/input-field/input-field.svelte";
   import InputLabel from "$lib/input-label/input-label.svelte";
+
   import type { InputButtonProps } from "./input-button.types.ts";
 
   const {
@@ -38,7 +39,7 @@
     </div>
     <button
       aria-label={buttonAriaLabel}
-      class="relative -ml-px inline-flex cursor-pointer appearance-none items-center gap-x-1.5 rounded-r-md border border-l-0 border-ink-gray px-3 py-2 text-sm font-bold ring-inset hover:bg-primary-500 hover:text-ink-white focus:border-primary-300 focus:ring-1 focus:ring-primary-300 focus:ring-inset active:bg-primary-700"
+      class="border-ink-gray hover:bg-primary-500 hover:text-ink-white focus:border-primary-300 focus:ring-primary-300 active:bg-primary-700 relative -ml-px inline-flex cursor-pointer appearance-none items-center gap-x-1.5 rounded-r-md border border-l-0 px-3 py-2 text-sm font-bold ring-inset focus:ring-1 focus:ring-inset"
       data-testid={id + "-button"}
       onclick={() => onButtonClick()}
       type="button">

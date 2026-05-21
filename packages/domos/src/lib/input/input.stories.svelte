@@ -2,8 +2,7 @@
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import { fn } from "storybook/test";
 
-  import { checkboxProps } from "./checkbox.mocks.ts";
-  import Checkbox from "./checkbox.svelte";
+  import Input from "./input.svelte";
 
   const { Story } = defineMeta({
     args: {
@@ -15,28 +14,29 @@
       label: { control: "text" },
       value: { control: "boolean" },
     },
-    component: Checkbox,
-    title: "Checkbox",
+    component: Input,
+    title: "Input",
   });
 </script>
 
 <Story
-  name="Checked"
+  name="Default"
   args={{
-    ...checkboxProps,
-    value: true,
+    id: "input-id-1",
+    type: "text",
+    label: "Input Label",
+    value: "Input Value",
+    placeholder: "Placeholder Text",
   }} />
 
 <Story
-  name="Unchecked"
+  name="Borderless"
   args={{
-    ...checkboxProps,
-    value: false,
-  }} />
-
-<Story
-  name="Hidden Label"
-  args={{
-    ...checkboxProps,
+    id: "input-id-1",
+    type: "text",
+    label: "Input Label",
+    value: "Input Value",
+    placeholder: "Placeholder Text",
+    borderless: true,
     hideLabel: true,
   }} />

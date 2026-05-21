@@ -2,6 +2,7 @@
   import InputField from "$lib/input-field/input-field.svelte";
   import InputLabel from "$lib/input-label/input-label.svelte";
   import SelectField from "$lib/select-field/select-field.svelte";
+
   import type { InputSelectProps } from "./input-select.types.ts";
 
   const {

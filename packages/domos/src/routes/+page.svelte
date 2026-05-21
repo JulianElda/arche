@@ -2,9 +2,9 @@
   import Card from "$lib/card/card.svelte";
   import Checkbox from "$lib/checkbox/checkbox.svelte";
   import InputButton from "$lib/input-button/input-button.svelte";
+  import InputSelect from "$lib/input-select/input-select.svelte";
   import Input from "$lib/input/input.svelte";
   import Select from "$lib/select/select.svelte";
-  import InputSelect from "$lib/input-select/input-select.svelte";
   import { BadgeDollarSign } from "@lucide/svelte";
 
   let inputValue: string = $state("input value");

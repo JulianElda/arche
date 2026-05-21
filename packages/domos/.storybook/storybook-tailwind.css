@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@julianelda/chroma";
+@import "@julianelda/stilo";
 
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";

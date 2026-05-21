@@ -1,9 +1,11 @@
 <script lang="ts">
   import InputField from "$lib/input-field/input-field.svelte";
   import InputLabel from "$lib/input-label/input-label.svelte";
+
   import type { InputProps } from "./input.types.ts";
 
   const {
+    borderless,
     disabled,
     hideLabel,
     id,
@@ -16,19 +18,18 @@
   }: InputProps = $props();
 </script>
 
-<div class="flex-1">
+<div class="flex flex-1 flex-col gap-1">
   <InputLabel
     {hideLabel}
     {id}
     {label} />
-  <div class="mt-1">
-    <InputField
-      {disabled}
-      {id}
-      {onChange}
-      {onKeyDown}
-      {placeholder}
-      {type}
-      {value} />
-  </div>
+  <InputField
+    {borderless}
+    {disabled}
+    {id}
+    {onChange}
+    {onKeyDown}
+    {placeholder}
+    {type}
+    {value} />
 </div>

@@ -1,24 +1,25 @@
 import { CheckIcon } from "@lucide/svelte";
 import { expect, test, vi } from "vitest";
 import { render } from "vitest-browser-svelte";
+
 import InputButton from "./input-button.svelte";
 
 test("render elements", async () => {
-  const { getByLabelText, getByTestId, getByPlaceholder, getByRole } = render(
+  const { getByLabelText, getByPlaceholder, getByRole, getByTestId } = render(
     InputButton,
     {
       props: {
-        id: "test-input-button",
         buttonAriaLabel: "Submit input button",
+        icon: CheckIcon,
+        id: "test-input-button",
         label: "Test Input Button",
+        onButtonClick: vi.fn(),
+        onChange: vi.fn(),
         placeholder: "Enter text...",
         type: "text",
         value: "",
-        icon: CheckIcon,
-        onChange: vi.fn(),
-        onButtonClick: vi.fn(),
       },
-    }
+    },
   );
   await expect.element(getByTestId("test-input-button")).toBeInTheDocument();
   await expect.element(getByLabelText("Test Input Button")).toBeInTheDocument();

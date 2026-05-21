@@ -1,11 +1,14 @@
 <script module>
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import { fn } from "storybook/test";
+
+  import { buttonPropsPrimary, buttonPropsSecondary } from "./button.mocks.ts";
   import Button from "./button.svelte";
 
   const { Story } = defineMeta({
-    title: "Button",
-    component: Button,
+    args: {
+      onclick: fn(),
+    },
     argTypes: {
       id: { control: "text" },
       style: {
@@ -18,26 +21,15 @@
         options: ["button", "submit"],
       },
     },
-    args: {
-      onclick: fn(),
-    },
+    component: Button,
+    title: "Button",
   });
 </script>
 
 <Story
   name="Primary"
-  args={{
-    id: "button",
-    style: "primary",
-    text: "Button primary",
-    type: "button",
-  }} />
+  args={buttonPropsPrimary} />
 
 <Story
   name="Secondary"
-  args={{
-    id: "button",
-    style: "secondary",
-    text: "Button secondary",
-    type: "button",
-  }} />
+  args={buttonPropsSecondary} />

@@ -1,15 +1,16 @@
 import { expect, test, vi } from "vitest";
 import { render } from "vitest-browser-svelte";
+
 import InputField from "./input-field.svelte";
 
 test("render elements", async () => {
-  const { getByTestId, getByPlaceholder, getByRole } = render(InputField, {
+  const { getByPlaceholder, getByRole, getByTestId } = render(InputField, {
     props: {
       id: "test-input-field",
+      onChange: vi.fn(),
       placeholder: "Enter text...",
       type: "text",
       value: "",
-      onChange: vi.fn(),
     },
   });
   await expect.element(getByTestId("test-input-field")).toBeInTheDocument();
@@ -22,10 +23,10 @@ test("call onChange handler when input changes", async () => {
   const { getByRole } = render(InputField, {
     props: {
       id: "test-input-field",
+      onChange: onChangeMock,
       placeholder: "Enter text...",
       type: "text",
       value: "",
-      onChange: onChangeMock,
     },
   });
   const input = getByRole("textbox");

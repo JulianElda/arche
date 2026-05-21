@@ -1,4 +1,5 @@
 import type { Preview } from "@storybook/sveltekit";
+
 import { withThemeByClassName } from "@storybook/addon-themes";
 
 import "./../src/routes/layout.css";

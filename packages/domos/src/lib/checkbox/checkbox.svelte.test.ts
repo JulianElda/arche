@@ -1,18 +1,19 @@
 import { expect, test, vi } from "vitest";
 import { render } from "vitest-browser-svelte";
+
 import Checkbox from "./checkbox.svelte";
 
 test("render checkbox element", async () => {
-  const { getByLabelText, getByTestId, getByText, getByRole } = render(
+  const { getByLabelText, getByRole, getByTestId, getByText } = render(
     Checkbox,
     {
       props: {
         id: "test-checkbox",
         label: "Test Checkbox",
-        value: false,
         onChange: vi.fn(),
+        value: false,
       },
-    }
+    },
   );
   await expect.element(getByTestId("test-checkbox")).toBeInTheDocument();
   await expect.element(getByLabelText("Test Checkbox")).toBeInTheDocument();
@@ -26,8 +27,8 @@ test("calls onChange handler when checked", async () => {
     props: {
       id: "test-checkbox",
       label: "Test Checkbox",
-      value: false,
       onChange: onChangeMock,
+      value: false,
     },
   });
   const checkbox = getByRole("checkbox");
@@ -44,8 +45,8 @@ test("renders with checked state", async () => {
     props: {
       id: "test-checkbox",
       label: "Test Checkbox",
-      value: true,
       onChange: vi.fn(),
+      value: true,
     },
   });
   const checkbox = getByRole("checkbox");

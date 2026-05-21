@@ -1,5 +1,6 @@
 import { expect, test } from "vitest";
 import { render } from "vitest-browser-svelte";
+
 import InputLabel from "./input-label.svelte";
 
 test("render input label element", async () => {

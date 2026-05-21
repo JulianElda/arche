@@ -1,4 +1,5 @@
 export interface InputFieldProps {
+  borderless?: boolean;
   disabled?: boolean;
   id: string;
   onChange?: (value: number | string) => void;

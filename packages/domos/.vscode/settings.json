@@ -1,8 +1,23 @@
 {
+  "[svelte]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.oxc": "explicit",
+    "source.format.oxc": "explicit"
+  },
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "eslint.enable": true,
+  "eslint.runtime": "node",
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
-  }
+  "js/ts.experimental.useTsgo": true,
+  "js/ts.preferences.preferTypeOnlyAutoImports": true,
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+  "prettier.enable": true,
+  "typescript.native-preview.tsdk": "/node_modules/@typescript/native-preview"
 }

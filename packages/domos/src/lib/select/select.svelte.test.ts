@@ -1,18 +1,19 @@
 import { expect, test, vi } from "vitest";
 import { render } from "vitest-browser-svelte";
+
 import Select from "./select.svelte";
 
 test("render elements", async () => {
-  const { getByLabelText, getByTestId, getByRole } = render(Select, {
+  const { getByLabelText, getByRole, getByTestId } = render(Select, {
     props: {
       id: "test-select",
       label: "Test Select",
+      onChange: vi.fn(),
       options: [
-        { value: "option1", label: "Option 1" },
-        { value: "option2", label: "Option 2" },
+        { label: "Option 1", value: "option1" },
+        { label: "Option 2", value: "option2" },
       ],
       value: "",
-      onChange: vi.fn(),
     },
   });
   await expect.element(getByTestId("test-select")).toBeInTheDocument();
@@ -26,12 +27,12 @@ test("callback when select changes", async () => {
     props: {
       id: "test-select",
       label: "Test Select",
+      onChange: onChangeMock,
       options: [
-        { value: "option1", label: "Option 1" },
-        { value: "option2", label: "Option 2" },
+        { label: "Option 1", value: "option1" },
+        { label: "Option 2", value: "option2" },
       ],
       value: "",
-      onChange: onChangeMock,
     },
   });
   const select = getByTestId("test-select");

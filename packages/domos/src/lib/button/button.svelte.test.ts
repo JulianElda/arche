@@ -1,15 +1,16 @@
 import { expect, test, vi } from "vitest";
 import { render } from "vitest-browser-svelte";
+
 import Button from "./button.svelte";
 
 test("render elements", async () => {
-  const { getByTestId, getByRole, getByText } = render(Button, {
+  const { getByRole, getByTestId, getByText } = render(Button, {
     props: {
       id: "button-id",
+      onClick: vi.fn(),
       style: "primary",
       text: "Test Button",
       type: "button",
-      onClick: vi.fn(),
     },
   });
   await expect.element(getByTestId("button-id")).toBeInTheDocument();
@@ -24,10 +25,10 @@ test("call onClick handler when clicked", async () => {
   const { getByRole } = render(Button, {
     props: {
       id: "button-id",
+      onClick: onClickMock,
       style: "primary",
       text: "Test Button",
       type: "button",
-      onClick: onClickMock,
     },
   });
   const button = getByRole("button", { name: "Test Button" });

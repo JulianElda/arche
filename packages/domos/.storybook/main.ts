@@ -1,7 +1,6 @@
 import type { StorybookConfig } from "@storybook/sveltekit";
 
 const config: StorybookConfig = {
-  stories: ["../src/**/*.stories.@(js|ts|svelte)"],
   addons: [
     "@storybook/addon-a11y",
     "@storybook/addon-svelte-csf",
@@ -11,5 +10,6 @@ const config: StorybookConfig = {
     disableTelemetry: true,
   },
   framework: "@storybook/sveltekit",
+  stories: ["../src/**/*.stories.@(js|ts|svelte)"],
 };
 export default config;

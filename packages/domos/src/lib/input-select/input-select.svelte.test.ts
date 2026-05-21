@@ -1,22 +1,23 @@
 import { expect, test, vi } from "vitest";
 import { render } from "vitest-browser-svelte";
+
 import InputSelect from "./input-select.svelte";
 
 test("render elements", async () => {
-  const { getByLabelText, getByTestId, getByRole } = render(InputSelect, {
+  const { getByLabelText, getByRole, getByTestId } = render(InputSelect, {
     props: {
       inputId: "test-input",
-      selectId: "test-select",
       inputLabel: "Test Input Select",
-      selectLabel: "Select an option",
-      options: [
-        { value: "option1", label: "Option 1" },
-        { value: "option2", label: "Option 2" },
-      ],
       inputValue: "",
-      selectValue: "option1",
       onInputChange: vi.fn(),
       onSelectChange: vi.fn(),
+      options: [
+        { label: "Option 1", value: "option1" },
+        { label: "Option 2", value: "option2" },
+      ],
+      selectId: "test-select",
+      selectLabel: "Select an option",
+      selectValue: "option1",
       type: "text",
     },
   });
@@ -34,17 +35,17 @@ test("callback when input and select changes", async () => {
   const { getByTestId } = render(InputSelect, {
     props: {
       inputId: "test-input",
-      selectId: "test-select",
       inputLabel: "Test Input Select",
-      selectLabel: "Select an option",
-      options: [
-        { value: "option1", label: "Option 1" },
-        { value: "option2", label: "Option 2" },
-      ],
       inputValue: "",
-      selectValue: "option1",
       onInputChange: onInputChangeMock,
       onSelectChange: onSelectChangeMock,
+      options: [
+        { label: "Option 1", value: "option1" },
+        { label: "Option 2", value: "option2" },
+      ],
+      selectId: "test-select",
+      selectLabel: "Select an option",
+      selectValue: "option1",
       type: "text",
     },
   });

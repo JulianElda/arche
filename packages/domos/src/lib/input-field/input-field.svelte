@@ -2,6 +2,7 @@
   import type { InputFieldProps } from "./input-field.types.ts";
 
   const {
+    borderless = false,
     disabled = false,
     id,
     onChange,
@@ -23,6 +24,9 @@
   {type}
   {value}
   class={[
-    "form-input block w-full appearance-none border border-ink-gray bg-white p-2 px-3 text-ink-black ring-inset focus:border-primary-300 focus:ring-1 focus:ring-primary-300 focus:ring-inset dark:bg-slate dark:text-app-text-dark",
+    "form-input text-ink-black dark:bg-slate dark:text-app-text-dark block w-full appearance-none border bg-white",
+    borderless === true
+      ? "border-0 p-0 ring-0 outline-none focus:ring-0 focus:outline-none"
+      : "border-ink-gray focus:border-primary-300 focus:ring-primary-300 p-2 px-3 ring-inset focus:ring-1 focus:ring-inset",
     withIconLeft === true ? "rounded-l-md" : "rounded-md",
   ]} />
