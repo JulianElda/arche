@@ -39,8 +39,18 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.5",
+    "@codemirror/lang-markdown": "^6.5.0",
+    "@codemirror/state": "^6.5.4",
+    "@codemirror/view": "^6.39.16",
     "@julianelda/chroma": "^1.0.0",
-    "@julianelda/stilo": "^1.0.2"
+    "@julianelda/stilo": "^1.0.2",
+    "@shikijs/langs": "^4.0.1",
+    "@shikijs/markdown-it": "^4.0.1",
+    "@shikijs/themes": "^4.0.1",
+    "codemirror": "^6.0.2",
+    "markdown-it": "^14.1.1",
+    "shiki": "^4.0.1"
   },
   "devDependencies": {
     "@eslint/compat": "^2.0.2",
@@ -59,6 +69,7 @@
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/typography": "^0.5.19",
     "@tailwindcss/vite": "^4.1.18",
+    "@types/markdown-it": "^14.1.2",
     "@types/node": "^24",
     "@typescript/native-preview": "^7.0.0-dev.20260521.1",
     "@vitest/browser-playwright": "^4.0.18",
