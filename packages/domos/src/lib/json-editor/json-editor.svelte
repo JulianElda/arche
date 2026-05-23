@@ -1,4 +1,6 @@
 <script lang="ts">
+  // oxlint-disable no-unassigned-vars
+  /* eslint-disable svelte/no-at-html-tags */
   import Button from "$lib/button/button.svelte";
   import { codeToHtml } from "shiki";
 
@@ -51,21 +53,8 @@
    * Line numbers
    * --------------------------------------------- */
   const lineNumbers = $derived<number[]>(
-    jsonText.split("\n").map((_: string, i: number) => i + 1)
+    jsonText.split("\n").map((_: string, i: number) => i + 1),
   );
-
-  /* ---------------------------------------------
-   * Actions
-   * --------------------------------------------- */
-  function onPrettify() {
-    const parsed = JSON.parse(jsonText);
-    setJsonText(JSON.stringify(parsed, undefined, 2));
-  }
-
-  function onSort() {
-    const parsed = JSON.parse(jsonText);
-    setJsonText(JSON.stringify(parsed, undefined, 2));
-  }
 
   function onKeyDown(e: KeyboardEvent) {
     if (e.key !== "Tab") return;
@@ -82,6 +71,19 @@
       if (!textareaRef) return;
       textareaRef.selectionStart = textareaRef.selectionEnd = start + 2;
     });
+  }
+
+  /* ---------------------------------------------
+   * Actions
+   * --------------------------------------------- */
+  function onPrettify() {
+    const parsed = JSON.parse(jsonText);
+    setJsonText(JSON.stringify(parsed, undefined, 2));
+  }
+
+  function onSort() {
+    const parsed = JSON.parse(jsonText);
+    setJsonText(JSON.stringify(parsed, undefined, 2));
   }
 </script>
 

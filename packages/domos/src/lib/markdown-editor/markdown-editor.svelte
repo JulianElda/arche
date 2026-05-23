@@ -1,22 +1,25 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { basicSetup } from "codemirror";
-  import { EditorView } from "@codemirror/view";
-  import { EditorState } from "@codemirror/state";
+  /* eslint-disable @typescript-eslint/no-unused-vars */
+  // oxlint-disable no-unassigned-vars
   import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
+  import { EditorState } from "@codemirror/state";
+  import { EditorView } from "@codemirror/view";
+  import { basicSetup } from "codemirror";
+  import { onMount } from "svelte";
 
   interface MarkdownEditorProps {
-    value: string;
     onChange: (newValue: string) => void;
+    value: string;
   }
   const { onChange, value }: MarkdownEditorProps = $props();
 
   let editorDiv: HTMLDivElement;
   let editor: EditorView;
-  let saveTimer: any;
+  let saveTimer: ReturnType<typeof setTimeout>;
 
   onMount(async () => {
     editor = new EditorView({
+      parent: editorDiv,
       state: EditorState.create({
         doc: value,
         extensions: [
@@ -37,7 +40,6 @@
           }),
         ],
       }),
-      parent: editorDiv,
     });
   });
 </script>
