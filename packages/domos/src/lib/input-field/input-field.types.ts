@@ -5,7 +5,9 @@ export interface InputFieldProps {
   onChange?: (value: number | string) => void;
   onKeyDown?: (value: number | string) => void;
   placeholder?: string;
-  type: "number" | "search" | "text";
+  type: InputFieldTypes;
   value: number | string;
   withIconLeft?: boolean;
 }
+
+export type InputFieldTypes = "number" | "range" | "search" | "text";

@@ -10,7 +10,7 @@
       },
       "devDependencies": {
         "@eslint/js": "^10.0.1",
-        "@julianelda/lexis": "^2.5.2",
+        "@julianelda/lexis": "^2.6.0",
         "@lucide/svelte": "^1.16.0",
         "@playwright/test": "^1.58.1",
         "@prettier/plugin-oxc": "^0.1.3",

@@ -1,23 +1,17 @@
 import { expect, test, vi } from "vitest";
 import { render } from "vitest-browser-svelte";
 
+import { selectProps1 } from "./select.mocks.ts";
 import Select from "./select.svelte";
 
 test("render elements", async () => {
   const { getByLabelText, getByRole, getByTestId } = render(Select, {
     props: {
-      id: "test-select",
-      label: "Test Select",
-      onChange: vi.fn(),
-      options: [
-        { label: "Option 1", value: "option1" },
-        { label: "Option 2", value: "option2" },
-      ],
-      value: "",
+      ...selectProps1,
     },
   });
-  await expect.element(getByTestId("test-select")).toBeInTheDocument();
-  await expect.element(getByLabelText("Test Select")).toBeInTheDocument();
+  await expect.element(getByTestId(selectProps1.id)).toBeInTheDocument();
+  await expect.element(getByLabelText(selectProps1.label)).toBeInTheDocument();
   await expect.element(getByRole("combobox")).toBeInTheDocument();
 });
 
@@ -25,18 +19,12 @@ test("callback when select changes", async () => {
   const onChangeMock = vi.fn();
   const { getByTestId } = render(Select, {
     props: {
-      id: "test-select",
-      label: "Test Select",
+      ...selectProps1,
       onChange: onChangeMock,
-      options: [
-        { label: "Option 1", value: "option1" },
-        { label: "Option 2", value: "option2" },
-      ],
-      value: "",
     },
   });
-  const select = getByTestId("test-select");
-  await select.selectOptions("option2");
+  const select = getByTestId(selectProps1.id);
+  await select.selectOptions(selectProps1.options[1].value);
   expect(onChangeMock).toHaveBeenCalledTimes(1);
-  expect(onChangeMock).toHaveBeenLastCalledWith("option2");
+  expect(onChangeMock).toHaveBeenLastCalledWith(selectProps1.options[1].value);
 });

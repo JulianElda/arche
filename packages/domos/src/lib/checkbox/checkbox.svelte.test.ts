@@ -1,6 +1,7 @@
 import { expect, test, vi } from "vitest";
 import { render } from "vitest-browser-svelte";
 
+import { checkboxProps } from "./checkbox.mocks.ts";
 import Checkbox from "./checkbox.svelte";
 
 test("render checkbox element", async () => {
@@ -8,25 +9,25 @@ test("render checkbox element", async () => {
     Checkbox,
     {
       props: {
-        id: "test-checkbox",
-        label: "Test Checkbox",
+        ...checkboxProps,
         onChange: vi.fn(),
-        value: false,
       },
     },
   );
-  await expect.element(getByTestId("test-checkbox")).toBeInTheDocument();
-  await expect.element(getByLabelText("Test Checkbox")).toBeInTheDocument();
-  await expect.element(getByText("Test Checkbox")).toBeInTheDocument();
-  await expect.element(getByRole("checkbox")).toBeInTheDocument();
+
+  await Promise.all([
+    expect.element(getByTestId(checkboxProps.id)).toBeInTheDocument(),
+    expect.element(getByLabelText(checkboxProps.label)).toBeInTheDocument(),
+    expect.element(getByText(checkboxProps.label)).toBeInTheDocument(),
+    expect.element(getByRole("checkbox")).toBeInTheDocument(),
+  ]);
 });
 
 test("calls onChange handler when checked", async () => {
   const onChangeMock = vi.fn();
   const { getByRole } = render(Checkbox, {
     props: {
-      id: "test-checkbox",
-      label: "Test Checkbox",
+      ...checkboxProps,
       onChange: onChangeMock,
       value: false,
     },
@@ -43,10 +44,8 @@ test("calls onChange handler when checked", async () => {
 test("renders with checked state", async () => {
   const { getByRole } = render(Checkbox, {
     props: {
-      id: "test-checkbox",
-      label: "Test Checkbox",
+      ...checkboxProps,
       onChange: vi.fn(),
-      value: true,
     },
   });
   const checkbox = getByRole("checkbox");

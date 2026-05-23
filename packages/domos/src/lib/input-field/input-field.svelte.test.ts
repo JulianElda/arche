@@ -1,31 +1,31 @@
 import { expect, test, vi } from "vitest";
 import { render } from "vitest-browser-svelte";
 
+import { inputFieldProps1 } from "./input-field.mocks.ts";
 import InputField from "./input-field.svelte";
 
 test("render elements", async () => {
   const { getByPlaceholder, getByRole, getByTestId } = render(InputField, {
     props: {
-      id: "test-input-field",
+      ...inputFieldProps1,
       onChange: vi.fn(),
       placeholder: "Enter text...",
-      type: "text",
-      value: "",
     },
   });
-  await expect.element(getByTestId("test-input-field")).toBeInTheDocument();
-  await expect.element(getByPlaceholder("Enter text...")).toBeInTheDocument();
-  await expect.element(getByRole("textbox")).toBeInTheDocument();
+
+  await Promise.all([
+    expect.element(getByTestId(inputFieldProps1.id)).toBeInTheDocument(),
+    expect.element(getByPlaceholder("Enter text...")).toBeInTheDocument(),
+    expect.element(getByRole("textbox")).toBeInTheDocument(),
+  ]);
 });
 
 test("call onChange handler when input changes", async () => {
   const onChangeMock = vi.fn();
   const { getByRole } = render(InputField, {
     props: {
-      id: "test-input-field",
+      ...inputFieldProps1,
       onChange: onChangeMock,
-      placeholder: "Enter text...",
-      type: "text",
       value: "",
     },
   });

@@ -1,6 +1,7 @@
 import { expect, test, vi } from "vitest";
 import { render } from "vitest-browser-svelte";
 
+import { inputProps1 } from "./input.mocks.ts";
 import Input from "./input.svelte";
 
 test("render elements", async () => {
@@ -8,30 +9,28 @@ test("render elements", async () => {
     Input,
     {
       props: {
-        id: "test-input",
-        label: "Test Input",
+        ...inputProps1,
         onChange: vi.fn(),
-        placeholder: "Enter text...",
-        type: "text",
-        value: "",
       },
     },
   );
-  await expect.element(getByTestId("test-input")).toBeInTheDocument();
-  await expect.element(getByLabelText("Test Input")).toBeInTheDocument();
-  await expect.element(getByPlaceholder("Enter text...")).toBeInTheDocument();
-  await expect.element(getByRole("textbox")).toBeInTheDocument();
+
+  await Promise.all([
+    expect.element(getByTestId(inputProps1.id)).toBeInTheDocument(),
+    expect.element(getByLabelText(inputProps1.label)).toBeInTheDocument(),
+    expect
+      .element(getByPlaceholder(inputProps1.placeholder!))
+      .toBeInTheDocument(),
+    expect.element(getByRole("textbox")).toBeInTheDocument(),
+  ]);
 });
 
 test("callback when input changes", async () => {
   const onChangeMock = vi.fn();
   const { getByRole } = render(Input, {
     props: {
-      id: "test-input",
-      label: "Test Input",
+      ...inputProps1,
       onChange: onChangeMock,
-      placeholder: "Enter text...",
-      type: "text",
       value: "",
     },
   });

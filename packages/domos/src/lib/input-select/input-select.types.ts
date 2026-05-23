@@ -1,3 +1,6 @@
+import type { InputFieldTypes } from "./../input-field/input-field.types.ts";
+import type { SelectFieldOption } from "./../select-field/select-field.types.ts";
+
 export interface InputSelectProps {
   hideLabel?: boolean;
   inputDisabled?: boolean;
@@ -8,12 +11,9 @@ export interface InputSelectProps {
   onInputChange?: (value: number | string) => void;
   onInputKeydown?: (key: number | string) => void;
   onSelectChange?: (value: string) => void;
-  options: {
-    label: string;
-    value: string;
-  }[];
+  options: SelectFieldOption[];
   selectId: string;
   selectLabel: string;
   selectValue: string;
-  type: "number" | "search" | "text";
+  type: InputFieldTypes;
 }
