@@ -1,7 +1,7 @@
 {
   "name": "@julianelda/lexis",
-  "version": "2.6.0",
-  "description": "My oxc and prettier rules",
+  "version": "3.0.0",
+  "description": "My oxc rules",
   "license": "MIT",
   "author": "Julius Polar",
   "repository": "@julianelda/lexis",
@@ -9,22 +9,17 @@
     "oxfmt.d.ts",
     "oxfmt.js",
     "oxlint.d.ts",
-    "oxlint.js",
-    "prettier.d.ts",
-    "prettier.js"
+    "oxlint.js"
   ],
   "type": "module",
   "exports": {
     "./oxfmt": "./oxfmt.js",
-    "./oxlint": "./oxlint.js",
-    "./prettier": "./prettier.js"
+    "./oxlint": "./oxlint.js"
   },
   "peerDependencies": {
-    "@prettier/plugin-oxc": "^0.1.4",
     "@typescript/native-preview": "^7.0.0-dev.20260421.2",
     "oxfmt": "^0.51.0",
     "oxlint": "^1.66.0",
-    "oxlint-tsgolint": "^0.23.0",
-    "prettier": "^3.8.3"
+    "oxlint-tsgolint": "^0.23.0"
   }
 }

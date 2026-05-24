@@ -1,6 +1,6 @@
 # lexis
 
-> My oxc and prettier rules
+> My oxc rules
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![npm version](https://img.shields.io/npm/v/@julianelda/lexis)](https://www.npmjs.com/package/@julianelda/lexis)
@@ -28,20 +28,4 @@ export default defineConfig({
     attributes: ["className"],
   },
 });
-```
-
-# Prettier Usage
-
-```js
-import prettier from "@julianelda/lexis/prettier";
-
-/**
- * @type {import("prettier").Config}
- */
-const config = {
-  ...prettier,
-  plugins: ["prettier-plugin-tailwindcss"],
-};
-
-export default config;
 ```

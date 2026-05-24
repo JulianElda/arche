@@ -1,10 +1,15 @@
-import { prettierConfig } from "./prettier.js";
-
 export default {
-  ...prettierConfig,
-
+  arrowParens: "always",
+  bracketSameLine: true,
+  bracketSpacing: true,
+  endOfLine: "lf",
   ignorePatterns: ["dist"],
   insertFinalNewline: true,
+  printWidth: 80,
+  quoteProps: "as-needed",
+  semi: true,
+  singleAttributePerLine: true,
+  singleQuote: false,
   sortImports: {
     groups: [
       "type-import",
@@ -19,4 +24,7 @@ export default {
   sortPackageJson: {
     sortScripts: true,
   },
+  tabWidth: 2,
+  trailingComma: "all",
+  useTabs: false,
 };
