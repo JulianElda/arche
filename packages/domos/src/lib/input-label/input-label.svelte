@@ -9,13 +9,11 @@
   }: InputLabelProps = $props();
 </script>
 
-<div class="flex">
-  <label
-    class={["font-heading mr-auto font-bold", hideLabel && "sr-only"]}
-    for={id}>
-    {label}
-    {#if value !== ""}
-      <span class="sr-only">{value}</span>
-    {/if}
-  </label>
-</div>
+<label
+  class={["font-heading mr-auto font-bold", hideLabel && "sr-only"]}
+  for={id}>
+  {label}
+  {#if value !== ""}
+    <span class="sr-only">{value}</span>
+  {/if}
+</label>

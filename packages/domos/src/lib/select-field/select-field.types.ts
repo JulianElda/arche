@@ -4,6 +4,7 @@ export interface SelectFieldOption {
 }
 
 export interface SelectFieldProps {
+  borderless?: boolean;
   id: string;
   inInputField?: boolean;
   onChange: (value: string) => void;

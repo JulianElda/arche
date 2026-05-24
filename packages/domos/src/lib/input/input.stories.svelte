@@ -2,16 +2,19 @@
   import { defineMeta } from "@storybook/addon-svelte-csf";
   import { fn } from "storybook/test";
 
+  import { inputProps1 } from "./input.mocks.ts";
   import Input from "./input.svelte";
 
   const { Story } = defineMeta({
     args: {
       onChange: fn(),
+      onKeyDown: fn(),
     },
     argTypes: {
       hideLabel: { control: "boolean" },
       id: { control: "text" },
       label: { control: "text" },
+      placeholder: { control: "text" },
       value: { control: "boolean" },
     },
     component: Input,
@@ -22,21 +25,12 @@
 <Story
   name="Default"
   args={{
-    id: "input-id-1",
-    type: "text",
-    label: "Input Label",
-    value: "Input Value",
-    placeholder: "Placeholder Text",
+    ...inputProps1,
   }} />
 
 <Story
   name="Borderless"
   args={{
-    id: "input-id-1",
-    type: "text",
-    label: "Input Label",
-    value: "Input Value",
-    placeholder: "Placeholder Text",
+    ...inputProps1,
     borderless: true,
-    hideLabel: true,
   }} />

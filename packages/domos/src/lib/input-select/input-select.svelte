@@ -23,12 +23,12 @@
   }: InputSelectProps = $props();
 </script>
 
-<div class="flex-1">
+<div class="flex flex-1 flex-col gap-1">
   <InputLabel
     {hideLabel}
     id={inputId}
     label={inputLabel} />
-  <div class="relative mt-1 rounded-md shadow-xs">
+  <div class="relative rounded-md shadow-xs">
     <InputField
       disabled={inputDisabled}
       id={inputId}
