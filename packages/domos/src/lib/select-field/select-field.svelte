@@ -12,7 +12,7 @@
 
 <select
   class={[
-    "form-select border-ink-gray text-ink-black focus:ring-primary-300 dark:bg-slate dark:text-ink-white w-full appearance-none rounded-md border py-2 pr-8 pl-2 focus:ring-1 focus:ring-inset",
+    "form-select w-full appearance-none rounded-md border border-ink-gray py-2 pr-8 pl-2 text-ink-black focus:ring-1 focus:ring-primary-300 focus:ring-inset dark:bg-slate dark:text-ink-white",
     inInputField && "h-full rounded-l-none bg-transparent",
     !inInputField && "block pl-3",
   ]}

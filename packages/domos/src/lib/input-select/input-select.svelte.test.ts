@@ -9,8 +9,8 @@ test("render elements", async () => {
       inputId: "test-input",
       inputLabel: "Test Input Select",
       inputValue: "",
-      onInputChange: vi.fn(),
-      onSelectChange: vi.fn(),
+      onInputChange: vi.fn<() => void>(),
+      onSelectChange: vi.fn<() => void>(),
       options: [
         { label: "Option 1", value: "option1" },
         { label: "Option 2", value: "option2" },
@@ -30,8 +30,8 @@ test("render elements", async () => {
 });
 
 test("callback when input and select changes", async () => {
-  const onInputChangeMock = vi.fn();
-  const onSelectChangeMock = vi.fn();
+  const onInputChangeMock = vi.fn<() => void>();
+  const onSelectChangeMock = vi.fn<() => void>();
   const { getByTestId } = render(InputSelect, {
     props: {
       inputId: "test-input",

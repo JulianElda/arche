@@ -8,20 +8,18 @@ test("render elements", async () => {
   const { getByRole, getByTestId, getByText } = render(Button, {
     props: {
       ...buttonPropsPrimary,
-      onClick: vi.fn(),
+      onClick: vi.fn<() => void>(),
     },
   });
-  await Promise.all([
-    expect.element(getByTestId(buttonPropsPrimary.id)).toBeInTheDocument(),
-    expect
-      .element(getByRole("button", { name: buttonPropsPrimary.text }))
-      .toBeInTheDocument(),
-    expect.element(getByText(buttonPropsPrimary.text)).toBeInTheDocument(),
-  ]);
+  await expect.element(getByTestId(buttonPropsPrimary.id)).toBeInTheDocument();
+  await expect
+    .element(getByRole("button", { name: buttonPropsPrimary.text }))
+    .toBeInTheDocument();
+  await expect.element(getByText(buttonPropsPrimary.text)).toBeInTheDocument();
 });
 
 test("call onClick handler when clicked", async () => {
-  const onClickMock = vi.fn();
+  const onClickMock = vi.fn<() => void>();
   const { getByRole } = render(Button, {
     props: {
       ...buttonPropsPrimary,

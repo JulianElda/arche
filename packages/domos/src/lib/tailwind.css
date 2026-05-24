@@ -1,6 +1,4 @@
 @import "tailwindcss";
 @import "@julianelda/chroma";
 
-@custom-variant dark (&:is(.dark *));
-
 @source "./**/*.{svelte,js,ts}";

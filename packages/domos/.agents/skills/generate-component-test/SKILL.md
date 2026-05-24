@@ -25,8 +25,7 @@ Create or update a component test file that matches this repository's establishe
    - avoid any
    - use type-only imports for types
 6. Prefer inline test values unless shared mocks are intentionally reused.
-7. If multiple async assertions are independent, group them with Promise.all.
-8. Keep assertions user-facing and stable:
+7. Keep assertions user-facing and stable:
    - prefer getByText or getByTestId where appropriate
    - avoid fragile implementation-coupled selectors unless needed
 
@@ -75,8 +74,7 @@ Use the pattern `vi.mock(import('path/to/component'), () => ({ default: vi.fn(..
    - required text and labels
    - formatting expectations (amount/date, etc.)
    - presence of semantic/test-id targets when meaningful
-5. Use Promise.all for independent async expect.element assertions.
-6. Keep one test focused on one behavior.
+5. Keep one test focused on one behavior.
 
 ## Output Pattern
 
@@ -98,11 +96,8 @@ test("renders with provided props", async () => {
     props,
   });
 
-  // Use Promise.all for independent async assertions, and prefer user-facing selectors.
-  await Promise.all([
-    expect.element(getByText("...")).toBeInTheDocument(),
-    expect.element(getByTestId("...")).toHaveTextContent("..."),
-  ]);
+  await expect.element(getByText("...")).toBeInTheDocument();
+  await expect.element(getByTestId("...")).toHaveTextContent("...");
 });
 ```
 
@@ -111,7 +106,6 @@ test("renders with provided props", async () => {
 - Test compiles with strict TypeScript.
 - Uses test (not it) and no describe wrapper.
 - Assertions verify user-visible behavior.
-- Independent async assertions use Promise.all.
 - Mock/value choice follows AGENTS guidance:
   - inline by default
   - shared mocks only when intended for reuse.

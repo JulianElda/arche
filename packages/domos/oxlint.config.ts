@@ -1,15 +1,8 @@
+import lexis from "@julianelda/lexis/oxlint";
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
-  categories: {
-    correctness: "error",
-    perf: "error",
-  },
-  env: {
-    browser: true,
-    builtin: true,
-    node: true,
-  },
+  ...lexis,
   ignorePatterns: [
     "**/node_modules",
     "**/.output",
@@ -28,10 +21,6 @@ export default defineConfig({
     "**/vite.config.ts.timestamp-*",
   ],
   jsPlugins: ["eslint-plugin-svelte", "eslint-plugin-perfectionist"],
-  options: {
-    typeAware: true,
-    typeCheck: true,
-  },
   overrides: [
     {
       files: ["*.svelte", "**/*.svelte"],
@@ -42,162 +31,8 @@ export default defineConfig({
       },
     },
   ],
-  plugins: ["typescript", "unicorn", "oxc"],
   rules: {
-    "perfectionist/sort-array-includes": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-classes": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-decorators": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-enums": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-export-attributes": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-exports": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-heritage-clauses": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-import-attributes": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-imports": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-interfaces": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-intersection-types": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-jsx-props": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-maps": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-modules": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-named-exports": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-named-imports": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-object-types": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-objects": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-sets": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-switch-case": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-union-types": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
-    "perfectionist/sort-variable-declarations": [
-      "error",
-      {
-        order: "asc",
-        type: "natural",
-      },
-    ],
+    ...lexis.rules,
     "svelte/comment-directive": "error",
     "svelte/infinite-reactive-loop": "error",
     "svelte/no-at-debug-tags": "warn",
@@ -235,17 +70,5 @@ export default defineConfig({
     "svelte/system": "error",
     "svelte/valid-each-key": "error",
     "svelte/valid-prop-names-in-kit-pages": "error",
-    "unicorn/no-array-for-each": "error",
-    "unicorn/no-array-reverse": "error",
-    "unicorn/no-array-sort": "error",
-    "unicorn/no-immediate-mutation": "error",
-    "unicorn/no-instanceof-array": "error",
-    "unicorn/no-instanceof-builtins": "error",
-    "unicorn/no-negation-in-equality-check": "error",
-    "unicorn/no-null": "error",
-    "unicorn/numeric-separators-style": "error",
-    "unicorn/prefer-global-this": "error",
-    "unicorn/prefer-node-protocol": "error",
-    "unicorn/prefer-number-properties": "error",
   },
 });

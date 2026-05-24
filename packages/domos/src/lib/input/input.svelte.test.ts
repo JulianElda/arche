@@ -10,23 +10,21 @@ test("render elements", async () => {
     {
       props: {
         ...inputProps1,
-        onChange: vi.fn(),
+        onChange: vi.fn<() => void>(),
       },
     },
   );
 
-  await Promise.all([
-    expect.element(getByTestId(inputProps1.id)).toBeInTheDocument(),
-    expect.element(getByLabelText(inputProps1.label)).toBeInTheDocument(),
-    expect
-      .element(getByPlaceholder(inputProps1.placeholder!))
-      .toBeInTheDocument(),
-    expect.element(getByRole("textbox")).toBeInTheDocument(),
-  ]);
+  await expect.element(getByTestId(inputProps1.id)).toBeInTheDocument();
+  await expect.element(getByLabelText(inputProps1.label)).toBeInTheDocument();
+  await expect
+    .element(getByPlaceholder(inputProps1.placeholder!))
+    .toBeInTheDocument();
+  await expect.element(getByRole("textbox")).toBeInTheDocument();
 });
 
 test("callback when input changes", async () => {
-  const onChangeMock = vi.fn();
+  const onChangeMock = vi.fn<() => void>();
   const { getByRole } = render(Input, {
     props: {
       ...inputProps1,

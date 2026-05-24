@@ -15,7 +15,7 @@ test("render elements", async () => {
 });
 
 test("callback when select changes", async () => {
-  const onChangeMock = vi.fn();
+  const onChangeMock = vi.fn<() => void>();
   const { getByTestId } = render(SelectField, {
     props: {
       ...selectFieldProps1,

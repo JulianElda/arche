@@ -10,21 +10,19 @@ test("render checkbox element", async () => {
     {
       props: {
         ...checkboxProps,
-        onChange: vi.fn(),
+        onChange: vi.fn<() => void>(),
       },
     },
   );
 
-  await Promise.all([
-    expect.element(getByTestId(checkboxProps.id)).toBeInTheDocument(),
-    expect.element(getByLabelText(checkboxProps.label)).toBeInTheDocument(),
-    expect.element(getByText(checkboxProps.label)).toBeInTheDocument(),
-    expect.element(getByRole("checkbox")).toBeInTheDocument(),
-  ]);
+  await expect.element(getByTestId(checkboxProps.id)).toBeInTheDocument();
+  await expect.element(getByLabelText(checkboxProps.label)).toBeInTheDocument();
+  await expect.element(getByText(checkboxProps.label)).toBeInTheDocument();
+  await expect.element(getByRole("checkbox")).toBeInTheDocument();
 });
 
 test("calls onChange handler when checked", async () => {
-  const onChangeMock = vi.fn();
+  const onChangeMock = vi.fn<() => void>();
   const { getByRole } = render(Checkbox, {
     props: {
       ...checkboxProps,
@@ -45,7 +43,7 @@ test("renders with checked state", async () => {
   const { getByRole } = render(Checkbox, {
     props: {
       ...checkboxProps,
-      onChange: vi.fn(),
+      onChange: vi.fn<() => void>(),
     },
   });
   const checkbox = getByRole("checkbox");

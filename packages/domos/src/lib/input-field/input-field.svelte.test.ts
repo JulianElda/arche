@@ -8,20 +8,18 @@ test("render elements", async () => {
   const { getByPlaceholder, getByRole, getByTestId } = render(InputField, {
     props: {
       ...inputFieldProps1,
-      onChange: vi.fn(),
+      onChange: vi.fn<() => void>(),
       placeholder: "Enter text...",
     },
   });
 
-  await Promise.all([
-    expect.element(getByTestId(inputFieldProps1.id)).toBeInTheDocument(),
-    expect.element(getByPlaceholder("Enter text...")).toBeInTheDocument(),
-    expect.element(getByRole("textbox")).toBeInTheDocument(),
-  ]);
+  await expect.element(getByTestId(inputFieldProps1.id)).toBeInTheDocument();
+  await expect.element(getByPlaceholder("Enter text...")).toBeInTheDocument();
+  await expect.element(getByRole("textbox")).toBeInTheDocument();
 });
 
 test("call onChange handler when input changes", async () => {
-  const onChangeMock = vi.fn();
+  const onChangeMock = vi.fn<() => void>();
   const { getByRole } = render(InputField, {
     props: {
       ...inputFieldProps1,
