@@ -1,4 +1,4 @@
-import "./assets/style/styles.css";
+import "./assets/background.css";
 
 export { default as Button } from "./button/button.svelte";
 export { default as Card } from "./card/card.svelte";
