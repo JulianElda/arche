@@ -9,10 +9,6 @@ export default {
   },
   ignorePatterns: ["dist"],
   jsPlugins: ["eslint-plugin-perfectionist"],
-  options: {
-    typeAware: true,
-    typeCheck: true,
-  },
   plugins: ["typescript", "unicorn", "oxc", "vitest"],
   rules: {
     curly: ["error", "all"],
