@@ -16,6 +16,22 @@
 - A type file should be named `{domain|feature}.types.ts` and placed where it is relevant.
 - Prefer `Record` over index signature, e.g. `type RecordType = Record<string, number>;`
 
+# React
+
+- Use function components and hooks.
+- Use named exports for reusable components, hooks, store modules, and utilities.
+- Declare component props as an interface immediately above the component.
+- Name props interfaces as ComponentNameProps.
+- Destructure props into a constant immediately after function declaration, e.g. `const { prop1, prop2 } = props`
+- Prefer small, focused components with clear responsibility.
+- Order hook declarations when independent: React built-ins → third-party hooks → generated API hooks → custom hooks. Place `useEffect` after all other hooks. If a hook depends on another hook result, prioritize dependency order over style order.
+- Use named callbacks in `useEffect` (not anonymous inline functions). Use a named cleanup function when cleanup is required.
+- Name event handlers descriptively with `handle` prefix: `handleClick`, `handleChange`, `handleSubmit`.
+- Order attribute name alphabetically.
+- Order element attributes alphabetically.
+- Use `useCallback` only when a stable function reference is required (e.g. for `useEffect`, memoized components, or dependency-sensitive hooks). Avoid it otherwise.
+- Return early for empty/loading states.
+
 # Svelte
 
 - Declare component props using the `$props()` rune with an interface immediately above the component script.
@@ -30,6 +46,20 @@
 - Use `let` for component state; prefer `let` over module-level variables to scope state.
 - Prefer Svelte runes.
 
+# NextJS
+
+- Use default exports only for Next.js route-level files (page, layout, and route handlers).
+- Keep server/client boundaries explicit in app routes and providers.
+- Use path aliases consistently:
+  - src/\* for source modules
+  - @/\* for app/root modules
+
+# RTK Query
+
+- Interface of a request should be named `*Request`, and response should be named `*Response`.
+- Redux stores UI state only; server data must come from RTK Query unless explicitly cached for offline/optimistic use.
+- Prefer `skipToken` instead of using skip attribute.
+
 # Styling
 
 - Use utility-first class composition patterns consistently.
@@ -37,24 +67,8 @@
 
 # Testing
 
-- Prefer inlining test values. Use shared mock data directly when it is intended for reuse across tests or Storybook, and avoid creating local copies unless the test needs to mutate the data.
+- Do not resort to mocking imports unless there is no other solution.
+- Avoid abstraction in test codes. Only shared setup is acceptable.
+- Prefer inlining values like strings in the test, do not extract same values to a const.
 - Do not wrap tests in a file in a `describe()`.
 - Use `test`, not `it`.
-- When multiple async assertions are independent, run them in a single Promise.all instead of sequential awaits. Keep sequential awaits only when assertion order matters, user interactions change state between checks, or clearer failure isolation is needed.
-
-Respond terse like smart caveman. All technical substance stay. Only fluff die.
-
-Rules:
-
-- Drop: articles (a/an/the), filler (just/really/basically), pleasantries, hedging
-- Fragments OK. Short synonyms. Technical terms exact. Code unchanged.
-- Pattern: [thing] [action] [reason]. [next step].
-- Not: "Sure! I'd be happy to help you with that."
-- Yes: "Bug in auth middleware. Fix:"
-
-Switch level: /caveman lite|full|ultra|wenyan
-Stop: "stop caveman" or "normal mode"
-
-Auto-Clarity: drop caveman for security warnings, irreversible actions, user confused. Resume after.
-
-Boundaries: code/commits/PRs written normal.

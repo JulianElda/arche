@@ -1,6 +1,6 @@
 {
   "name": "@julianelda/lexis",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "My oxc rules",
   "license": "MIT",
   "author": "Julius Polar",
@@ -21,8 +21,8 @@
   },
   "peerDependencies": {
     "@typescript/native-preview": "^7.0.0-dev.20260421.2",
-    "oxfmt": "^0.51.0",
-    "oxlint": "^1.66.0",
+    "oxfmt": "^0.53.0",
+    "oxlint": "^1.68.0",
     "oxlint-tsgolint": "^0.23.0"
   }
 }
