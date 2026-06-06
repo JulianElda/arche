@@ -1,0 +1,9 @@
+{
+  "name": "@julianelda/chroma",
+  "version": "1.0.0",
+  "files": [
+    "src"
+  ],
+  "style": "./src/index.css",
+  "type": "module"
+}
