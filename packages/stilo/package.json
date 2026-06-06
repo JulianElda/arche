@@ -1,10 +1,15 @@
 {
   "name": "@julianelda/stilo",
   "version": "1.0.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JulianElda/arche",
+    "directory": "packages/stilo"
+  },
+  "style": "./src/index.css",
   "files": [
     "fonts",
     "src"
   ],
-  "style": "./src/index.css",
   "type": "module"
 }

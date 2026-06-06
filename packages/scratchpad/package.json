@@ -1,6 +1,11 @@
 {
   "name": "@julianelda/scratchpad",
   "version": "1.18.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JulianElda/arche",
+    "directory": "packages/scratchpad"
+  },
   "style": "./dist/scratchpad.css",
   "files": [
     "dist"

@@ -1,2 +1,2 @@
-import "./assets/style/styles.css";
+import "./assets/style/background.css";
 import "./tailwind.css";

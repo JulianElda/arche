@@ -4,6 +4,11 @@
   "keywords": [
     "svelte"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JulianElda/arche",
+    "directory": "packages/domos"
+  },
   "files": [
     "dist",
     "!dist/**/*.test.*",

@@ -6,7 +6,8 @@
   "author": "Julius Polar",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JulianElda/lexis"
+    "url": "https://github.com/JulianElda/arche",
+    "directory": "packages/lexis"
   },
   "files": [
     "oxfmt.d.ts",

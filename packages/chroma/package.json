@@ -1,9 +1,14 @@
 {
   "name": "@julianelda/chroma",
   "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JulianElda/arche",
+    "directory": "packages/chroma"
+  },
+  "style": "./src/index.css",
   "files": [
     "src"
   ],
-  "style": "./src/index.css",
   "type": "module"
 }
