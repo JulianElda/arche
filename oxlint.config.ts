@@ -3,4 +3,8 @@ import { defineConfig } from "oxlint";
 
 export default defineConfig({
   ...lexis,
+  options: {
+    typeAware: true,
+    typeCheck: true,
+  },
 });

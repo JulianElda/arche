@@ -18,7 +18,7 @@ test("renders elements", async () => {
 });
 
 test("calls callback when clicked", async () => {
-  const onClick = vi.fn();
+  const onClick = vi.fn<() => void>();
   const { getByTestId } = await render(
     <Button
       {...buttonPropsPrimary}

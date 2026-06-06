@@ -1,4 +1,4 @@
-import "./assets/style/styles.css";
+import "./assets/style/background.css";
 
 export { Button } from "lib/button/button";
 export { Card } from "lib/card/card";

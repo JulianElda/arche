@@ -1,5 +1,5 @@
 import type { SVGProps } from "react";
-const SvgGithubMarkLight = (props: SVGProps<SVGSVGElement>) => (
+export const GithubMarkLight = (props: SVGProps<SVGSVGElement>) => (
   <svg
     viewBox="0 0 96 96"
     xmlns="http://www.w3.org/2000/svg"
@@ -12,4 +12,3 @@ const SvgGithubMarkLight = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 );
-export default SvgGithubMarkLight;

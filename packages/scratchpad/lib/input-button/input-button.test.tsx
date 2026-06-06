@@ -36,7 +36,7 @@ test("render text button elements", async () => {
 });
 
 test("button click triggers onButtonClick", async () => {
-  const mockOnButtonClick = vi.fn();
+  const mockOnButtonClick = vi.fn<() => void>();
   const { getByTestId } = await render(
     <InputButton
       {...inputButtonProps1}
@@ -50,7 +50,7 @@ test("button click triggers onButtonClick", async () => {
 });
 
 test("input change triggers onChange", async () => {
-  const mockOnChange = vi.fn();
+  const mockOnChange = vi.fn<(value: number | string) => void>();
   const { getByTestId } = await render(
     <InputButton
       {...inputButtonProps2}

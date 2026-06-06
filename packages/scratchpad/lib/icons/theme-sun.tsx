@@ -1,5 +1,5 @@
 import type { SVGProps } from "react";
-export const SvgThemeSun = (props: SVGProps<SVGSVGElement>) => (
+export const ThemeSun = (props: SVGProps<SVGSVGElement>) => (
   <svg
     fill="none"
     stroke="currentColor"

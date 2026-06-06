@@ -1,0 +1,53 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules
+
+# Build output
+dist
+dist-ssr
+build
+.output
+.svelte-kit
+
+# Environment
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Logs
+logs
+*.log*
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Testing
+test-results
+coverage
+
+# Storybook
+storybook-static
+*storybook.log
+
+# Deployment
+.vercel
+.netlify
+.wrangler
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Local
+*.local

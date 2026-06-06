@@ -1,4 +1,4 @@
-export { default as GithubMarkDark } from "./github-mark-dark";
-export { default as GithubMarkLight } from "./github-mark-light";
-export { default as ThemeMoon } from "./theme-moon";
-export { default as ThemeSun } from "./theme-sun";
+export { GithubMarkDark } from "./github-mark-dark";
+export { GithubMarkLight } from "./github-mark-light";
+export { ThemeMoon } from "./theme-moon";
+export { ThemeSun } from "./theme-sun";

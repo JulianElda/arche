@@ -4,7 +4,10 @@
   "description": "My oxc rules",
   "license": "MIT",
   "author": "Julius Polar",
-  "repository": "@julianelda/lexis",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JulianElda/lexis"
+  },
   "files": [
     "oxfmt.d.ts",
     "oxfmt.js",

@@ -1,26 +1,6 @@
 // https://github.com/juliencrn/usehooks-ts/blob/master/packages/usehooks-ts/tests/mocks.ts
 
 /**
- * Mocks the matchMedia API
- * @param {boolean} matches - True for dark, false for light
- * @example
- * mockMatchMedia(false)
- */
-export const mockMatchMedia = (matches: boolean): void => {
-  Object.defineProperty(globalThis, "matchMedia", {
-    value: vitest.fn().mockImplementation((query) => ({
-      addEventListener: vitest.fn(),
-      dispatchEvent: vitest.fn(),
-      matches,
-      media: query,
-      onchange: undefined,
-      removeEventListener: vitest.fn(),
-    })),
-    writable: true,
-  });
-};
-
-/**
  * Mocks the Storage API
  * @param {'localStorage' | 'sessionStorage'} name - The name of the storage to mock
  * @example
