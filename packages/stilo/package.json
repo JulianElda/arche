@@ -1,0 +1,10 @@
+{
+  "name": "@julianelda/stilo",
+  "version": "1.0.2",
+  "files": [
+    "fonts",
+    "src"
+  ],
+  "style": "./src/index.css",
+  "type": "module"
+}
