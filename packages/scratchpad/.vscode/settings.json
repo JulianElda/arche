@@ -1,0 +1,16 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "explicit",
+    "source.format.oxc": "explicit"
+  },
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "eslint.enable": false,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "js/ts.experimental.useTsgo": true,
+  "prettier.enable": false,
+  "typescript.native-preview.tsdk": "/home/julian/workspace/scratchpad/node_modules/@typescript/native-preview"
+}

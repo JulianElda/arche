@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@import "@julianelda/chroma";
+
+@import "./assets/style/styles.css";
+
+@plugin "@tailwindcss/forms";
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
