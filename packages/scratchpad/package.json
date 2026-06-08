@@ -3,7 +3,7 @@
   "version": "1.18.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JulianElda/arche",
+    "url": "git+https://github.com/JulianElda/arche.git",
     "directory": "packages/scratchpad"
   },
   "style": "./dist/scratchpad.css",

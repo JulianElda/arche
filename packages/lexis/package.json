@@ -6,7 +6,7 @@
   "author": "Julius Polar",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JulianElda/arche",
+    "url": "git+https://github.com/JulianElda/arche.git",
     "directory": "packages/lexis"
   },
   "files": [

@@ -5,7 +5,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JulianElda/arche"
+    "url": "git+https://github.com/JulianElda/arche.git"
   },
   "workspaces": [
     "packages/*"
