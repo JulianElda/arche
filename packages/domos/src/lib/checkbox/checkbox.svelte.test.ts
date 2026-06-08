@@ -1,4 +1,4 @@
-import { expect, test, vi } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { render } from "vitest-browser-svelte";
 
 import { checkboxProps } from "./checkbox.mocks.ts";
@@ -48,4 +48,28 @@ test("renders with checked state", async () => {
   });
   const checkbox = getByRole("checkbox");
   await expect.element(checkbox).toHaveProperty("checked", true);
+});
+
+describe("disabled prop", () => {
+  test("checkbox element has disabled attribute when disabled={true}", async () => {
+    const { getByTestId } = render(Checkbox, {
+      props: {
+        ...checkboxProps,
+        disabled: true,
+      },
+    });
+    const checkbox = getByTestId(checkboxProps.id);
+    await expect.element(checkbox).toBeDisabled();
+  });
+
+  test("checkbox element does not have disabled attribute when disabled={false}", async () => {
+    const { getByTestId } = render(Checkbox, {
+      props: {
+        ...checkboxProps,
+        disabled: false,
+      },
+    });
+    const checkbox = getByTestId(checkboxProps.id);
+    await expect.element(checkbox).not.toBeDisabled();
+  });
 });

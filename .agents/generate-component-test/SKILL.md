@@ -1,6 +1,6 @@
 ---
 name: generate-component-test
-description: Generate Svelte component tests for this project using Vitest Browser + vitest-browser-svelte. Use when creating or updating *.svelte.test.ts files. Enforces AGENTS testing conventions.
+description: Generate Svelte component tests for this project using Vitest Browser + vitest-browser-svelte. Use when creating or updating *.svelte.test.ts files.
 ---
 
 # Generate Component Test (Svelte + Vitest Browser)
@@ -116,7 +116,7 @@ test("renders with provided props", async () => {
 After writing the test file, prompt the user to run it with the specific file path:
 
 ```
-bun vitest <path-to-test-file> --run
+bun vitest <path-to-test-file> --run --browser.headless
 ```
 
-For example: `bun vitest src/lib/components/month-sum/month-sum-row.svelte.test.ts --run`
+For example: `bun vitest src/lib/components/month-sum/month-sum-row.svelte.test.ts --run --browser.headless`

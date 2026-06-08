@@ -29,6 +29,7 @@ vite.config.ts.timestamp-*
 # Testing
 test-results
 coverage
+.vitest-attachments
 
 # Storybook
 storybook-static

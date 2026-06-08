@@ -37,3 +37,29 @@ test("callback when input changes", async () => {
   expect(onChangeMock).toHaveBeenCalledTimes(1);
   expect(onChangeMock).toHaveBeenLastCalledWith("test");
 });
+
+test("hideLabel=false shows label visually", async () => {
+  const { getByText } = render(Input, {
+    props: {
+      ...inputProps1,
+      hideLabel: false,
+      onChange: vi.fn<() => void>(),
+    },
+  });
+  const label = getByText(inputProps1.label);
+  await expect.element(label).toBeVisible();
+});
+
+test("hideLabel=true hides label visually but keeps it accessible", async () => {
+  const { getByLabelText, getByText } = render(Input, {
+    props: {
+      ...inputProps1,
+      hideLabel: true,
+      onChange: vi.fn<() => void>(),
+    },
+  });
+  const label = getByText(inputProps1.label);
+  await expect.element(label).toHaveClass("sr-only");
+  const input = getByLabelText(inputProps1.label);
+  await expect.element(input).toBeInTheDocument();
+});

@@ -1,5 +1,5 @@
 {
   "**/*.{js,jsx,ts,tsx}": ["oxlint --fix", "oxfmt"],
   "**/*.{css,html,json,yaml,yml,md}": "oxfmt",
-  "**/*.svelte": ["eslint --fix", "oxfmt"]
+  "**/*.svelte": ["bunx eslint --fix", "oxfmt"]
 }
