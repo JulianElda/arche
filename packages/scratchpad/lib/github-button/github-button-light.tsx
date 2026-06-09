@@ -1,4 +1,4 @@
-import { GithubMarkLight } from "lib/icons";
+import { GithubMarkLight } from "../icons";
 
 interface GitHubButtonLightProps {
   href: string;

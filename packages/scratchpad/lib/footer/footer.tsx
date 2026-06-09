@@ -1,9 +1,9 @@
-import { useDarkMode } from "lib/commons/use-dark-mode";
-import { GitHubButton } from "lib/github-button/github-button";
-import { Hyperlink } from "lib/hyperlink/hyperlink";
-import { ThemeToggle } from "lib/theme-toggle/theme-toggle";
-
 import type { FooterProps } from "./footer.types";
+
+import { useDarkMode } from "../commons/use-dark-mode";
+import { GitHubButton } from "../github-button/github-button";
+import { Hyperlink } from "../hyperlink/hyperlink";
+import { ThemeToggle } from "../theme-toggle/theme-toggle";
 
 /**
  * Footer with dark mode and GitHub button.

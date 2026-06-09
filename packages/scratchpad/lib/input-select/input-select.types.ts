@@ -1,4 +1,4 @@
-import type { InputFieldTypes, Option } from "lib/commons/commons.types";
+import type { InputFieldTypes, Option } from "../commons/commons.types";
 
 export interface InputSelectProps {
   hideLabel?: boolean;

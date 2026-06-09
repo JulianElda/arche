@@ -1,7 +1,7 @@
-import { InputLabel } from "lib/input-label/input-label";
-import { SelectField } from "lib/select-field/select-field";
-
 import type { SelectProps } from "./select.types";
+
+import { InputLabel } from "../input-label/input-label";
+import { SelectField } from "../select-field/select-field";
 
 export function Select(props: SelectProps) {
   const { hideLabel, id, label, onChange, options, value } = props;

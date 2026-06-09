@@ -1,5 +1,4 @@
-import type { InputFieldTypes } from "lib/commons/commons.types";
-
+import type { InputFieldTypes } from "../commons/commons.types";
 import type { InputFieldProps } from "./input-field.types";
 
 export const inputFieldProps1: InputFieldProps = {

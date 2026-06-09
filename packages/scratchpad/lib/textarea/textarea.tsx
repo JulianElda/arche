@@ -1,7 +1,7 @@
-import { InputLabel } from "lib/input-label/input-label";
-import { TextAreaField } from "lib/textarea-field/textarea-field";
-
 import type { TextAreaProps } from "./textarea.types";
+
+import { InputLabel } from "../input-label/input-label";
+import { TextAreaField } from "../textarea-field/textarea-field";
 
 export function TextArea(props: TextAreaProps) {
   const { hideLabel, id, label, onChange, onKeyDown, value } = props;

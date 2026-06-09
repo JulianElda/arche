@@ -1,4 +1,4 @@
-import { GithubMarkDark } from "lib/icons";
+import { GithubMarkDark } from "../icons";
 
 interface GitHubButtonDarkProps {
   href: string;

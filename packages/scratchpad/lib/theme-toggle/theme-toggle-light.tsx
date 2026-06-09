@@ -1,4 +1,4 @@
-import { ThemeMoon } from "lib/icons";
+import { ThemeMoon } from "../icons";
 
 interface ThemeToggleLightProps {
   onToggleDarkMode: () => void;

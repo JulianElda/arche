@@ -1,4 +1,4 @@
-import type { InputFieldTypes } from "lib/commons/commons.types";
+import type { InputFieldTypes } from "../commons/commons.types";
 
 export interface InputFieldProps {
   disabled?: boolean;

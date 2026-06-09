@@ -1,4 +1,4 @@
-import { ThemeSun } from "lib/icons";
+import { ThemeSun } from "../icons";
 
 interface ThemeToggleDarkProps {
   onToggleDarkMode: () => void;

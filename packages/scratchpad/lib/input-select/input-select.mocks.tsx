@@ -1,11 +1,10 @@
-import type { InputFieldTypes } from "lib/commons/commons.types";
+import type { InputFieldTypes } from "../commons/commons.types";
+import type { InputSelectProps } from "./input-select.types";
 
 import {
   selectFieldOptions1,
   selectFieldOptions2,
-} from "lib/select-field/select-field.mocks";
-
-import type { InputSelectProps } from "./input-select.types";
+} from "../select-field/select-field.mocks";
 
 export const inputSelectProps1: InputSelectProps = {
   inputId: "input-id-1",

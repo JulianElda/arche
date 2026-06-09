@@ -1,7 +1,7 @@
-import { InputField } from "lib/input-field/input-field";
-import { InputLabel } from "lib/input-label/input-label";
-
 import type { InputButtonProps } from "./input-button.types";
+
+import { InputField } from "../input-field/input-field";
+import { InputLabel } from "../input-label/input-label";
 
 export function InputButton(props: InputButtonProps) {
   const {

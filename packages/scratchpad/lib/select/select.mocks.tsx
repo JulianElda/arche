@@ -1,7 +1,7 @@
 import {
   selectFieldOptions1,
   selectFieldOptions2,
-} from "lib/select-field/select-field.mocks";
+} from "../select-field/select-field.mocks";
 
 export const selectProps1 = {
   id: "select-id-1",
