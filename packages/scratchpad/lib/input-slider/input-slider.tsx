@@ -1,7 +1,7 @@
-import type { InputSliderProps } from "lib/input-slider/input-slider.types";
-
 import { InputField } from "lib/input-field/input-field";
 import { InputLabel } from "lib/input-label/input-label";
+
+import type { InputSliderProps } from "./input-slider.types";
 
 export function InputSlider(props: InputSliderProps) {
   const { disabled, hideLabel, id, label, max, min, onChange, value } = props;

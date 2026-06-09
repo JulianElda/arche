@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { InputSlider } from "lib/input-slider/input-slider";
-import { inputSliderProps1 } from "lib/input-slider/input-slider.mocks";
+import { InputSlider } from "./input-slider";
+import { inputSliderProps1 } from "./input-slider.mocks";
 
 const meta = {
   component: InputSlider,

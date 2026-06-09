@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { ProgressBar } from "lib/progress-bar/progress-bar";
-import {
-  progressBarProps1,
-  progressBarProps2,
-} from "lib/progress-bar/progress-bar.mocks";
+import { ProgressBar } from "./progress-bar";
+import { progressBarProps1, progressBarProps2 } from "./progress-bar.mocks";
 
 const meta = {
   component: ProgressBar,

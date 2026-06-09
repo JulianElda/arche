@@ -1,6 +1,6 @@
-import type { InputLabelProps } from "lib/input-label/input-label.types";
-
 import { clsx } from "clsx";
+
+import type { InputLabelProps } from "./input-label.types";
 
 export function InputLabel(props: InputLabelProps) {
   const { hideLabel, id, label, value } = props;

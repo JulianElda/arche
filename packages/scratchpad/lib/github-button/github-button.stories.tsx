@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 
-import { GitHubButton } from "lib/github-button/github-button";
+import { GitHubButton } from "./github-button";
 
 const meta = {
   component: GitHubButton,

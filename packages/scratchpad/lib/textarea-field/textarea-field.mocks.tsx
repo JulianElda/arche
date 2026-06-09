@@ -1,4 +1,4 @@
-import type { TextAreaFieldProps } from "lib/textarea-field/textarea-field.types";
+import type { TextAreaFieldProps } from "./textarea-field.types";
 
 export const textAreaFieldProps1: TextAreaFieldProps = {
   id: "textarea-id-1",

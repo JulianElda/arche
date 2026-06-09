@@ -1,8 +1,8 @@
-import type { TextAreaProps } from "lib/textarea/textarea.types";
-
 import { useState } from "react";
 import { expect, test } from "vitest";
 import { render } from "vitest-browser-react";
+
+import type { TextAreaProps } from "./textarea.types";
 
 import { TextArea } from "./textarea";
 import { textAreaProps1 } from "./textarea.mocks";

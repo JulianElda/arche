@@ -1,8 +1,8 @@
-import type { CheckboxProps } from "lib/checkbox/checkbox.types.ts";
-
 import { useState } from "react";
 import { expect, test } from "vitest";
 import { render } from "vitest-browser-react";
+
+import type { CheckboxProps } from "./checkbox.types.ts";
 
 import { checkboxProps } from "./checkbox.mocks.tsx";
 import { Checkbox } from "./checkbox.tsx";

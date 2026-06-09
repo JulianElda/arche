@@ -1,6 +1,6 @@
-import type { InputButtonProps } from "lib/input-button/input-button.types";
-
 import { inputProps1, inputProps2, inputProps3 } from "lib/input/input.mocks";
+
+import type { InputButtonProps } from "./input-button.types";
 
 const copySvg = (
   <svg

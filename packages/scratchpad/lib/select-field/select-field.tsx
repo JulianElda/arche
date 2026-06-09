@@ -1,6 +1,6 @@
-import type { SelectFieldProps } from "lib/select-field/select-field.types";
-
 import { clsx } from "clsx";
+
+import type { SelectFieldProps } from "./select-field.types";
 
 export function SelectField(props: SelectFieldProps) {
   const { id, inInputField, onChange, options, value } = props;

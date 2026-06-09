@@ -1,8 +1,8 @@
-import type { InputSelectProps } from "lib/input-select/input-select.types";
-
 import { useState } from "react";
 import { expect, test } from "vitest";
 import { render } from "vitest-browser-react";
+
+import type { InputSelectProps } from "./input-select.types";
 
 import { InputSelect } from "./input-select";
 import { inputSelectProps1 } from "./input-select.mocks";

@@ -1,6 +1,6 @@
-import type { ButtonProps } from "lib/button/button.types";
-
 import { clsx } from "clsx";
+
+import type { ButtonProps } from "./button.types";
 
 export function Button(props: ButtonProps) {
   const { id, onClick, style, text, type } = props;

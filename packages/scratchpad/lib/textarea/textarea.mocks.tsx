@@ -1,6 +1,6 @@
-import type { TextAreaProps } from "lib/textarea/textarea.types";
-
 import { textAreaFieldProps1 } from "lib/textarea-field/textarea-field.mocks";
+
+import type { TextAreaProps } from "./textarea.types";
 
 export const textAreaProps1: TextAreaProps = {
   ...textAreaFieldProps1,

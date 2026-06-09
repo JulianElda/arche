@@ -1,7 +1,7 @@
-import type { GitHubButtonProps } from "lib/github-button/github-button.types";
+import type { GitHubButtonProps } from "./github-button.types";
 
-import { GitHubButtonDark } from "lib/github-button/github-button-dark";
-import { GitHubButtonLight } from "lib/github-button/github-button-light";
+import { GitHubButtonDark } from "./github-button-dark";
+import { GitHubButtonLight } from "./github-button-light";
 
 export function GitHubButton(props: GitHubButtonProps) {
   const { isDarkMode, link } = props;

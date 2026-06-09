@@ -1,8 +1,8 @@
-import type { InputSelectProps } from "lib/input-select/input-select.types";
-
 import { InputField } from "lib/input-field/input-field";
 import { InputLabel } from "lib/input-label/input-label";
 import { SelectField } from "lib/select-field/select-field";
+
+import type { InputSelectProps } from "./input-select.types";
 
 export function InputSelect(props: InputSelectProps) {
   const {

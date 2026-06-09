@@ -1,8 +1,8 @@
-import type { SelectProps } from "lib/select/select.types";
-
 import { useState } from "react";
 import { expect, test } from "vitest";
 import { render } from "vitest-browser-react";
+
+import type { SelectProps } from "./select.types";
 
 import { Select } from "./select";
 import { selectProps1 } from "./select.mocks";

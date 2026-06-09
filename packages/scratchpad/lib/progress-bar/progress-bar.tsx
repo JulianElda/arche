@@ -1,6 +1,6 @@
-import type { ProgressBarProps } from "lib/progress-bar/progress-bar.types";
-
 import { InputLabel } from "lib/input-label/input-label";
+
+import type { ProgressBarProps } from "./progress-bar.types";
 
 export function ProgressBar(props: ProgressBarProps) {
   const { hideLabel, id, label, max, min, value } = props;
