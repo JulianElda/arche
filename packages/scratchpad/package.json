@@ -1,6 +1,6 @@
 {
   "name": "@julianelda/scratchpad",
-  "version": "1.18.0",
+  "version": "1.19.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JulianElda/arche.git",
@@ -22,7 +22,7 @@
     "./background": "./dist/assets/background.css"
   },
   "scripts": {
-    "build": "tsgo --project ./tsconfig.lib.json && vite build",
+    "build": "tsgo --project ./tsconfig.lib.json && vite build && mkdir -p dist/assets && cp lib/tailwind.css dist/tailwind.css && cp lib/assets/style/background.css dist/assets/background.css",
     "dev": "vite",
     "lint": "oxlint",
     "preview": "vite preview",

@@ -16,6 +16,6 @@ bun add @julianelda@scratchpad
 Add import and source in tailwind file
 
 ```css
-@import "@julianelda/scratchpad";
-@source "./node_modules/@julianelda/scratchpad/dist";
+@import "@julianelda/scratchpad/tailwind";
+@import "@julianelda/scratchpad/background";
 ```
