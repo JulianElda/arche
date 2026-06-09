@@ -19,10 +19,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true,
-    "paths": {
-      "lib/*": ["./lib/*"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
   "include": ["src", "lib"]
 }

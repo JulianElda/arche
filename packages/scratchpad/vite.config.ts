@@ -1,7 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
-import path, { resolve } from "node:path";
+import { resolve } from "node:path";
 import dts from "vite-plugin-dts";
 import { defineConfig } from "vitest/config";
 
@@ -28,11 +28,6 @@ export default defineConfig({
       tsconfigPath: "./tsconfig.lib.json",
     }),
   ],
-  resolve: {
-    alias: {
-      lib: path.resolve(__dirname, "lib"),
-    },
-  },
   test: {
     browser: {
       enabled: true,
