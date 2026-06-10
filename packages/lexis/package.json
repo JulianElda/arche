@@ -1,6 +1,6 @@
 {
   "name": "@julianelda/lexis",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "My oxc rules",
   "license": "MIT",
   "author": "Julius Polar",
@@ -13,12 +13,15 @@
     "oxfmt.d.ts",
     "oxfmt.js",
     "oxlint.d.ts",
-    "oxlint.js"
+    "oxlint.js",
+    "oxlint.svelte.d.ts",
+    "oxlint.svelte.js"
   ],
   "type": "module",
   "exports": {
     "./oxfmt": "./oxfmt.js",
-    "./oxlint": "./oxlint.js"
+    "./oxlint": "./oxlint.js",
+    "./oxlint/svelte": "./oxlint.svelte.js"
   },
   "peerDependencies": {
     "@typescript/native-preview": "^7.0.0-dev.20260421.2",

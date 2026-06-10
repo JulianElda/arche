@@ -29,7 +29,7 @@ export default defineConfig(
       parserOptions: {
         extraFileExtensions: [".svelte"],
         parser: ts.parser,
-        projectService: true,
+        projectService: false,
         svelteConfig,
       },
     },
