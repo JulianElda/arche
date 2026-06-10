@@ -1,5 +1,3 @@
-import "./assets/style/background.css";
-
 export { Button } from "./button/button";
 export { Card } from "./card/card";
 export { Checkbox } from "./checkbox/checkbox";

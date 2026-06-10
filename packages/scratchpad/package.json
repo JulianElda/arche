@@ -6,23 +6,21 @@
     "url": "git+https://github.com/JulianElda/arche.git",
     "directory": "packages/scratchpad"
   },
-  "style": "./dist/scratchpad.css",
   "files": [
     "dist"
   ],
   "type": "module",
-  "main": "./dist/scratchpad.js",
-  "module": "./dist/scratchpad.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/scratchpad.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts"
+      "import": "./dist/scratchpad.js",
+      "types": "./dist/scratchpad.d.ts"
     },
     "./tailwind": "./dist/tailwind.css",
-    "./background": "./dist/assets/background.css"
+    "./background": "./dist/background.css"
   },
   "scripts": {
-    "build": "tsgo --project ./tsconfig.lib.json && vite build && mkdir -p dist/assets && cp lib/tailwind.css dist/tailwind.css && cp lib/assets/style/background.css dist/assets/background.css",
+    "build": "tsdown",
     "dev": "vite",
     "lint": "oxlint",
     "preview": "vite preview",
@@ -43,6 +41,7 @@
     "@tailwindcss/cli": "^4.3.0",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4.3.0",
+    "@tsdown/css": "^0.22.2",
     "@types/js-cookie": "^3.0.6",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -52,7 +51,7 @@
     "postcss": "^8.5.14",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "vite-plugin-dts": "^5.0.0",
+    "tsdown": "^0.22.2",
     "vitest-browser-react": "^2.2.0"
   },
   "peerDependencies": {
