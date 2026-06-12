@@ -32,7 +32,7 @@ test("calls onChange handler when checked", async () => {
   });
   const checkbox = getByRole("checkbox");
   await checkbox.click();
-  expect(onChangeMock).toHaveBeenCalledTimes(1);
+  expect(onChangeMock).toHaveBeenCalledOnce();
   expect(onChangeMock).toHaveBeenCalledWith(true);
   await checkbox.click();
   expect(onChangeMock).toHaveBeenCalledTimes(2);

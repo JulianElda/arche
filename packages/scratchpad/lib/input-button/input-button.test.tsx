@@ -46,7 +46,7 @@ test("button click triggers onButtonClick", async () => {
   const buttonElement = getByTestId(inputButtonProps1.id + "-button");
 
   await buttonElement.click();
-  expect(mockOnButtonClick).toHaveBeenCalledTimes(1);
+  expect(mockOnButtonClick).toHaveBeenCalledOnce();
 });
 
 test("input change triggers onChange", async () => {
@@ -60,5 +60,5 @@ test("input change triggers onChange", async () => {
   const inputElement = getByTestId(inputButtonProps2.id);
 
   await inputElement.fill("test");
-  expect(mockOnChange).toHaveBeenCalledTimes(1);
+  expect(mockOnChange).toHaveBeenCalledOnce();
 });

@@ -34,7 +34,7 @@ describe("type='text'", () => {
     });
     const input = getByTestId(inputFieldProps1.id);
     await input.fill("test");
-    expect(onChangeMock).toHaveBeenCalledTimes(1);
+    expect(onChangeMock).toHaveBeenCalledOnce();
     expect(onChangeMock).toHaveBeenLastCalledWith("test");
   });
 
@@ -135,7 +135,7 @@ describe("type='number'", () => {
     });
     const input = getByTestId(inputFieldProps2.id);
     await input.fill("42");
-    expect(onChangeMock).toHaveBeenCalledTimes(1);
+    expect(onChangeMock).toHaveBeenCalledOnce();
     expect(onChangeMock).toHaveBeenLastCalledWith("42");
   });
 
@@ -165,7 +165,7 @@ describe("type='number'", () => {
     });
     const input = getByTestId(inputFieldProps2.id);
     await input.fill("3.14");
-    expect(onChangeMock).toHaveBeenCalledTimes(1);
+    expect(onChangeMock).toHaveBeenCalledOnce();
     expect(onChangeMock).toHaveBeenLastCalledWith("3.14");
   });
 });
@@ -194,7 +194,7 @@ describe("type='search'", () => {
     });
     const input = getByTestId(inputFieldProps3.id);
     await input.fill("test");
-    expect(onChangeMock).toHaveBeenCalledTimes(1);
+    expect(onChangeMock).toHaveBeenCalledOnce();
     expect(onChangeMock).toHaveBeenLastCalledWith("test");
   });
 });

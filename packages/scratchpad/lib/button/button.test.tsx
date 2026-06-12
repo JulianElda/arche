@@ -26,5 +26,5 @@ test("calls callback when clicked", async () => {
     />,
   );
   await getByTestId(buttonPropsPrimary.id).click();
-  expect(onClick).toHaveBeenCalled();
+  expect(onClick).toHaveBeenCalledOnce();
 });

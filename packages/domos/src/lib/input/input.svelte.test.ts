@@ -34,7 +34,7 @@ test("callback when input changes", async () => {
   });
   const input = getByRole("textbox");
   await input.fill("test");
-  expect(onChangeMock).toHaveBeenCalledTimes(1);
+  expect(onChangeMock).toHaveBeenCalledOnce();
   expect(onChangeMock).toHaveBeenLastCalledWith("test");
 });
 

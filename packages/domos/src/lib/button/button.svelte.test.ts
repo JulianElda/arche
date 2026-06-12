@@ -28,5 +28,5 @@ test("call onClick handler when clicked", async () => {
   });
   const button = getByRole("button", { name: buttonPropsPrimary.text });
   await button.click();
-  expect(onClickMock).toHaveBeenCalledTimes(1);
+  expect(onClickMock).toHaveBeenCalledOnce();
 });

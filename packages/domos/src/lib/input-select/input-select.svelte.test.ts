@@ -51,11 +51,11 @@ test("callback when input and select changes", async () => {
   });
   const input = getByTestId("test-input");
   await input.fill("test");
-  expect(onInputChangeMock).toHaveBeenCalledTimes(1);
+  expect(onInputChangeMock).toHaveBeenCalledOnce();
   expect(onInputChangeMock).toHaveBeenLastCalledWith("test");
 
   const select = getByTestId("test-select");
   await select.selectOptions("option2");
-  expect(onSelectChangeMock).toHaveBeenCalledTimes(1);
+  expect(onSelectChangeMock).toHaveBeenCalledOnce();
   expect(onSelectChangeMock).toHaveBeenLastCalledWith("option2");
 });

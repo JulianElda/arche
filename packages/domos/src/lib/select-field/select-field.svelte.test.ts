@@ -26,7 +26,7 @@ test("callback when select changes", async () => {
   });
   const select = getByTestId(selectFieldProps1.id);
   await select.selectOptions(selectFieldProps1.options[1].value);
-  expect(onChangeMock).toHaveBeenCalledTimes(1);
+  expect(onChangeMock).toHaveBeenCalledOnce();
   expect(onChangeMock).toHaveBeenLastCalledWith(
     selectFieldProps1.options[1].value,
   );
