@@ -53,6 +53,5 @@ export default {
     "svelte/system": "error",
     "svelte/valid-each-key": "error",
     "svelte/valid-prop-names-in-kit-pages": "error",
-    "vitest/require-awaited-expect-poll": "off",
   },
 };
