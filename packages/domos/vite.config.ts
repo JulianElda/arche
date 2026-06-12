@@ -6,20 +6,26 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [tailwindcss(), sveltekit()],
   test: {
-    expect: { requireAssertions: true },
-    projects: [
-      {
-        extends: "./vite.config.ts",
-        test: {
-          browser: {
-            enabled: true,
-            instances: [{ browser: "chromium" }],
-            provider: playwright(),
-          },
-          include: ["src/**/*.svelte.{test,spec}.{js,ts}"],
-          setupFiles: "./src/test.setup.ts",
+    browser: {
+      enabled: true,
+      instances: [
+        {
+          browser: "chromium",
         },
-      },
-    ],
+      ],
+      provider: playwright({
+        launchOptions: {
+          executablePath: "/usr/bin/chromium",
+        },
+      }),
+    },
+    coverage: {
+      enabled: true,
+      exclude: ["src/**/*.mocks.ts"],
+      provider: "v8",
+    },
+    expect: { requireAssertions: true },
+    include: ["src/**/*.svelte.test.ts"],
+    setupFiles: "./src/test.setup.ts",
   },
 });

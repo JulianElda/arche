@@ -24,6 +24,7 @@ export default defineConfig({
       exclude: ["lib/**/*.mocks.{ts,tsx}"],
       provider: "v8",
     },
+    expect: { requireAssertions: true },
     include: ["lib/**/*.test.{ts,tsx}"],
     setupFiles: "./lib/test.setup.ts",
   },
