@@ -24,6 +24,7 @@ export default defineConfig({
       exclude: ["lib/**/*.mocks.{ts,tsx}"],
       provider: "v8",
     },
-    setupFiles: "./lib/test-setup.ts",
+    include: ["lib/**/*.test.{ts,tsx}"],
+    setupFiles: "./lib/test.setup.ts",
   },
 });
