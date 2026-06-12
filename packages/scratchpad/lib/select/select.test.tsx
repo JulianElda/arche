@@ -8,6 +8,7 @@ import { Select } from "./select";
 import { selectProps1 } from "./select.mocks";
 
 const SelectTemplate = (arguments_: SelectProps) => {
+  const { hideLabel, id, inInputField, label, options } = arguments_;
   const [value, setValue] = useState(arguments_.value ?? "");
 
   const handleChange = (newValue: string) => {
@@ -16,8 +17,12 @@ const SelectTemplate = (arguments_: SelectProps) => {
 
   return (
     <Select
-      {...arguments_}
+      hideLabel={hideLabel}
+      id={id}
+      inInputField={inInputField}
+      label={label}
       onChange={handleChange}
+      options={options}
       value={value}
     />
   );
@@ -25,7 +30,13 @@ const SelectTemplate = (arguments_: SelectProps) => {
 
 test("renders elements with label", async () => {
   const { getByLabelText, getByRole, getByTestId } = await render(
-    <Select {...selectProps1} />,
+    <Select
+      id={selectProps1.id}
+      label={selectProps1.label}
+      onChange={selectProps1.onChange}
+      options={selectProps1.options}
+      value={selectProps1.value}
+    />,
   );
 
   await expect.element(getByTestId(selectProps1.id)).toBeInTheDocument();
@@ -45,8 +56,12 @@ test("renders elements with label", async () => {
 test("renders elements without label", async () => {
   const { getByLabelText, getByRole, getByTestId } = await render(
     <Select
-      {...selectProps1}
       hideLabel={true}
+      id={selectProps1.id}
+      label={selectProps1.label}
+      onChange={selectProps1.onChange}
+      options={selectProps1.options}
+      value={selectProps1.value}
     />,
   );
 
@@ -65,7 +80,15 @@ test("renders elements without label", async () => {
 });
 
 test("initial value", async () => {
-  const { getByTestId } = await render(<Select {...selectProps1} />);
+  const { getByTestId } = await render(
+    <Select
+      id={selectProps1.id}
+      label={selectProps1.label}
+      onChange={selectProps1.onChange}
+      options={selectProps1.options}
+      value={selectProps1.value}
+    />,
+  );
 
   await expect
     .element(getByTestId(selectProps1.id))
@@ -73,7 +96,15 @@ test("initial value", async () => {
 });
 
 test("change value", async () => {
-  const { getByTestId } = await render(<SelectTemplate {...selectProps1} />);
+  const { getByTestId } = await render(
+    <SelectTemplate
+      id={selectProps1.id}
+      label={selectProps1.label}
+      onChange={selectProps1.onChange}
+      options={selectProps1.options}
+      value={selectProps1.value}
+    />,
+  );
 
   const selectElement = getByTestId(selectProps1.id);
   await selectElement.selectOptions(selectProps1.options[1].value);

@@ -8,6 +8,7 @@ import { checkboxProps } from "./checkbox.mocks.tsx";
 import { Checkbox } from "./checkbox.tsx";
 
 const CheckboxTemplate = (props: CheckboxProps) => {
+  const { hideLabel, id, label } = props;
   const [value, setValue] = useState<boolean>(props.value ?? true);
 
   const handleChange = (newValue: boolean) => {
@@ -16,7 +17,9 @@ const CheckboxTemplate = (props: CheckboxProps) => {
 
   return (
     <Checkbox
-      {...props}
+      hideLabel={hideLabel}
+      id={id}
+      label={label}
       onChange={handleChange}
       value={value}
     />
@@ -25,7 +28,12 @@ const CheckboxTemplate = (props: CheckboxProps) => {
 
 test("renders elements", async () => {
   const { getByLabelText, getByRole, getByTestId, getByText } = await render(
-    <Checkbox {...checkboxProps} />,
+    <Checkbox
+      id={checkboxProps.id}
+      label={checkboxProps.label}
+      onChange={checkboxProps.onChange}
+      value={checkboxProps.value}
+    />,
   );
   await expect.element(getByTestId(checkboxProps.id)).toBeInTheDocument();
   await expect.element(getByLabelText(checkboxProps.label)).toBeInTheDocument();
@@ -38,8 +46,11 @@ test("renders elements", async () => {
 test("renders elements with hidden label", async () => {
   const { getByLabelText, getByRole, getByTestId, getByText } = await render(
     <Checkbox
-      {...checkboxProps}
       hideLabel={true}
+      id={checkboxProps.id}
+      label={checkboxProps.label}
+      onChange={checkboxProps.onChange}
+      value={checkboxProps.value}
     />,
   );
   await expect.element(getByTestId(checkboxProps.id)).toBeInTheDocument();
@@ -51,14 +62,23 @@ test("renders elements with hidden label", async () => {
 });
 
 test("initial value checked", async () => {
-  const { getByTestId } = await render(<Checkbox {...checkboxProps} />);
+  const { getByTestId } = await render(
+    <Checkbox
+      id={checkboxProps.id}
+      label={checkboxProps.label}
+      onChange={checkboxProps.onChange}
+      value={checkboxProps.value}
+    />,
+  );
   await expect.element(getByTestId(checkboxProps.id)).toBeChecked();
 });
 
 test("initial value not checked", async () => {
   const { getByTestId } = await render(
     <Checkbox
-      {...checkboxProps}
+      id={checkboxProps.id}
+      label={checkboxProps.label}
+      onChange={checkboxProps.onChange}
       value={false}
     />,
   );
@@ -66,7 +86,14 @@ test("initial value not checked", async () => {
 });
 
 test("change value", async () => {
-  const { getByTestId } = await render(<CheckboxTemplate {...checkboxProps} />);
+  const { getByTestId } = await render(
+    <CheckboxTemplate
+      id={checkboxProps.id}
+      label={checkboxProps.label}
+      onChange={checkboxProps.onChange}
+      value={checkboxProps.value}
+    />,
+  );
   const checkbox = getByTestId(checkboxProps.id);
   await expect.element(checkbox).toBeChecked();
   await checkbox.click();

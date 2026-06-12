@@ -6,7 +6,13 @@ import { Button } from "./button.tsx";
 
 test("renders elements", async () => {
   const { getByLabelText, getByRole, getByTestId } = await render(
-    <Button {...buttonPropsPrimary} />,
+    <Button
+      id={buttonPropsPrimary.id}
+      onClick={buttonPropsPrimary.onClick}
+      style={buttonPropsPrimary.style}
+      text={buttonPropsPrimary.text}
+      type={buttonPropsPrimary.type}
+    />,
   );
   await expect.element(getByTestId(buttonPropsPrimary.id)).toBeInTheDocument();
   await expect
@@ -21,8 +27,11 @@ test("calls callback when clicked", async () => {
   const onClick = vi.fn<() => void>();
   const { getByTestId } = await render(
     <Button
-      {...buttonPropsPrimary}
+      id={buttonPropsPrimary.id}
       onClick={onClick}
+      style={buttonPropsPrimary.style}
+      text={buttonPropsPrimary.text}
+      type={buttonPropsPrimary.type}
     />,
   );
   await getByTestId(buttonPropsPrimary.id).click();

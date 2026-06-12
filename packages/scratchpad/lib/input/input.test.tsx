@@ -8,6 +8,19 @@ import { Input } from "./input";
 import { inputProps1, inputProps2 } from "./input.mocks";
 
 const InputTemplate = (arguments_: InputProps) => {
+  const {
+    disabled,
+    hideLabel,
+    id,
+    label,
+    max,
+    maxLength,
+    min,
+    onKeyDown,
+    placeholder,
+    type,
+    withIconLeft,
+  } = arguments_;
   const [value, setValue] = useState(arguments_.value || "");
 
   const handleChange = (newValue: number | string) => {
@@ -16,9 +29,19 @@ const InputTemplate = (arguments_: InputProps) => {
 
   return (
     <Input
-      {...arguments_}
+      disabled={disabled}
+      hideLabel={hideLabel}
+      id={id}
+      label={label}
+      max={max}
+      maxLength={maxLength}
+      min={min}
       onChange={handleChange}
+      onKeyDown={onKeyDown}
+      placeholder={placeholder}
+      type={type}
       value={value}
+      withIconLeft={withIconLeft}
     />
   );
 };
@@ -30,7 +53,15 @@ test("render elements", async () => {
     getByRole,
     getByTestId,
     getByText,
-  } = await render(<Input {...inputProps1} />);
+  } = await render(
+    <Input
+      id={inputProps1.id}
+      label={inputProps1.label}
+      placeholder={inputProps1.placeholder}
+      type={inputProps1.type}
+      value={inputProps1.value}
+    />,
+  );
   await expect.element(getByLabelText(inputProps1.label)).toBeInTheDocument();
   await expect.element(getByText(inputProps1.label)).toBeInTheDocument();
   await expect.element(getByTestId(inputProps1.id)).toBeInTheDocument();
@@ -44,14 +75,30 @@ test("render elements", async () => {
 
 describe("type=text", () => {
   test("initial value", async () => {
-    const { getByTestId } = await render(<InputTemplate {...inputProps1} />);
+    const { getByTestId } = await render(
+      <InputTemplate
+        id={inputProps1.id}
+        label={inputProps1.label}
+        placeholder={inputProps1.placeholder}
+        type={inputProps1.type}
+        value={inputProps1.value}
+      />,
+    );
     const inputElement = getByTestId(inputProps1.id);
 
     await expect.element(inputElement).toHaveValue(inputProps1.value);
   });
 
   test("change value", async () => {
-    const { getByTestId } = await render(<InputTemplate {...inputProps1} />);
+    const { getByTestId } = await render(
+      <InputTemplate
+        id={inputProps1.id}
+        label={inputProps1.label}
+        placeholder={inputProps1.placeholder}
+        type={inputProps1.type}
+        value={inputProps1.value}
+      />,
+    );
     const inputElement = getByTestId(inputProps1.id);
 
     await inputElement.clear();
@@ -68,14 +115,28 @@ describe("type=text", () => {
 
 describe("type=number", () => {
   test("initial value", async () => {
-    const { getByTestId } = await render(<InputTemplate {...inputProps2} />);
+    const { getByTestId } = await render(
+      <InputTemplate
+        id={inputProps2.id}
+        label={inputProps2.label}
+        type={inputProps2.type}
+        value={inputProps2.value}
+      />,
+    );
     const inputElement = getByTestId(inputProps2.id);
 
     await expect.element(inputElement).toHaveValue(inputProps2.value);
   });
 
   test("change value", async () => {
-    const { getByTestId } = await render(<InputTemplate {...inputProps2} />);
+    const { getByTestId } = await render(
+      <InputTemplate
+        id={inputProps2.id}
+        label={inputProps2.label}
+        type={inputProps2.type}
+        value={inputProps2.value}
+      />,
+    );
     const inputElement = getByTestId(inputProps2.id);
 
     await inputElement.clear();

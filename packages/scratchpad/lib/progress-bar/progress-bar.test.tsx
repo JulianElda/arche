@@ -6,7 +6,14 @@ import { progressBarProps1, progressBarProps2 } from "./progress-bar.mocks";
 
 test("renders elements without label", async () => {
   const { getByRole, getByTestId, getByText } = await render(
-    <ProgressBar {...progressBarProps2} />,
+    <ProgressBar
+      hideLabel={progressBarProps2.hideLabel}
+      id={progressBarProps2.id}
+      label={progressBarProps2.label}
+      max={progressBarProps2.max}
+      min={progressBarProps2.min}
+      value={progressBarProps2.value}
+    />,
   );
 
   await expect.element(getByTestId(progressBarProps2.id)).toBeInTheDocument();
@@ -18,7 +25,13 @@ test("renders elements without label", async () => {
 
 test("renders elements with label", async () => {
   const { getByRole, getByTestId, getByText } = await render(
-    <ProgressBar {...progressBarProps1} />,
+    <ProgressBar
+      id={progressBarProps1.id}
+      label={progressBarProps1.label}
+      max={progressBarProps1.max}
+      min={progressBarProps1.min}
+      value={progressBarProps1.value}
+    />,
   );
 
   await expect.element(getByTestId(progressBarProps1.id)).toBeInTheDocument();

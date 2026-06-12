@@ -8,6 +8,17 @@ import { TextArea } from "./textarea";
 import { textAreaProps1 } from "./textarea.mocks";
 
 const TextAreaTemplate = (arguments_: TextAreaProps) => {
+  const {
+    disabled,
+    hideLabel,
+    id,
+    label,
+    max,
+    maxLength,
+    min,
+    onKeyDown,
+    placeholder,
+  } = arguments_;
   const [value, setValue] = useState(arguments_.value || "");
 
   const handleChange = (newValue: number | string) => {
@@ -16,8 +27,16 @@ const TextAreaTemplate = (arguments_: TextAreaProps) => {
 
   return (
     <TextArea
-      {...arguments_}
+      disabled={disabled}
+      hideLabel={hideLabel}
+      id={id}
+      label={label}
+      max={max}
+      maxLength={maxLength}
+      min={min}
       onChange={handleChange}
+      onKeyDown={onKeyDown}
+      placeholder={placeholder}
       value={value}
     />
   );
@@ -25,7 +44,11 @@ const TextAreaTemplate = (arguments_: TextAreaProps) => {
 
 test("render elements", async () => {
   const { getByLabelText, getByTestId, getByText } = await render(
-    <TextArea {...textAreaProps1} />,
+    <TextArea
+      id={textAreaProps1.id}
+      label={textAreaProps1.label}
+      value={textAreaProps1.value}
+    />,
   );
   await expect
     .element(getByLabelText(textAreaProps1.label))
@@ -35,7 +58,13 @@ test("render elements", async () => {
 });
 
 test("initial value", async () => {
-  const { getByTestId } = await render(<TextArea {...textAreaProps1} />);
+  const { getByTestId } = await render(
+    <TextArea
+      id={textAreaProps1.id}
+      label={textAreaProps1.label}
+      value={textAreaProps1.value}
+    />,
+  );
   await expect
     .element(getByTestId(textAreaProps1.id))
     .toHaveValue(textAreaProps1.value);
@@ -43,7 +72,11 @@ test("initial value", async () => {
 
 test("change value", async () => {
   const { getByTestId } = await render(
-    <TextAreaTemplate {...textAreaProps1} />,
+    <TextAreaTemplate
+      id={textAreaProps1.id}
+      label={textAreaProps1.label}
+      value={textAreaProps1.value}
+    />,
   );
   const textAreaElement = getByTestId(textAreaProps1.id);
 

@@ -8,6 +8,19 @@ import { InputSelect } from "./input-select";
 import { inputSelectProps1 } from "./input-select.mocks";
 
 const InputSelectTemplate = (arguments_: InputSelectProps) => {
+  const {
+    hideLabel,
+    inputDisabled,
+    inputId,
+    inputLabel,
+    inputMaxLength,
+    inputPlaceholder,
+    onInputKeydown,
+    options,
+    selectId,
+    selectLabel,
+    type,
+  } = arguments_;
   const [inputValue, setInputValue] = useState(arguments_.inputValue || "");
   const [selectValue, setSelectValue] = useState(arguments_.selectValue || "");
 
@@ -21,18 +34,37 @@ const InputSelectTemplate = (arguments_: InputSelectProps) => {
 
   return (
     <InputSelect
-      {...arguments_}
+      hideLabel={hideLabel}
+      inputDisabled={inputDisabled}
+      inputId={inputId}
+      inputLabel={inputLabel}
+      inputMaxLength={inputMaxLength}
+      inputPlaceholder={inputPlaceholder}
       inputValue={inputValue}
       onInputChange={handleInputChange}
+      onInputKeydown={onInputKeydown}
       onSelectChange={handleSelectChange}
+      options={options}
+      selectId={selectId}
+      selectLabel={selectLabel}
       selectValue={selectValue}
+      type={type}
     />
   );
 };
 
 test("render elements", async () => {
   const { getByLabelText, getByRole, getByTestId, getByText } = await render(
-    <InputSelect {...inputSelectProps1} />,
+    <InputSelect
+      inputId={inputSelectProps1.inputId}
+      inputLabel={inputSelectProps1.inputLabel}
+      inputValue={inputSelectProps1.inputValue}
+      options={inputSelectProps1.options}
+      selectId={inputSelectProps1.selectId}
+      selectLabel={inputSelectProps1.selectLabel}
+      selectValue={inputSelectProps1.selectValue}
+      type={inputSelectProps1.type}
+    />,
   );
   await expect
     .element(getByLabelText(inputSelectProps1.inputLabel))
@@ -78,8 +110,15 @@ test("render elements", async () => {
 test("render elements without label", async () => {
   const { getByLabelText, getByRole, getByTestId, getByText } = await render(
     <InputSelect
-      {...inputSelectProps1}
       hideLabel={true}
+      inputId={inputSelectProps1.inputId}
+      inputLabel={inputSelectProps1.inputLabel}
+      inputValue={inputSelectProps1.inputValue}
+      options={inputSelectProps1.options}
+      selectId={inputSelectProps1.selectId}
+      selectLabel={inputSelectProps1.selectLabel}
+      selectValue={inputSelectProps1.selectValue}
+      type={inputSelectProps1.type}
     />,
   );
   await expect
@@ -125,7 +164,16 @@ test("render elements without label", async () => {
 
 test("input value change", async () => {
   const { getByTestId } = await render(
-    <InputSelectTemplate {...inputSelectProps1} />,
+    <InputSelectTemplate
+      inputId={inputSelectProps1.inputId}
+      inputLabel={inputSelectProps1.inputLabel}
+      inputValue={inputSelectProps1.inputValue}
+      options={inputSelectProps1.options}
+      selectId={inputSelectProps1.selectId}
+      selectLabel={inputSelectProps1.selectLabel}
+      selectValue={inputSelectProps1.selectValue}
+      type={inputSelectProps1.type}
+    />,
   );
   const inputElement = getByTestId(inputSelectProps1.inputId);
   await inputElement.clear();

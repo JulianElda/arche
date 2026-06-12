@@ -18,7 +18,7 @@ export function Button(props: ButtonProps) {
       data-testid={id}
       id={id}
       onClick={onClick}
-      type={type || "button"}>
+      type={type ?? "button"}>
       {text}
     </button>
   );

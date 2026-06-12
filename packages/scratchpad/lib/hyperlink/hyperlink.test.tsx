@@ -9,7 +9,12 @@ import {
 } from "./hyperlink.mocks";
 
 test("renders without asterisks by default", async () => {
-  const { getByText } = await render(<Hyperlink {...hyperlinkPropsDefault} />);
+  const { getByText } = await render(
+    <Hyperlink
+      href={hyperlinkPropsDefault.href}
+      title={hyperlinkPropsDefault.title}
+    />,
+  );
   const linkElement = getByText(hyperlinkPropsDefault.title + "*");
   await expect.element(linkElement).toBeInTheDocument();
   await expect
@@ -18,7 +23,13 @@ test("renders without asterisks by default", async () => {
 });
 
 test("renders with asterisks when specified", async () => {
-  const { getByText } = await render(<Hyperlink {...hyperlinkPropsAsterisk} />);
+  const { getByText } = await render(
+    <Hyperlink
+      asterisk={hyperlinkPropsAsterisk.asterisk}
+      href={hyperlinkPropsAsterisk.href}
+      title={hyperlinkPropsAsterisk.title}
+    />,
+  );
   const linkElement = getByText(hyperlinkPropsAsterisk.title + "*");
   await expect.element(linkElement).toBeInTheDocument();
   await expect
@@ -28,7 +39,11 @@ test("renders with asterisks when specified", async () => {
 
 test("renders without asterisks when specified", async () => {
   const { getByText } = await render(
-    <Hyperlink {...hyperlinkPropsNoAsterisk} />,
+    <Hyperlink
+      asterisk={hyperlinkPropsNoAsterisk.asterisk}
+      href={hyperlinkPropsNoAsterisk.href}
+      title={hyperlinkPropsNoAsterisk.title}
+    />,
   );
   const linkElement = getByText(hyperlinkPropsNoAsterisk.title);
   await expect.element(linkElement).toBeInTheDocument();

@@ -6,7 +6,13 @@ import { inputSliderProps1 } from "./input-slider.mocks";
 
 test("render elements", async () => {
   const { getByLabelText, getByRole, getByTestId, getByText } = await render(
-    <InputSlider {...inputSliderProps1} />,
+    <InputSlider
+      id={inputSliderProps1.id}
+      label={inputSliderProps1.label}
+      max={inputSliderProps1.max}
+      min={inputSliderProps1.min}
+      value={inputSliderProps1.value}
+    />,
   );
   await expect
     .element(getByLabelText(inputSliderProps1.label))

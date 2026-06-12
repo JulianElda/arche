@@ -11,7 +11,8 @@ export function ThemeToggleLight(props: ThemeToggleLightProps) {
       aria-label="Toggle dark mode"
       className="bg-app-background-dark text-app-text-dark size-8 cursor-pointer rounded-md p-1"
       data-testid="footer-toggle-dark"
-      onClick={onToggleDarkMode}>
+      onClick={onToggleDarkMode}
+      type="button">
       <ThemeMoon className="size-6 stroke-2" />
     </button>
   );
