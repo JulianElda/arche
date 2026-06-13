@@ -82,7 +82,6 @@ export default {
         "vitest/valid-describe-callback": "error",
         "vitest/valid-expect": "error",
         "vitest/valid-expect-in-promise": "error",
-        "vitest/valid-title": "error",
       },
     },
   ],
