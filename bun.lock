@@ -67,7 +67,7 @@
     },
     "packages/lexis": {
       "name": "@julianelda/lexis",
-      "version": "3.4.2",
+      "version": "3.4.3",
       "peerDependencies": {
         "@typescript/native-preview": "^7.0.0-dev.20260421.2",
         "oxfmt": "^0.53.0",
