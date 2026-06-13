@@ -75,7 +75,6 @@ export default {
         "vitest/prefer-to-have-been-called-times": "error",
         "vitest/prefer-to-have-length": "error",
         "vitest/prefer-todo": "error",
-        "vitest/require-awaited-expect-poll": "error",
         "vitest/require-hook": "error",
         "vitest/require-local-test-context-for-concurrent-snapshots": "error",
         "vitest/require-mock-type-parameters": "error",
