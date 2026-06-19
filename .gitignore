@@ -41,8 +41,6 @@ storybook-static
 .wrangler
 
 # IDE
-.vscode/*
-!.vscode/extensions.json
 .idea
 *.suo
 *.ntvs*
