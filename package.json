@@ -24,6 +24,9 @@
     "@julianelda/stilo": "workspace:*"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "@commitlint/types": "^21.0.1",
     "@julianelda/lexis": "workspace:*",
     "@storybook/addon-a11y": "^10.4.2",
     "@storybook/addon-themes": "^10.4.2",
