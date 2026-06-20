@@ -3,26 +3,15 @@
 
   import type { CheckboxProps } from "./checkbox.types.ts";
 
-  const {
-    disabled = false,
-    hideLabel,
-    id,
-    label,
-    onChange,
-    value,
-  }: CheckboxProps = $props();
+  const { hideLabel, id, label, ...rest }: CheckboxProps = $props();
 </script>
 
 <div class="relative flex items-start gap-1">
   <div class="flex h-6 items-center">
     <input
-      checked={value}
-      class="form-checkbox inline-block size-4 rounded-md border-0 bg-white p-1 text-primary-500 accent-primary-500 ring-1 ring-ink-500 ring-inset focus:border-primary-300 focus:ring-1 focus:ring-primary-300 focus:ring-inset dark:bg-ink-500"
-      data-testid={id}
-      {disabled}
+      {...rest}
       {id}
-      name={id}
-      onchange={(event) => onChange((event.target as HTMLInputElement).checked)}
+      class="form-checkbox inline-block size-4 rounded-md border-0 bg-white p-1 text-primary-500 accent-primary-500 ring-1 ring-ink-500 ring-inset focus:border-primary-300 focus:ring-1 focus:ring-primary-300 focus:ring-inset dark:bg-ink-500"
       type="checkbox" />
   </div>
   <div class="leading-6">

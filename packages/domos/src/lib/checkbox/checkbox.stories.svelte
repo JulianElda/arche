@@ -7,13 +7,13 @@
 
   const { Story } = defineMeta({
     args: {
-      onChange: fn(),
+      onchange: fn(),
     },
     argTypes: {
+      checked: { control: "boolean" },
       hideLabel: { control: "boolean" },
       id: { control: "text" },
       label: { control: "text" },
-      value: { control: "boolean" },
     },
     component: Checkbox,
     title: "Checkbox",
@@ -22,21 +22,12 @@
 
 <Story
   name="Checked"
-  args={{
-    ...checkboxProps,
-    value: true,
-  }} />
+  args={{ ...checkboxProps, checked: true }} />
 
 <Story
   name="Unchecked"
-  args={{
-    ...checkboxProps,
-    value: false,
-  }} />
+  args={{ ...checkboxProps, checked: false }} />
 
 <Story
   name="Hidden Label"
-  args={{
-    ...checkboxProps,
-    hideLabel: true,
-  }} />
+  args={{ ...checkboxProps, hideLabel: true }} />

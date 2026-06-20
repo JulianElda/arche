@@ -7,69 +7,47 @@ import Checkbox from "./checkbox.svelte";
 test("render checkbox element", async () => {
   const { getByLabelText, getByRole, getByTestId, getByText } = render(
     Checkbox,
-    {
-      props: {
-        ...checkboxProps,
-        onChange: vi.fn<() => void>(),
-      },
-    },
+    { props: checkboxProps },
   );
 
-  await expect.element(getByTestId(checkboxProps.id)).toBeInTheDocument();
+  await expect
+    .element(getByTestId(checkboxProps["data-testid"]!))
+    .toBeInTheDocument();
   await expect.element(getByLabelText(checkboxProps.label)).toBeInTheDocument();
   await expect.element(getByText(checkboxProps.label)).toBeInTheDocument();
   await expect.element(getByRole("checkbox")).toBeInTheDocument();
 });
 
-test("calls onChange handler when checked", async () => {
-  const onChangeMock = vi.fn<() => void>();
+test("calls onchange handler when clicked", async () => {
+  const onchange = vi.fn<(e: Event) => void>();
   const { getByRole } = render(Checkbox, {
-    props: {
-      ...checkboxProps,
-      onChange: onChangeMock,
-      value: false,
-    },
+    props: { ...checkboxProps, checked: false, onchange },
   });
-  const checkbox = getByRole("checkbox");
-  await checkbox.click();
-  expect(onChangeMock).toHaveBeenCalledOnce();
-  expect(onChangeMock).toHaveBeenCalledWith(true);
-  await checkbox.click();
-  expect(onChangeMock).toHaveBeenCalledTimes(2);
-  expect(onChangeMock).toHaveBeenCalledWith(false);
+  await getByRole("checkbox").click();
+  expect(onchange).toHaveBeenCalledOnce();
 });
 
 test("renders with checked state", async () => {
-  const { getByRole } = render(Checkbox, {
-    props: {
-      ...checkboxProps,
-      onChange: vi.fn<() => void>(),
-    },
-  });
-  const checkbox = getByRole("checkbox");
-  await expect.element(checkbox).toHaveProperty("checked", true);
+  const { getByRole } = render(Checkbox, { props: checkboxProps });
+  await expect.element(getByRole("checkbox")).toHaveProperty("checked", true);
 });
 
 describe("disabled prop", () => {
   test("checkbox element has disabled attribute when disabled={true}", async () => {
     const { getByTestId } = render(Checkbox, {
-      props: {
-        ...checkboxProps,
-        disabled: true,
-      },
+      props: { ...checkboxProps, disabled: true },
     });
-    const checkbox = getByTestId(checkboxProps.id);
-    await expect.element(checkbox).toBeDisabled();
+    await expect
+      .element(getByTestId(checkboxProps["data-testid"]!))
+      .toBeDisabled();
   });
 
   test("checkbox element does not have disabled attribute when disabled={false}", async () => {
     const { getByTestId } = render(Checkbox, {
-      props: {
-        ...checkboxProps,
-        disabled: false,
-      },
+      props: { ...checkboxProps, disabled: false },
     });
-    const checkbox = getByTestId(checkboxProps.id);
-    await expect.element(checkbox).not.toBeDisabled();
+    await expect
+      .element(getByTestId(checkboxProps["data-testid"]!))
+      .not.toBeDisabled();
   });
 });

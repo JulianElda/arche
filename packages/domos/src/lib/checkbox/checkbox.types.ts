@@ -1,8 +1,6 @@
-export interface CheckboxProps {
-  disabled?: boolean;
+import type { HTMLInputAttributes } from "svelte/elements";
+
+export interface CheckboxProps extends HTMLInputAttributes {
   hideLabel?: boolean;
-  id: string;
   label: string;
-  onChange: (value: boolean) => void;
-  value: boolean;
 }
