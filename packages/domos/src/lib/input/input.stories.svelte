@@ -7,15 +7,14 @@
 
   const { Story } = defineMeta({
     args: {
-      onChange: fn(),
-      onKeyDown: fn(),
+      oninput: fn(),
     },
     argTypes: {
+      disabled: { control: "boolean" },
       hideLabel: { control: "boolean" },
       id: { control: "text" },
       label: { control: "text" },
       placeholder: { control: "text" },
-      value: { control: "text" },
     },
     component: Input,
     title: "Input",
@@ -24,31 +23,19 @@
 
 <Story
   name="Input type text"
-  args={{
-    ...inputProps1,
-    hideLabel: false,
-  }} />
+  args={{ ...inputProps1, hideLabel: false }} />
 
 <Story
   name="Input type number"
-  args={{
-    ...inputProps2,
-    hideLabel: false,
-  }} />
+  args={{ ...inputProps2, hideLabel: false }} />
 
 <Story
   name="Input type search"
-  args={{
-    ...inputProps3,
-    hideLabel: false,
-  }} />
+  args={{ ...inputProps3, hideLabel: false }} />
 
 <Story
   name="Input without label"
-  args={{
-    ...inputProps1,
-    hideLabel: true,
-  }} />
+  args={{ ...inputProps1, hideLabel: true }} />
 
 <Story
   name="Input with placeholder"
@@ -61,7 +48,8 @@
 
 <Story
   name="Borderless"
-  args={{
-    ...inputProps1,
-    borderless: true,
-  }} />
+  args={{ ...inputProps1, borderless: true }} />
+
+<Story
+  name="Disabled"
+  args={{ ...inputProps1, hideLabel: false, disabled: true }} />

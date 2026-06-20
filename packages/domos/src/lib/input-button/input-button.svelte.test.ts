@@ -10,11 +10,11 @@ test("render elements", async () => {
     {
       props: {
         buttonAriaLabel: "Submit input button",
+        "data-testid": "test-input-button",
         icon: CheckIcon,
         id: "test-input-button",
         label: "Test Input Button",
         onButtonClick: vi.fn<() => void>(),
-        onChange: vi.fn<() => void>(),
         placeholder: "Enter text...",
         type: "text",
         value: "",
@@ -28,4 +28,21 @@ test("render elements", async () => {
   await expect
     .element(getByRole("button", { name: "Submit input button" }))
     .toBeInTheDocument();
+});
+
+test("calls onButtonClick when button is clicked", async () => {
+  const onButtonClick = vi.fn<() => void>();
+  const { getByRole } = render(InputButton, {
+    props: {
+      buttonAriaLabel: "Submit",
+      "data-testid": "test-input-button",
+      id: "test-input-button",
+      label: "Test",
+      onButtonClick,
+      type: "text",
+      value: "",
+    },
+  });
+  await getByRole("button", { name: "Submit" }).click();
+  expect(onButtonClick).toHaveBeenCalledOnce();
 });

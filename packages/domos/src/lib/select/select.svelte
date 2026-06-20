@@ -4,15 +4,7 @@
 
   import type { SelectProps } from "./select.types.ts";
 
-  const {
-    borderless,
-    hideLabel,
-    id,
-    label,
-    onChange,
-    options,
-    value,
-  }: SelectProps = $props();
+  const { hideLabel, id, label, ...rest }: SelectProps = $props();
 </script>
 
 <div class="flex flex-1 flex-col gap-1">
@@ -21,9 +13,6 @@
     {id}
     {label} />
   <SelectField
-    {borderless}
     {id}
-    {onChange}
-    {options}
-    {value} />
+    {...rest} />
 </div>

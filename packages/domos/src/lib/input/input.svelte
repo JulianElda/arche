@@ -4,18 +4,7 @@
 
   import type { InputProps } from "./input.types.ts";
 
-  const {
-    borderless,
-    disabled,
-    hideLabel,
-    id,
-    label,
-    onChange,
-    onKeyDown,
-    placeholder,
-    type,
-    value,
-  }: InputProps = $props();
+  const { hideLabel, id, label, ...rest }: InputProps = $props();
 </script>
 
 <div class="flex flex-1 flex-col gap-1">
@@ -24,12 +13,6 @@
     {id}
     {label} />
   <InputField
-    {borderless}
-    {disabled}
     {id}
-    {onChange}
-    {onKeyDown}
-    {placeholder}
-    {type}
-    {value} />
+    {...rest} />
 </div>

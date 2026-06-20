@@ -7,15 +7,11 @@ import Input from "./input.svelte";
 test("render elements", async () => {
   const { getByLabelText, getByPlaceholder, getByRole, getByTestId } = render(
     Input,
-    {
-      props: {
-        ...inputProps1,
-        onChange: vi.fn<() => void>(),
-      },
-    },
+    { props: inputProps1 },
   );
-
-  await expect.element(getByTestId(inputProps1.id)).toBeInTheDocument();
+  await expect
+    .element(getByTestId(inputProps1["data-testid"]!))
+    .toBeInTheDocument();
   await expect.element(getByLabelText(inputProps1.label)).toBeInTheDocument();
   await expect
     .element(getByPlaceholder(inputProps1.placeholder!))
@@ -23,43 +19,26 @@ test("render elements", async () => {
   await expect.element(getByRole("textbox")).toBeInTheDocument();
 });
 
-test("callback when input changes", async () => {
-  const onChangeMock = vi.fn<() => void>();
+test("calls oninput handler when input changes", async () => {
+  const oninput = vi.fn<(e: Event) => void>();
   const { getByRole } = render(Input, {
-    props: {
-      ...inputProps1,
-      onChange: onChangeMock,
-      value: "",
-    },
+    props: { ...inputProps1, oninput, value: "" },
   });
-  const input = getByRole("textbox");
-  await input.fill("test");
-  expect(onChangeMock).toHaveBeenCalledOnce();
-  expect(onChangeMock).toHaveBeenLastCalledWith("test");
+  await getByRole("textbox").fill("test");
+  expect(oninput).toHaveBeenCalledOnce();
 });
 
 test("hideLabel=false shows label visually", async () => {
   const { getByText } = render(Input, {
-    props: {
-      ...inputProps1,
-      hideLabel: false,
-      onChange: vi.fn<() => void>(),
-    },
+    props: { ...inputProps1, hideLabel: false },
   });
-  const label = getByText(inputProps1.label);
-  await expect.element(label).toBeVisible();
+  await expect.element(getByText(inputProps1.label)).toBeVisible();
 });
 
 test("hideLabel=true hides label visually but keeps it accessible", async () => {
   const { getByLabelText, getByText } = render(Input, {
-    props: {
-      ...inputProps1,
-      hideLabel: true,
-      onChange: vi.fn<() => void>(),
-    },
+    props: { ...inputProps1, hideLabel: true },
   });
-  const label = getByText(inputProps1.label);
-  await expect.element(label).toHaveClass("sr-only");
-  const input = getByLabelText(inputProps1.label);
-  await expect.element(input).toBeInTheDocument();
+  await expect.element(getByText(inputProps1.label)).toHaveClass("sr-only");
+  await expect.element(getByLabelText(inputProps1.label)).toBeInTheDocument();
 });

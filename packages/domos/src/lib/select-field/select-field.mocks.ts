@@ -42,17 +42,17 @@ export const selectFieldOptions2: SelectFieldOption[] = [
 ];
 
 export const selectFieldProps1: SelectFieldProps = {
+  "data-testid": "select-id-1",
   id: "select-id-1",
   inInputField: false,
-  onChange: () => {},
   options: [...selectFieldOptions1],
   value: selectFieldOptions1[0].value,
 };
 
 export const selectFieldProps2: SelectFieldProps = {
+  "data-testid": "select-id-2",
   id: "select-id-2",
   inInputField: false,
-  onChange: () => {},
   options: [...selectFieldOptions2],
   value: selectFieldOptions2[2].value,
 };

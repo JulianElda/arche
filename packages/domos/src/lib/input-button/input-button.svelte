@@ -6,17 +6,12 @@
 
   const {
     buttonAriaLabel,
-    disabled,
     hideLabel,
     icon,
     id,
     label,
     onButtonClick,
-    onChange,
-    onKeyDown,
-    placeholder,
-    type,
-    value,
+    ...rest
   }: InputButtonProps = $props();
 </script>
 
@@ -27,13 +22,8 @@
     {label} />
   <div class="relative flex grow items-stretch focus-within:z-10">
     <InputField
-      {disabled}
       {id}
-      onChange={(value) => onChange?.(value)}
-      onKeyDown={(value) => onKeyDown?.(value)}
-      {placeholder}
-      {type}
-      {value}
+      {...rest}
       withIconLeft={true} />
   </div>
   <button

@@ -1,12 +1,8 @@
-export interface InputFieldProps {
+import type { HTMLInputAttributes } from "svelte/elements";
+
+export interface InputFieldProps extends HTMLInputAttributes {
   borderless?: boolean;
-  disabled?: boolean;
   id: string;
-  onChange?: (value: string) => void;
-  onKeyDown?: (value: string) => void;
-  placeholder?: string;
-  type: InputFieldTypes;
-  value: number | string;
   withIconLeft?: boolean;
 }
 

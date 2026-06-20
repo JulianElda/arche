@@ -6,28 +6,26 @@ import SelectField from "./select-field.svelte";
 
 test("render elements", async () => {
   const { getByRole, getByTestId } = render(SelectField, {
-    props: {
-      ...selectFieldProps1,
-    },
+    props: selectFieldProps1,
   });
-  await expect.element(getByTestId(selectFieldProps1.id)).toBeInTheDocument();
+  await expect
+    .element(getByTestId(selectFieldProps1["data-testid"]!))
+    .toBeInTheDocument();
   await expect.element(getByRole("combobox")).toBeInTheDocument();
 });
 
-test("callback when select changes", async () => {
-  const onChangeMock = vi.fn<() => void>();
-  const { getByTestId } = render(SelectField, {
-    props: {
-      ...selectFieldProps1,
-      onChange: onChangeMock,
+test("reflects selected value", async () => {
+  const { getByRole } = render(SelectField, { props: selectFieldProps1 });
+  await expect
+    .element(getByRole("combobox"))
+    .toHaveValue(selectFieldProps1.value as string);
+});
 
-      value: "",
-    },
+test("calls oninput handler when selection changes", async () => {
+  const oninput = vi.fn<(e: Event) => void>();
+  const { getByRole } = render(SelectField, {
+    props: { ...selectFieldProps1, oninput, value: "" },
   });
-  const select = getByTestId(selectFieldProps1.id);
-  await select.selectOptions(selectFieldProps1.options[1].value);
-  expect(onChangeMock).toHaveBeenCalledOnce();
-  expect(onChangeMock).toHaveBeenLastCalledWith(
-    selectFieldProps1.options[1].value,
-  );
+  await getByRole("combobox").selectOptions(selectFieldProps1.options[1].value);
+  expect(oninput).toHaveBeenCalledOnce();
 });

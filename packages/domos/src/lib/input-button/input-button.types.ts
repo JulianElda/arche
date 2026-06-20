@@ -1,14 +1,12 @@
 import type { Component } from "svelte";
 
 import type { InputFieldProps } from "./../input-field/input-field.types.ts";
-import type { InputLabelProps } from "./../input-label/input-label.types.ts";
 
-export type InputButtonProps = IconButtonProps &
-  InputFieldProps &
-  InputLabelProps;
-
-interface IconButtonProps {
+export interface InputButtonProps extends InputFieldProps {
   buttonAriaLabel: string;
+  hideLabel?: boolean;
   icon?: Component;
+  id: string;
+  label: string;
   onButtonClick: () => void;
 }

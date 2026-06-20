@@ -1,4 +1,3 @@
-import type { InputFieldTypes } from "./../input-field/input-field.types.ts";
 import type { InputSelectProps } from "./input-select.types.ts";
 
 import {
@@ -7,23 +6,35 @@ import {
 } from "./../select-field/select-field.mocks.ts";
 
 export const inputSelectProps1: InputSelectProps = {
-  inputId: "input-id-1",
-  inputLabel: "Currency amount",
-  inputValue: "100",
-  options: [...selectFieldOptions1],
-  selectId: "select-id-1",
-  selectLabel: "Currency select",
-  selectValue: selectFieldOptions1[0].value,
-  type: "text" as InputFieldTypes,
+  inputProps: {
+    "data-testid": "input-id-1",
+    id: "input-id-1",
+    label: "Currency amount",
+    type: "text",
+    value: "100",
+  },
+  selectProps: {
+    "data-testid": "select-id-1",
+    id: "select-id-1",
+    label: "Currency select",
+    options: [...selectFieldOptions1],
+    value: selectFieldOptions1[0].value,
+  },
 };
 
 export const inputSelectProps2: InputSelectProps = {
-  inputId: "input-id-2",
-  inputLabel: "Currency amount",
-  inputValue: "100",
-  options: [...selectFieldOptions2],
-  selectId: "select-id-2",
-  selectLabel: "Currency select",
-  selectValue: selectFieldOptions2[2].value,
-  type: "text" as InputFieldTypes,
+  inputProps: {
+    "data-testid": "input-id-2",
+    id: "input-id-2",
+    label: "Currency amount",
+    type: "text",
+    value: "100",
+  },
+  selectProps: {
+    "data-testid": "select-id-2",
+    id: "select-id-2",
+    label: "Currency select",
+    options: [...selectFieldOptions2],
+    value: selectFieldOptions2[2].value,
+  },
 };

@@ -2,7 +2,7 @@ import type { Preview } from "@storybook/sveltekit";
 
 import { withThemeByClassName } from "@storybook/addon-themes";
 
-import "./../src/routes/layout.css";
+import "./storybook-tailwind.css";
 
 const preview: Preview = {
   decorators: [

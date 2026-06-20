@@ -3,26 +3,13 @@
 
   const {
     borderless = false,
-    disabled = false,
-    id,
-    onChange,
-    onKeyDown,
-    placeholder = "",
-    type = "text",
-    value,
     withIconLeft = false,
+    ...rest
   }: InputFieldProps = $props();
 </script>
 
 <input
-  data-testid={id}
-  {id}
-  {disabled}
-  oninput={(e) => onChange?.((e.target as HTMLInputElement).value)}
-  onkeydown={(e) => onKeyDown?.((e.target as HTMLInputElement).value)}
-  {placeholder}
-  {type}
-  {value}
+  {...rest}
   class={[
     "form-input block w-full appearance-none border text-ink-black dark:text-app-text-dark",
     borderless === true
