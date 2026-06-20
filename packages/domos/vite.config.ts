@@ -11,18 +11,16 @@ export default defineConfig({
       instances: [
         {
           browser: "chromium",
+          headless: true,
         },
       ],
       provider: playwright({
+        /*
         launchOptions: {
           executablePath: "/usr/bin/chromium",
         },
+        */
       }),
-    },
-    coverage: {
-      enabled: true,
-      exclude: ["src/**/*.mocks.ts"],
-      provider: "v8",
     },
     expect: { requireAssertions: true },
     include: ["src/**/*.svelte.test.ts"],

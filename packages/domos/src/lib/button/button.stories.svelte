@@ -10,15 +10,9 @@
       onclick: fn(),
     },
     argTypes: {
-      id: { control: "text" },
-      style: {
+      variant: {
         control: { type: "select" },
         options: ["primary", "secondary"],
-      },
-      text: { control: "text" },
-      type: {
-        control: { type: "select" },
-        options: ["button", "submit"],
       },
     },
     component: Button,
@@ -26,10 +20,16 @@
   });
 </script>
 
+{#snippet children()}
+  Button
+{/snippet}
+
 <Story
   name="Primary"
-  args={buttonPropsPrimary} />
+  args={{ buttonPropsPrimary, children }}>
+</Story>
 
 <Story
   name="Secondary"
-  args={buttonPropsSecondary} />
+  args={{ buttonPropsSecondary, children }}>
+</Story>

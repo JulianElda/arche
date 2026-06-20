@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Card from "$lib/card/card.svelte";
+  import Button from "$lib/button/button.svelte";
 </script>
 
-<Card>domos</Card>
+<Button variant="secondary">domos</Button>

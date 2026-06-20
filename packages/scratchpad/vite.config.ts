@@ -14,15 +14,12 @@ export default defineConfig({
         },
       ],
       provider: playwright({
+        /*
         launchOptions: {
           executablePath: "/usr/bin/chromium",
         },
+        */
       }),
-    },
-    coverage: {
-      enabled: true,
-      exclude: ["lib/**/*.mocks.{ts,tsx}"],
-      provider: "v8",
     },
     expect: { requireAssertions: true },
     include: ["lib/**/*.test.{ts,tsx}"],

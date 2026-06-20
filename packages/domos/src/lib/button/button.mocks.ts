@@ -1,21 +1,12 @@
 import type { ButtonProps } from "./button.types.ts";
 
 export const buttonPropsPrimary: ButtonProps = {
+  "data-testid": "primary-button",
   id: "primary-button",
-  onClick: () => {
-    console.log("");
-  },
-  style: "primary",
-  text: "Primary button",
-  type: "button",
+  variant: "primary",
 };
 
 export const buttonPropsSecondary: ButtonProps = {
   id: "secondary-button",
-  onClick: () => {
-    console.log("");
-  },
-  style: "secondary",
-  text: "Secondary button",
-  type: "button",
+  variant: "secondary",
 };
