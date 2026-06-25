@@ -13,9 +13,7 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "js/ts.experimental.useTsgo": true,
   "js/ts.preferences.preferTypeOnlyAutoImports": true,
   "js/ts.updateImportsOnFileMove.enabled": "always",
-  "prettier.enable": false,
-  "typescript.native-preview.tsdk": "/node_modules/@typescript/native-preview"
+  "prettier.enable": false
 }

@@ -11,14 +11,13 @@ export default defineConfig({
       instances: [
         {
           browser: "chromium",
+          headless: true,
         },
       ],
       provider: playwright({
-        /*
         launchOptions: {
-          executablePath: "/usr/bin/chromium",
+          channel: "chromium",
         },
-        */
       }),
     },
     expect: { requireAssertions: true },

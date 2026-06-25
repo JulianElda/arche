@@ -15,11 +15,9 @@ export default defineConfig({
         },
       ],
       provider: playwright({
-        /*
         launchOptions: {
-          executablePath: "/usr/bin/chromium",
+          channel: "chromium",
         },
-        */
       }),
     },
     expect: { requireAssertions: true },
