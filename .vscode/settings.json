@@ -15,5 +15,9 @@
   },
   "js/ts.preferences.preferTypeOnlyAutoImports": true,
   "js/ts.updateImportsOnFileMove.enabled": "always",
-  "prettier.enable": false
+  "prettier.enable": false,
+  "sonarlint.connectedMode.project": {
+    "connectionId": "t480",
+    "projectKey": "JulianElda_arche"
+  }
 }
