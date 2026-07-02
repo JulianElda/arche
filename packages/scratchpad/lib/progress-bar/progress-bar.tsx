@@ -19,15 +19,14 @@ export function ProgressBar(props: ProgressBarProps) {
       <div className="mt-1 h-2 rounded-md bg-gray-200 dark:bg-gray-500">
         <progress
           aria-label={label}
-          aria-valuemax={max}
-          aria-valuemin={min}
-          aria-valuenow={value}
           className="bg-primary-500 h-2 rounded-md"
           data-testid={id}
           id={id}
+          max={max}
           style={{
             width: `${currentPercent}%`,
           }}
+          value={value}
         />
       </div>
     </div>
