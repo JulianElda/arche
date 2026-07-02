@@ -4,7 +4,7 @@ interface ThemeToggleDarkProps {
   onToggleDarkMode: () => void;
 }
 
-export function ThemeToggleDark(props: ThemeToggleDarkProps) {
+export function ThemeToggleDark(props: Readonly<ThemeToggleDarkProps>) {
   const { onToggleDarkMode } = props;
 
   return (

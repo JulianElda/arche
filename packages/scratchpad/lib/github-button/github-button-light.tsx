@@ -4,7 +4,7 @@ interface GitHubButtonLightProps {
   href: string;
 }
 
-export function GitHubButtonLight(props: GitHubButtonLightProps) {
+export function GitHubButtonLight(props: Readonly<GitHubButtonLightProps>) {
   const { href } = props;
 
   return (

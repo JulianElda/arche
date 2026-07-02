@@ -4,7 +4,7 @@ interface GitHubButtonDarkProps {
   href: string;
 }
 
-export function GitHubButtonDark(props: GitHubButtonDarkProps) {
+export function GitHubButtonDark(props: Readonly<GitHubButtonDarkProps>) {
   const { href } = props;
 
   return (
