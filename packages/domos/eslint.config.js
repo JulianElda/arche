@@ -1,8 +1,7 @@
 import js from "@eslint/js";
 import oxlint from "eslint-plugin-oxlint";
 import svelte from "eslint-plugin-svelte";
-import { includeIgnoreFile } from "eslint/config";
-import { defineConfig } from "eslint/config";
+import { defineConfig, includeIgnoreFile } from "eslint/config";
 import globals from "globals";
 import path from "node:path";
 import ts from "typescript-eslint";

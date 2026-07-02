@@ -2,7 +2,7 @@ import { clsx } from "clsx";
 
 import type { InputFieldProps } from "./input-field.types";
 
-export function InputField(props: InputFieldProps) {
+export function InputField(props: Readonly<InputFieldProps>) {
   const {
     disabled,
     id,

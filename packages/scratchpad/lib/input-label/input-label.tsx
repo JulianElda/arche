@@ -2,7 +2,7 @@ import { clsx } from "clsx";
 
 import type { InputLabelProps } from "./input-label.types";
 
-export function InputLabel(props: InputLabelProps) {
+export function InputLabel(props: Readonly<InputLabelProps>) {
   const { hideLabel, id, label, value } = props;
 
   return (

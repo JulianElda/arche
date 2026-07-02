@@ -8,7 +8,7 @@ import { ThemeToggle } from "../theme-toggle/theme-toggle";
 /**
  * Footer with dark mode and GitHub button.
  */
-export function Footer(props: FooterProps) {
+export function Footer(props: Readonly<FooterProps>) {
   const { link } = props;
 
   const [isDarkMode, toggleDarkMode] = useDarkMode();

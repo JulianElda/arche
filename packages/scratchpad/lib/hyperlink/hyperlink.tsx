@@ -1,6 +1,6 @@
 import type { HyperlinkProps } from "./hyperlink.types";
 
-export function Hyperlink(props: HyperlinkProps) {
+export function Hyperlink(props: Readonly<HyperlinkProps>) {
   const { asterisk, href, title } = props;
 
   return (

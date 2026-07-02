@@ -2,7 +2,7 @@ import { clsx } from "clsx";
 
 import type { SelectFieldProps } from "./select-field.types";
 
-export function SelectField(props: SelectFieldProps) {
+export function SelectField(props: Readonly<SelectFieldProps>) {
   const { id, inInputField, onChange, options, value } = props;
 
   return (

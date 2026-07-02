@@ -2,7 +2,7 @@ import { clsx } from "clsx";
 
 import type { ButtonProps } from "./button.types";
 
-export function Button(props: ButtonProps) {
+export function Button(props: Readonly<ButtonProps>) {
   const { id, onClick, style, text, type } = props;
 
   return (

@@ -4,7 +4,7 @@ import { InputField } from "../input-field/input-field";
 import { InputLabel } from "../input-label/input-label";
 import { SelectField } from "../select-field/select-field";
 
-export function InputSelect(props: InputSelectProps) {
+export function InputSelect(props: Readonly<InputSelectProps>) {
   const {
     hideLabel,
     inputDisabled,

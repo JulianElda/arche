@@ -2,7 +2,7 @@ import type { CheckboxProps } from "./checkbox.types";
 
 import { InputLabel } from "../input-label/input-label";
 
-export function Checkbox(props: CheckboxProps) {
+export function Checkbox(props: Readonly<CheckboxProps>) {
   const { hideLabel, id, label, onChange, value } = props;
 
   return (

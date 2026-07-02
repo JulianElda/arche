@@ -17,7 +17,7 @@ export function ProgressBar(props: ProgressBarProps) {
         label={label}
       />
       <div className="mt-1 h-2 rounded-md bg-gray-200 dark:bg-gray-500">
-        <div
+        <progress
           aria-label={label}
           aria-valuemax={max}
           aria-valuemin={min}
@@ -25,7 +25,6 @@ export function ProgressBar(props: ProgressBarProps) {
           className="bg-primary-500 h-2 rounded-md"
           data-testid={id}
           id={id}
-          role="progressbar"
           style={{
             width: `${currentPercent}%`,
           }}

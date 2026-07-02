@@ -3,7 +3,7 @@ import type { ThemeToggleProps } from "./theme-toggle.types";
 import { ThemeToggleDark } from "./theme-toggle-dark";
 import { ThemeToggleLight } from "./theme-toggle-light";
 
-export function ThemeToggle(props: ThemeToggleProps) {
+export function ThemeToggle(props: Readonly<ThemeToggleProps>) {
   const { isDarkMode, onToggleDarkMode } = props;
 
   return isDarkMode ? (

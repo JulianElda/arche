@@ -1,6 +1,6 @@
 import type { TextAreaFieldProps } from "./textarea-field.types";
 
-export function TextAreaField(props: TextAreaFieldProps) {
+export function TextAreaField(props: Readonly<TextAreaFieldProps>) {
   const { id, onChange, onKeyDown, value } = props;
 
   return (

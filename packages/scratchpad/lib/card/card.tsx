@@ -2,7 +2,7 @@ interface CardProps {
   children: React.ReactNode;
 }
 
-export function Card(props: CardProps) {
+export function Card(props: Readonly<CardProps>) {
   const { children } = props;
 
   return (
