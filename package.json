@@ -16,7 +16,7 @@
     "check": "bun run --filter='*' check",
     "format": "bun run --filter='*' format",
     "lint": "bun run --filter='*' lint",
-    "prepare": "husky",
+    "prepare": "lefthook install",
     "test": "bun run --filter='*' test"
   },
   "dependencies": {
@@ -37,7 +37,7 @@
     "@vitest/ui": "^4.1.9",
     "eslint-plugin-perfectionist": "^5.9.1",
     "globals": "^17.7.0",
-    "husky": "^9.1.7",
+    "lefthook": "^2.1.10",
     "nano-staged": "^1.0.2",
     "oxfmt": "^0.56.0",
     "oxlint": "^1.71.0",
