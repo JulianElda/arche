@@ -17,7 +17,7 @@
   "js/ts.updateImportsOnFileMove.enabled": "always",
   "prettier.enable": false,
   "sonarlint.connectedMode.project": {
-    "connectionId": "t480",
+    "connectionId": "julianelda",
     "projectKey": "JulianElda_arche"
   }
 }
