@@ -32,6 +32,7 @@
     "@storybook/addon-themes": "^10.4.6",
     "@tailwindcss/vite": "^4.3.1",
     "@types/node": "^26.0.1",
+    "@typescript/native": "npm:typescript@^7.0.2",
     "@vitest/browser-playwright": "^4.1.9",
     "@vitest/coverage-v8": "^4.1.9",
     "@vitest/ui": "^4.1.9",
@@ -45,8 +46,7 @@
     "playwright": "^1.61.1",
     "storybook": "^10.4.6",
     "tailwindcss": "^4.3.1",
-    "typescript": "~6.0.0",
-    "typescript-7": "npm:typescript@rc",
+    "typescript": "npm:@typescript/typescript6@^6.0.2",
     "vite": "^8.1.0",
     "vitest": "^4.1.9"
   },
