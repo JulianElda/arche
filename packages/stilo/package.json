@@ -11,5 +11,8 @@
     "fonts",
     "src"
   ],
-  "type": "module"
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  }
 }

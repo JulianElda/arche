@@ -19,6 +19,9 @@
     "./tailwind": "./dist/tailwind.css",
     "./background": "./dist/background.css"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsdown",
     "dev": "vite",

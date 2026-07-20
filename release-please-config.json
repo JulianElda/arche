@@ -1,0 +1,27 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "separate-pull-requests": true,
+  "pull-request-title-pattern": "chore: release${component} ${version}",
+  "packages": {
+    "packages/chroma": {
+      "release-type": "node",
+      "package-name": "@julianelda/chroma"
+    },
+    "packages/domos": {
+      "release-type": "node",
+      "package-name": "@julianelda/domos"
+    },
+    "packages/lexis": {
+      "release-type": "node",
+      "package-name": "@julianelda/lexis"
+    },
+    "packages/scratchpad": {
+      "release-type": "node",
+      "package-name": "@julianelda/scratchpad"
+    },
+    "packages/stilo": {
+      "release-type": "node",
+      "package-name": "@julianelda/stilo"
+    }
+  }
+}
