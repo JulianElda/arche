@@ -1,0 +1,20 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+      - run: bun install --ignore-scripts --frozen-lockfile
+      - run: bun run format -- --check
+      - run: bun run lint
+      - run: bun run check
+      - run: bun run build
+      - run: ./node_modules/.bin/playwright install chromium --with-deps --no-shell
+      - run: bun run test
