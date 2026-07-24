@@ -1,4 +1,11 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(bun run test *)",
+      "Bash(bun run check *)",
+      "Bash(bun run lint *)"
+    ]
+  },
   "hooks": {
     "PostToolUse": [
       {
