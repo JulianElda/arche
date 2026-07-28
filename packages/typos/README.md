@@ -26,7 +26,7 @@ Wired up as a Claude Code hook, in `.claude/settings.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "bunx @julianelda/typos"
+            "command": "typos"
           }
         ]
       }
@@ -45,14 +45,14 @@ Called directly, e.g. to try a config against one file:
 
 ```sh
 echo '{"tool_name":"Write","tool_input":{"file_path":"src/index.ts"}}' \
-  | bunx @julianelda/typos
+  | typos
 ```
 
 `-c`/`--config` overrides auto-discovery with an explicit config path:
 
 ```sh
 echo '{"tool_name":"Write","tool_input":{"file_path":"src/index.ts"}}' \
-  | bunx @julianelda/typos --config ./.nano-staged.json
+  | typos --config ./.nano-staged.json
 ```
 
 A failing command's exit code and stderr are surfaced as Claude Code's
