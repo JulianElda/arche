@@ -74,8 +74,8 @@ type CommandFailure struct {
 	Pattern  string // the glob pattern this command's group matched
 	Command  string // the original (untokenized) command string
 	ExitCode int    // the command's real exit code; -1 if it never ran/completed normally
-	Stderr   string
-	Err      error // non-nil only when ExitCode is -1 (tokenize error, command not found, timeout, ...)
+	Output   string // combined stdout+stderr — many linters (e.g. oxlint) report diagnostics on stdout, not stderr
+	Err      error  // non-nil only when ExitCode is -1 (tokenize error, command not found, timeout, ...)
 }
 
 // Run executes each matched group's commands against filePath, appended
@@ -151,15 +151,16 @@ func runCommand(ctx context.Context, pattern, command, filePath, repoRoot string
 	// grandchild), Wait would otherwise block until they exit on their
 	// own; WaitDelay bounds that by forcibly closing the pipes instead.
 	cmd.WaitDelay = timeout
-	var stderr bytes.Buffer
-	cmd.Stderr = &stderr
+	var output bytes.Buffer
+	cmd.Stdout = &output
+	cmd.Stderr = &output
 
 	if err := cmd.Run(); err != nil {
 		var exitErr *exec.ExitError
 		if errors.As(err, &exitErr) && exitErr.Exited() {
-			return &CommandFailure{Pattern: pattern, Command: command, ExitCode: exitErr.ExitCode(), Stderr: stderr.String()}
+			return &CommandFailure{Pattern: pattern, Command: command, ExitCode: exitErr.ExitCode(), Output: output.String()}
 		}
-		return &CommandFailure{Pattern: pattern, Command: command, ExitCode: -1, Stderr: stderr.String(), Err: err}
+		return &CommandFailure{Pattern: pattern, Command: command, ExitCode: -1, Output: output.String(), Err: err}
 	}
 	return nil
 }

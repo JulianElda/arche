@@ -99,14 +99,15 @@ func resolveConfig(override, filePath string) (nanostaged.Config, string, error)
 }
 
 // writeFailure reports a command failure the way Claude should see it:
-// which command ran, and whatever it printed to its own stderr (or, if it
-// never got that far, why).
+// which command ran, and whatever it printed (or, if it never got that
+// far, why). Output is combined stdout+stderr — some linters (oxlint
+// included) report diagnostics on stdout, not stderr.
 func writeFailure(w io.Writer, f *runner.CommandFailure) {
 	fmt.Fprintf(w, "typos: %q failed (pattern %s)\n", f.Command, f.Pattern)
 	if f.Err != nil {
 		fmt.Fprintln(w, f.Err)
 	}
-	if f.Stderr != "" {
-		io.WriteString(w, f.Stderr)
+	if f.Output != "" {
+		io.WriteString(w, f.Output)
 	}
 }

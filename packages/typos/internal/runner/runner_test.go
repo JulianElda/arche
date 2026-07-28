@@ -131,7 +131,7 @@ func TestRun_AllCommandsSucceed(t *testing.T) {
 	}
 }
 
-func TestRun_CapturesExitCodeAndStderr(t *testing.T) {
+func TestRun_CapturesExitCodeAndStderrOutput(t *testing.T) {
 	repoRoot := t.TempDir()
 	failing := writeScript(t, repoRoot, "fail.sh", "echo boom >&2\nexit 3\n")
 	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{failing}}}
@@ -143,11 +143,28 @@ func TestRun_CapturesExitCodeAndStderr(t *testing.T) {
 	if failure.ExitCode != 3 {
 		t.Errorf("ExitCode = %d, want 3", failure.ExitCode)
 	}
-	if !strings.Contains(failure.Stderr, "boom") {
-		t.Errorf("Stderr = %q, want it to contain %q", failure.Stderr, "boom")
+	if !strings.Contains(failure.Output, "boom") {
+		t.Errorf("Output = %q, want it to contain %q", failure.Output, "boom")
 	}
 	if failure.Pattern != "**/*.ts" {
 		t.Errorf("Pattern = %q, want %q", failure.Pattern, "**/*.ts")
+	}
+}
+
+func TestRun_CapturesStdoutOutput(t *testing.T) {
+	// Some real linters (oxlint included) report diagnostics on stdout,
+	// not stderr — Output must capture both regardless of which stream
+	// the failing command actually used.
+	repoRoot := t.TempDir()
+	failing := writeScript(t, repoRoot, "fail.sh", "echo diagnostic-on-stdout\nexit 1\n")
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{failing}}}
+
+	failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, time.Second)
+	if failure == nil {
+		t.Fatal("Run() = nil, want a failure")
+	}
+	if !strings.Contains(failure.Output, "diagnostic-on-stdout") {
+		t.Errorf("Output = %q, want it to contain %q", failure.Output, "diagnostic-on-stdout")
 	}
 }
 
