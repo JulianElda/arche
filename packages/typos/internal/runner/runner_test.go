@@ -1,10 +1,15 @@
 package runner
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"reflect"
+	"strings"
 	"testing"
+	"time"
+
+	"github.com/JulianElda/arche/packages/typos/internal/nanostaged"
 )
 
 func TestTokenize(t *testing.T) {
@@ -102,5 +107,126 @@ func TestPrependPath_EmptyBinDirIsNoOp(t *testing.T) {
 
 	if !reflect.DeepEqual(got, env) {
 		t.Errorf("PrependPath() = %#v, want %#v (unchanged)", got, env)
+	}
+}
+
+// writeScript writes an executable shell script to dir/name and returns
+// its absolute path.
+func writeScript(t *testing.T, dir, name, contents string) string {
+	t.Helper()
+	path := filepath.Join(dir, name)
+	if err := os.WriteFile(path, []byte("#!/bin/sh\n"+contents), 0o755); err != nil {
+		t.Fatalf("WriteFile(%q) error = %v", path, err)
+	}
+	return path
+}
+
+func TestRun_AllCommandsSucceed(t *testing.T) {
+	repoRoot := t.TempDir()
+	ok := writeScript(t, repoRoot, "ok.sh", "exit 0\n")
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{ok}}}
+
+	if failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, time.Second); failure != nil {
+		t.Errorf("Run() = %#v, want nil", failure)
+	}
+}
+
+func TestRun_CapturesExitCodeAndStderr(t *testing.T) {
+	repoRoot := t.TempDir()
+	failing := writeScript(t, repoRoot, "fail.sh", "echo boom >&2\nexit 3\n")
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{failing}}}
+
+	failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, time.Second)
+	if failure == nil {
+		t.Fatal("Run() = nil, want a failure")
+	}
+	if failure.ExitCode != 3 {
+		t.Errorf("ExitCode = %d, want 3", failure.ExitCode)
+	}
+	if !strings.Contains(failure.Stderr, "boom") {
+		t.Errorf("Stderr = %q, want it to contain %q", failure.Stderr, "boom")
+	}
+	if failure.Pattern != "**/*.ts" {
+		t.Errorf("Pattern = %q, want %q", failure.Pattern, "**/*.ts")
+	}
+}
+
+func TestRun_BailsOnFirstFailureWithinGroup(t *testing.T) {
+	repoRoot := t.TempDir()
+	failing := writeScript(t, repoRoot, "fail.sh", "exit 1\n")
+	marker := filepath.Join(repoRoot, "marker")
+	second := writeScript(t, repoRoot, "second.sh", "touch "+marker+"\n")
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{failing, second}}}
+
+	failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, time.Second)
+	if failure == nil {
+		t.Fatal("Run() = nil, want a failure")
+	}
+	if failure.Command != failing {
+		t.Errorf("Command = %q, want %q (the first, failing command)", failure.Command, failing)
+	}
+	if _, err := os.Stat(marker); err == nil {
+		t.Error("the second command ran despite the first one failing")
+	}
+}
+
+func TestRun_GroupsRunConcurrently(t *testing.T) {
+	repoRoot := t.TempDir()
+	slow := writeScript(t, repoRoot, "slow.sh", "sleep 0.2\n")
+	groups := []nanostaged.MatchedGroup{
+		{Pattern: "**/*.ts", Commands: []string{slow}},
+		{Pattern: "**/*.css", Commands: []string{slow}},
+	}
+
+	start := time.Now()
+	if failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, time.Second); failure != nil {
+		t.Fatalf("Run() = %#v, want nil", failure)
+	}
+	if elapsed := time.Since(start); elapsed > 350*time.Millisecond {
+		t.Errorf("Run() took %s, want well under 400ms (two 200ms groups should overlap, not stack)", elapsed)
+	}
+}
+
+func TestRun_AppendsFilePathAsTrailingArgUnderRepoRootCwd(t *testing.T) {
+	repoRoot := t.TempDir()
+	echoArg := writeScript(t, repoRoot, "echo-arg.sh", `echo "$1" > out.txt`+"\n")
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{echoArg}}}
+
+	filePath := filepath.Join(repoRoot, "a.ts")
+	if failure := Run(context.Background(), groups, filePath, repoRoot, time.Second); failure != nil {
+		t.Fatalf("Run() = %#v, want nil", failure)
+	}
+
+	got, err := os.ReadFile(filepath.Join(repoRoot, "out.txt"))
+	if err != nil {
+		t.Fatalf("ReadFile() error = %v", err)
+	}
+	if want := filePath + "\n"; string(got) != want {
+		t.Errorf("out.txt = %q, want %q", got, want)
+	}
+}
+
+func TestRun_PrependsNodeModulesBinToPATH(t *testing.T) {
+	repoRoot := t.TempDir()
+	binDir := filepath.Join(repoRoot, "node_modules", ".bin")
+	if err := os.MkdirAll(binDir, 0o755); err != nil {
+		t.Fatalf("MkdirAll() error = %v", err)
+	}
+	writeScript(t, binDir, "fakelint", "exit 0\n")
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{"fakelint"}}}
+
+	if failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, time.Second); failure != nil {
+		t.Errorf("Run() = %#v, want nil (fakelint should resolve via the prepended PATH)", failure)
+	}
+}
+
+func TestRun_TimeoutAbortsTheCommand(t *testing.T) {
+	repoRoot := t.TempDir()
+	slow := writeScript(t, repoRoot, "slow.sh", "sleep 1\n")
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{slow}}}
+
+	failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, 50*time.Millisecond)
+	if failure == nil {
+		t.Fatal("Run() = nil, want a failure from the timeout")
 	}
 }
