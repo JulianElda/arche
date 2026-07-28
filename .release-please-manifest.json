@@ -5,9 +5,9 @@
   "packages/scratchpad": "1.19.1",
   "packages/stilo": "1.0.2",
   "packages/typos": "0.2.0",
-  "packages/typos/npm/darwin-arm64": "0.1.0",
+  "packages/typos/npm/darwin-arm64": "0.2.0",
   "packages/typos/npm/darwin-x64": "0.2.0",
-  "packages/typos/npm/linux-arm64": "0.1.0",
+  "packages/typos/npm/linux-arm64": "0.2.0",
   "packages/typos/npm/linux-x64": "0.2.0",
-  "packages/typos/npm/win32-x64": "0.1.0"
+  "packages/typos/npm/win32-x64": "0.2.0"
 }
