@@ -1,6 +1,6 @@
 {
   "name": "@julianelda/typos",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Lint/format a single file directly, without touching git — a nano-staged-config-compatible replacement for the naive nano-staged-in-a-hook approach",
   "repository": {
     "type": "git",
