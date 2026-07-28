@@ -57,6 +57,10 @@
   },
   "plugins": [
     {
+      "type": "node-workspace",
+      "merge": false
+    },
+    {
       "type": "linked-versions",
       "groupName": "typos",
       "merge": true,
@@ -68,10 +72,6 @@
         "typos-linux-x64",
         "typos-win32-x64"
       ]
-    },
-    {
-      "type": "node-workspace",
-      "merge": false
     }
   ]
 }
