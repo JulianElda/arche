@@ -7,6 +7,7 @@
       "dependencies": {
         "@julianelda/domos": "workspace:*",
         "@julianelda/stilo": "workspace:*",
+        "@julianelda/typos": "workspace:*",
       },
       "devDependencies": {
         "@commitlint/cli": "^21.1.0",
@@ -118,6 +119,40 @@
     "packages/stilo": {
       "name": "@julianelda/stilo",
       "version": "1.0.2",
+    },
+    "packages/typos": {
+      "name": "@julianelda/typos",
+      "version": "0.1.0",
+      "bin": {
+        "typos": "./bin/typos.js",
+      },
+      "optionalDependencies": {
+        "@julianelda/typos-darwin-arm64": "0.1.0",
+        "@julianelda/typos-darwin-x64": "0.1.0",
+        "@julianelda/typos-linux-arm64": "0.1.0",
+        "@julianelda/typos-linux-x64": "0.1.0",
+        "@julianelda/typos-win32-x64": "0.1.0",
+      },
+    },
+    "packages/typos/npm/darwin-arm64": {
+      "name": "@julianelda/typos-darwin-arm64",
+      "version": "0.1.0",
+    },
+    "packages/typos/npm/darwin-x64": {
+      "name": "@julianelda/typos-darwin-x64",
+      "version": "0.1.0",
+    },
+    "packages/typos/npm/linux-arm64": {
+      "name": "@julianelda/typos-linux-arm64",
+      "version": "0.1.0",
+    },
+    "packages/typos/npm/linux-x64": {
+      "name": "@julianelda/typos-linux-x64",
+      "version": "0.1.0",
+    },
+    "packages/typos/npm/win32-x64": {
+      "name": "@julianelda/typos-win32-x64",
+      "version": "0.1.0",
     },
   },
   "packages": {
@@ -304,6 +339,18 @@
     "@julianelda/scratchpad": ["@julianelda/scratchpad@workspace:packages/scratchpad"],
 
     "@julianelda/stilo": ["@julianelda/stilo@workspace:packages/stilo"],
+
+    "@julianelda/typos": ["@julianelda/typos@workspace:packages/typos"],
+
+    "@julianelda/typos-darwin-arm64": ["@julianelda/typos-darwin-arm64@workspace:packages/typos/npm/darwin-arm64"],
+
+    "@julianelda/typos-darwin-x64": ["@julianelda/typos-darwin-x64@workspace:packages/typos/npm/darwin-x64"],
+
+    "@julianelda/typos-linux-arm64": ["@julianelda/typos-linux-arm64@workspace:packages/typos/npm/linux-arm64"],
+
+    "@julianelda/typos-linux-x64": ["@julianelda/typos-linux-x64@workspace:packages/typos/npm/linux-x64"],
+
+    "@julianelda/typos-win32-x64": ["@julianelda/typos-win32-x64@workspace:packages/typos/npm/win32-x64"],
 
     "@lucide/svelte": ["@lucide/svelte@1.21.0", "", { "peerDependencies": { "svelte": "^5" } }, "sha512-MEv//A7Jv3kHukZowv/DWp1MAtUzJKYwtJsmnQ7X98lCgtac3z3NbaToDl3Q6jO3gS9sougFpcD+t+YuxOkRMw=="],
 

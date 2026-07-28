@@ -8,7 +8,8 @@
     "url": "git+https://github.com/JulianElda/arche.git"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/typos/npm/*"
   ],
   "type": "module",
   "scripts": {
@@ -21,7 +22,8 @@
   },
   "dependencies": {
     "@julianelda/domos": "workspace:*",
-    "@julianelda/stilo": "workspace:*"
+    "@julianelda/stilo": "workspace:*",
+    "@julianelda/typos": "workspace:*"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.1.0",

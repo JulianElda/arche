@@ -1,0 +1,78 @@
+version: 2
+
+project_name: typos
+
+# One build block per npm platform package (rather than a GOOS/GOARCH
+# matrix) so each target's post-build hook can copy straight into its
+# matching packages/typos/npm/<npm-os>-<npm-cpu>/ directory under the
+# filename that package's package.json `files` entry expects — npm's
+# os/cpu naming ("x64", "win32") doesn't match Go's GOOS/GOARCH ("amd64",
+# "windows"), so there's no template mapping between them to rely on.
+builds:
+  - id: linux-x64
+    binary: typos
+    main: .
+    env:
+      - CGO_ENABLED=0
+    goos: [linux]
+    goarch: [amd64]
+    hooks:
+      post:
+        - cmd: cp {{ .Path }} npm/linux-x64/typos
+
+  - id: linux-arm64
+    binary: typos
+    main: .
+    env:
+      - CGO_ENABLED=0
+    goos: [linux]
+    goarch: [arm64]
+    hooks:
+      post:
+        - cmd: cp {{ .Path }} npm/linux-arm64/typos
+
+  - id: darwin-x64
+    binary: typos
+    main: .
+    env:
+      - CGO_ENABLED=0
+    goos: [darwin]
+    goarch: [amd64]
+    hooks:
+      post:
+        - cmd: cp {{ .Path }} npm/darwin-x64/typos
+
+  - id: darwin-arm64
+    binary: typos
+    main: .
+    env:
+      - CGO_ENABLED=0
+    goos: [darwin]
+    goarch: [arm64]
+    hooks:
+      post:
+        - cmd: cp {{ .Path }} npm/darwin-arm64/typos
+
+  - id: win32-x64
+    binary: typos
+    main: .
+    env:
+      - CGO_ENABLED=0
+    goos: [windows]
+    goarch: [amd64]
+    hooks:
+      post:
+        - cmd: cp {{ .Path }} npm/win32-x64/typos.exe
+
+# Also archived as raw binaries under dist/ (debugging/manual download
+# convenience) — the npm/ copies above are what actually gets published.
+archives:
+  - formats:
+      - binary
+    name_template: "typos_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  disable: true
+
+release:
+  disable: true
