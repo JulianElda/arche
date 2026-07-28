@@ -46,6 +46,9 @@ jobs:
     needs: paths
     if: ${{ needs.paths.outputs.other != '[]' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     strategy:
       matrix:
         path: ${{ fromJSON(needs.paths.outputs.other) }}
@@ -54,7 +57,7 @@ jobs:
       - uses: oven-sh/setup-bun@v2
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org
       - run: bun install --frozen-lockfile
       - name: Build
@@ -65,13 +68,14 @@ jobs:
           fi
       - name: Publish
         run: cd ${{ matrix.path }} && npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   publish-typos:
     needs: paths
     if: ${{ needs.paths.outputs.typos != '[]' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -84,7 +88,7 @@ jobs:
       - run: go install github.com/goreleaser/goreleaser/v2@latest
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org
       - run: bun install --frozen-lockfile
       - name: Cross-compile every platform binary
@@ -104,10 +108,6 @@ jobs:
             | while IFS= read -r dir; do
                 (cd "$dir" && npm publish --access public)
               done
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish main package
         if: ${{ contains(fromJSON(needs.paths.outputs.typos), 'packages/typos') }}
         run: cd packages/typos && npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
