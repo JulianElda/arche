@@ -5,8 +5,10 @@ package main
 import (
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/JulianElda/arche/packages/typos/internal/hook"
+	"github.com/JulianElda/arche/packages/typos/internal/nanostaged"
 )
 
 func main() {
@@ -30,8 +32,13 @@ func run(r io.Reader) int {
 		return 0
 	}
 
-	// TODO: config discovery, glob matching, and command execution land in
-	// later commits (see the implementation roadmap in CLAUDE.md).
-	_ = path
+	config, _, ok, err := nanostaged.Discover(filepath.Dir(path))
+	if !ok || err != nil {
+		return 0
+	}
+
+	// TODO: glob matching and command execution land in later commits (see
+	// the implementation roadmap in CLAUDE.md).
+	_ = config
 	return 0
 }
