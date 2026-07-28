@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/JulianElda/arche/compare/typos-linux-x64-v0.2.0...typos-linux-x64-v0.2.0) (2026-07-28)
+
+
+### Miscellaneous Chores
+
+* **typos-linux-x64:** Synchronize typos versions
+
 ## [0.2.0](https://github.com/JulianElda/arche/compare/typos-linux-x64-v0.1.0...typos-linux-x64-v0.2.0) (2026-07-28)
 
 
