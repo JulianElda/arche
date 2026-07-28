@@ -52,6 +52,7 @@
     {
       "type": "linked-versions",
       "groupName": "typos",
+      "merge": true,
       "components": [
         "@julianelda/typos",
         "@julianelda/typos-darwin-arm64",
@@ -60,6 +61,10 @@
         "@julianelda/typos-linux-x64",
         "@julianelda/typos-win32-x64"
       ]
+    },
+    {
+      "type": "node-workspace",
+      "merge": false
     }
   ]
 }

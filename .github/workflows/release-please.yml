@@ -88,17 +88,25 @@ jobs:
       - run: bun install --frozen-lockfile
       - name: Cross-compile every platform binary
         run: cd packages/typos && bun run build:all
-      # Platform packages publish first: the main package's
-      # optionalDependencies reference them by exact version, so they
-      # need to already exist on the registry by the time it does.
-      - name: Publish platform packages
+      # Only publish paths release-please actually released in *this* run
+      # (needs.paths.outputs.typos), not every platform package indis-
+      # criminately — the 6 typos components release independently as
+      # their own PRs merge, so a package not in this run's release list
+      # hasn't had its own version bump yet and would publish stale/wrong.
+      # Platform packages publish before the main package where both are
+      # in this run: its optionalDependencies reference them by exact
+      # version, so they should exist on the registry first when possible.
+      - name: Publish released platform packages
         run: |
-          for dir in packages/typos/npm/*/; do
-            (cd "$dir" && npm publish --access public)
-          done
+          echo '${{ needs.paths.outputs.typos }}' \
+            | jq -r '.[] | select(startswith("packages/typos/npm/"))' \
+            | while IFS= read -r dir; do
+                (cd "$dir" && npm publish --access public)
+              done
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Publish main package
+        if: ${{ contains(fromJSON(needs.paths.outputs.typos), 'packages/typos') }}
         run: cd packages/typos && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
