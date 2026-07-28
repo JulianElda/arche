@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"strings"
@@ -9,27 +10,27 @@ import (
 
 func TestRun_BashIsNoOp(t *testing.T) {
 	payload := `{"tool_name":"Bash","tool_input":{"command":"ls"}}`
-	if got := run(strings.NewReader(payload)); got != 0 {
+	if got := run(strings.NewReader(payload), &bytes.Buffer{}); got != 0 {
 		t.Errorf("run() = %d, want 0", got)
 	}
 }
 
 func TestRun_MissingFilePathIsNoOp(t *testing.T) {
 	payload := `{"tool_name":"Write","tool_input":{}}`
-	if got := run(strings.NewReader(payload)); got != 0 {
+	if got := run(strings.NewReader(payload), &bytes.Buffer{}); got != 0 {
 		t.Errorf("run() = %d, want 0", got)
 	}
 }
 
 func TestRun_MalformedPayloadIsNoOp(t *testing.T) {
-	if got := run(strings.NewReader(`{not json`)); got != 0 {
+	if got := run(strings.NewReader(`{not json`), &bytes.Buffer{}); got != 0 {
 		t.Errorf("run() = %d, want 0", got)
 	}
 }
 
 func TestRun_NonexistentFileIsNoOp(t *testing.T) {
 	payload := `{"tool_name":"Write","tool_input":{"file_path":"/does/not/exist.ts"}}`
-	if got := run(strings.NewReader(payload)); got != 0 {
+	if got := run(strings.NewReader(payload), &bytes.Buffer{}); got != 0 {
 		t.Errorf("run() = %d, want 0", got)
 	}
 }
@@ -42,39 +43,95 @@ func TestRun_NoConfigFoundIsNoOp(t *testing.T) {
 	}
 
 	payload := `{"tool_name":"Write","tool_input":{"file_path":"` + filePath + `"}}`
-	if got := run(strings.NewReader(payload)); got != 0 {
+	if got := run(strings.NewReader(payload), &bytes.Buffer{}); got != 0 {
 		t.Errorf("run() = %d, want 0", got)
 	}
 }
 
 func TestRun_NoPatternMatchIsNoOp(t *testing.T) {
 	dir := t.TempDir()
-	if err := os.WriteFile(filepath.Join(dir, ".nano-staged.json"), []byte(`{"**/*.ts": "oxfmt"}`), 0o644); err != nil {
-		t.Fatalf("WriteFile() error = %v", err)
-	}
+	writeConfigFile(t, dir, `{"**/*.ts": "oxfmt"}`)
 	filePath := filepath.Join(dir, "README.txt")
 	if err := os.WriteFile(filePath, []byte("hello"), 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
 	}
 
 	payload := `{"tool_name":"Write","tool_input":{"file_path":"` + filePath + `"}}`
-	if got := run(strings.NewReader(payload)); got != 0 {
+	if got := run(strings.NewReader(payload), &bytes.Buffer{}); got != 0 {
 		t.Errorf("run() = %d, want 0", got)
 	}
 }
 
-func TestRun_PatternMatchReachesTheTODO(t *testing.T) {
-	dir := t.TempDir()
-	if err := os.WriteFile(filepath.Join(dir, ".nano-staged.json"), []byte(`{"**/*.ts": "oxfmt"}`), 0o644); err != nil {
-		t.Fatalf("WriteFile() error = %v", err)
-	}
-	filePath := filepath.Join(dir, "a.ts")
+func TestRun_EndToEnd_SuccessfulCommandIsNotBlocking(t *testing.T) {
+	repoRoot := t.TempDir()
+	ok := writeScript(t, repoRoot, "ok.sh", "exit 0\n")
+	writeConfigFile(t, repoRoot, `{"**/*.ts": "`+ok+`"}`)
+	filePath := filepath.Join(repoRoot, "a.ts")
 	if err := os.WriteFile(filePath, []byte("export {}"), 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
 	}
 
 	payload := `{"tool_name":"Write","tool_input":{"file_path":"` + filePath + `"}}`
-	if got := run(strings.NewReader(payload)); got != 0 {
-		t.Errorf("run() = %d, want 0", got)
+	var stderr bytes.Buffer
+	if got := run(strings.NewReader(payload), &stderr); got != 0 {
+		t.Errorf("run() = %d, want 0; stderr = %s", got, stderr.String())
+	}
+}
+
+func TestRun_EndToEnd_FailingCommandIsBlockingFeedback(t *testing.T) {
+	repoRoot := t.TempDir()
+	fail := writeScript(t, repoRoot, "fail.sh", "echo custom lint error >&2\nexit 1\n")
+	writeConfigFile(t, repoRoot, `{"**/*.ts": "`+fail+`"}`)
+	filePath := filepath.Join(repoRoot, "a.ts")
+	if err := os.WriteFile(filePath, []byte("export {}"), 0o644); err != nil {
+		t.Fatalf("WriteFile() error = %v", err)
+	}
+
+	payload := `{"tool_name":"Write","tool_input":{"file_path":"` + filePath + `"}}`
+	var stderr bytes.Buffer
+	if got := run(strings.NewReader(payload), &stderr); got != 2 {
+		t.Errorf("run() = %d, want 2 (blocking feedback)", got)
+	}
+	if !strings.Contains(stderr.String(), "custom lint error") {
+		t.Errorf("stderr = %q, want it to contain %q", stderr.String(), "custom lint error")
+	}
+}
+
+func TestRun_EndToEnd_BareCommandResolvesViaNodeModulesBin(t *testing.T) {
+	repoRoot := t.TempDir()
+	binDir := filepath.Join(repoRoot, "node_modules", ".bin")
+	if err := os.MkdirAll(binDir, 0o755); err != nil {
+		t.Fatalf("MkdirAll() error = %v", err)
+	}
+	writeScript(t, binDir, "fakelint", "exit 0\n")
+	writeConfigFile(t, repoRoot, `{"**/*.ts": "fakelint --fix"}`)
+	filePath := filepath.Join(repoRoot, "a.ts")
+	if err := os.WriteFile(filePath, []byte("export {}"), 0o644); err != nil {
+		t.Fatalf("WriteFile() error = %v", err)
+	}
+
+	payload := `{"tool_name":"Write","tool_input":{"file_path":"` + filePath + `"}}`
+	var stderr bytes.Buffer
+	if got := run(strings.NewReader(payload), &stderr); got != 0 {
+		t.Errorf("run() = %d, want 0; stderr = %s", got, stderr.String())
+	}
+}
+
+// writeScript writes an executable shell script to dir/name and returns
+// its absolute path.
+func writeScript(t *testing.T, dir, name, contents string) string {
+	t.Helper()
+	path := filepath.Join(dir, name)
+	if err := os.WriteFile(path, []byte("#!/bin/sh\n"+contents), 0o755); err != nil {
+		t.Fatalf("WriteFile(%q) error = %v", path, err)
+	}
+	return path
+}
+
+// writeConfigFile writes contents to dir/.nano-staged.json.
+func writeConfigFile(t *testing.T, dir, contents string) {
+	t.Helper()
+	if err := os.WriteFile(filepath.Join(dir, ".nano-staged.json"), []byte(contents), 0o644); err != nil {
+		t.Fatalf("WriteFile() error = %v", err)
 	}
 }

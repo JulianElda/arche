@@ -26,6 +26,7 @@ jobs:
       - run: ./node_modules/.bin/playwright install chromium --with-deps --no-shell
       - run: bun run --filter @julianelda/domos test -- --coverage --coverage.reporter=lcov --coverage.reportsDirectory=./coverage
       - run: bun run --filter @julianelda/scratchpad test -- --coverage --coverage.reporter=lcov --coverage.reportsDirectory=./coverage
+      - run: bun run --filter @julianelda/typos test
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: coverage

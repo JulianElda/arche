@@ -20,7 +20,8 @@
   "scripts": {
     "build": "goreleaser build --snapshot --clean --single-target",
     "format": "oxfmt",
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "test": "go test ./..."
   },
   "optionalDependencies": {
     "@julianelda/typos-darwin-arm64": "0.1.0",
