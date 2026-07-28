@@ -1,7 +1,106 @@
-# typos — design brief
+# typos — design brief & architecture
 
 This is the authoritative design reference for this package. Implementation
-should follow it exactly unless the user says otherwise.
+should follow it exactly unless the user says otherwise. Read "Current
+architecture" first for how the code is actually organized today; the
+"Goal"/"design decisions" sections below it are the original brief and
+rationale (still accurate — they describe what got built).
+
+## Current architecture
+
+All core hook logic is implemented and tested (see "Implementation status"
+at the bottom for exactly what's landed). Package layout:
+
+```
+packages/typos/
+  main.go                    # entrypoint: wires everything below together
+  internal/
+    hook/hook.go              # PostToolUse JSON payload parsing
+    nanostaged/nanostaged.go  # .nano-staged.json discovery, parsing, glob matching
+    runner/runner.go          # tokenization, PATH resolution, command execution
+  bin/typos.js                # npm dispatcher: resolves + execs the platform binary
+  .goreleaser.yaml            # cross-compiles + copies binaries into npm/*/
+  npm/<platform>/             # per-platform optionalDependency packages
+```
+
+**`main.go`'s `run(r io.Reader, stderr io.Writer, configPathOverride string) int`**
+is the whole pipeline, in order, no-op'ing (return 0) at the first
+inapplicable step:
+
+1. `hook.Parse(r)` — decode the PostToolUse payload; bail on malformed JSON.
+2. `payload.FilePath()` — bail unless `tool_name` is `Write`/`Edit`/`MultiEdit`
+   and `tool_input.file_path` is non-empty.
+3. `os.Stat` the path — bail if it's not a regular file.
+4. `resolveConfig` — either `nanostaged.Load(configPathOverride)` if `-c`/
+   `--config` was given, or `nanostaged.Discover(filepath.Dir(path))` to
+   walk up looking for the nearest `.nano-staged.json`; bail if neither
+   yields a usable config.
+5. `config.Match(repoRoot, path)` — bail if no glob pattern matches.
+6. `runner.Run(ctx, groups, path, repoRoot, commandTimeout)` — actually run
+   the matched commands. `repoRoot` (the config file's directory) is used
+   as both `cmd.Dir` and the base for `node_modules/.bin` PATH resolution.
+7. Any `*runner.CommandFailure` gets written to stderr and maps to exit
+   code 2 (`blockingFeedbackExitCode`) — Claude Code's PostToolUse
+   "blocking feedback" convention, so Claude sees the real lint/format
+   error and can self-correct.
+
+**`internal/hook`**: `Payload.FilePath()` is the single gate for "is this
+payload actionable at all" (supported tool + non-empty path) — everything
+else in `main.go` assumes that's already been checked.
+
+**`internal/nanostaged`**: `Config` is `map[string][]string` (pattern →
+commands, both `"cmd"` and `["cmd1","cmd2"]` config shapes normalized to the
+latter). `Find`/`Discover` walk up the directory tree exactly like
+`internal/runner.FindNodeModulesBin` does (same pattern, different target
+file — not shared code, kept separate per package since they're
+conceptually unrelated lookups). `Config.Match` returns `[]MatchedGroup`
+sorted by pattern string for determinism — actual execution order across
+groups doesn't matter since they run concurrently.
+
+**`internal/runner`**: `Tokenize` wraps `go-shellwords`; `Run` executes
+matched groups concurrently (one goroutine each) and, within a group,
+commands sequentially with bail-on-first-failure; each command gets its own
+`context.WithTimeout`. Two non-obvious bugs were caught here during
+development and are worth knowing about before touching this file:
+
+- `exec.Command` resolves a bare (no path separator) `argv[0]` using the
+  **current process's** `PATH`, not `cmd.Env` — setting `cmd.Env` alone
+  does _not_ make bare commands resolve against the PATH-prepended
+  environment. The unexported `lookPath(name, env)` works around this by
+  resolving manually against `env`'s `PATH` before constructing the
+  `exec.Cmd`. Skipping this silently breaks the entire "bare `oxlint`/
+  `oxfmt` resolves via `node_modules/.bin`" design goal.
+- If a spawned command's child process (e.g. a backgrounded/forked
+  grandchild) inherits and keeps the stdout/stderr pipe open after the
+  command itself is killed by the context timeout, `cmd.Wait()` blocks
+  until that grandchild exits on its own — potentially forever. `cmd.WaitDelay`
+  (set to the same per-command `timeout`) bounds this by forcibly closing
+  the pipes after that grace period.
+
+**`bin/typos.js`**: maps `` `${process.platform}-${process.arch}` `` to the
+matching `@julianelda/typos-<platform>` package (`PLATFORM_PACKAGES`),
+resolves its binary via `require.resolve(pkg + "/package.json")`, and
+`spawnSync`s it with `stdio: "inherit"` (so the hook's stdin payload and
+stderr feedback both pass through unchanged) and propagates its exit code.
+
+**`.goreleaser.yaml`**: one `builds` entry per platform (not a GOOS/GOARCH
+matrix) because npm's os/cpu naming (`x64`, `win32`) doesn't map cleanly
+from Go's (`amd64`, `windows`) — each build's `hooks.post` does a literal
+`cp {{ .Path }} npm/<platform>/typos[.exe]`. `package.json` has two build
+scripts: `build` (single-target snapshot, fast — used for local dev and the
+generic CI `bun run build` step) and `build:all` (all 5 targets — used only
+by the release publish job).
+
+**Publishing** (`.github/workflows/release-please.yml`): `typos` and its 5
+platform packages are version-linked in `release-please-config.json`
+(always released together) and always land together in
+`paths_released` — but GitHub Actions matrix jobs each get an _isolated_
+checkout, so a generic per-path matrix can't "build once in one job, publish
+the artifact from another." A `paths` job splits `paths_released` into
+typos-related vs. everything else (via `jq`); a dedicated `publish-typos`
+job does one checkout, runs `bun run build:all`, then publishes all 5
+platform packages _before_ the main package (whose `optionalDependencies`
+reference them by exact version).
 
 ## Goal
 
@@ -233,14 +332,54 @@ that or these existing configs will break.
   tool exists to prevent). Explicitly decided this is **not** something the
   tool needs to handle in v1.
 
-## Current state of this package
+## Implementation status
 
-Only the initial scaffolding exists so far: `go.mod`/placeholder `main.go`,
-the npm package manifests (main + per-platform `optionalDependencies`
-packages), `.goreleaser.yaml`, and CI/`release-please` wiring. **None of the
-"Design decisions already made" logic above is implemented yet** —
-`main.go` and `bin/typos.js` are both stubs. Implementing that logic is the
-next phase of work on this package.
+All "Design decisions already made" above are implemented and tested — this
+was built incrementally, one commit per concern, each left green
+(`go build`/`go vet`/`gofmt`/`go test -race`) before moving to the next:
+
+1. Hook payload parsing + gating on supported tools (`internal/hook`).
+2. `.nano-staged.json` discovery + parsing (`internal/nanostaged`).
+3. Glob matching against the discovered config (`internal/nanostaged`).
+4. Command tokenization + `node_modules/.bin` PATH resolution
+   (`internal/runner`).
+5. The concurrent-groups/sequential-commands execution engine
+   (`internal/runner`) — this is where the two gotchas documented under
+   "Current architecture" (`lookPath`, `cmd.WaitDelay`) were found and
+   fixed, caught by tests that actually spawn real subprocesses rather
+   than mocking `os/exec`.
+6. End-to-end wiring in `main.go`, mapping failures to exit code 2.
+7. The real `bin/typos.js` dispatcher (was a stub before this).
+8. `.goreleaser.yaml` → npm platform package wiring, plus restructuring
+   `release-please.yml`'s publish job (see "Publishing" above).
+9. The `-c`/`--config` override flag.
+
+Tests favor real execution over mocking: `internal/runner`'s tests write
+actual executable shell script fixtures to a `t.TempDir()` and run them
+through the real `Run`/`exec.Command` path (this is exactly how the two
+gotchas above were caught — they wouldn't have surfaced against a mock).
+Critical paths (the dispatcher, the `-c` flag) were also manually smoke-
+tested against the real compiled binary, not just via Go's test runner —
+worth doing again after any change to `main.go` or `bin/typos.js`.
+
+To verify the whole package after a change:
+
+```sh
+cd packages/typos
+go build ./... && go vet ./... && gofmt -l . && go test ./... -race
+bun run --filter='@julianelda/typos' lint
+bun run --filter='@julianelda/typos' format -- --check
+bun run --filter='@julianelda/typos' build:all   # full 5-platform cross-compile
+```
+
+**Not yet done** (deliberately, not an oversight):
+
+- Everything under "Explicitly out of scope / deferred for v1" above.
+- The actual cutover: `~/.claude/settings.json`'s `PostToolUse` hook still
+  points at `lint-edited-file.sh`. That's dotfiles, outside this repo, and
+  should only be switched to `typos` after a real npm release is published
+  and manually smoke-tested — not something to do as part of a change in
+  this repo.
 
 ## Repo conventions (see repo-root `AGENTS.md` for the full list)
 
@@ -251,4 +390,4 @@ next phase of work on this package.
   JS bits (the Go source itself isn't covered by these).
 - Root `format`/`lint`/`build`/`check`/`test` scripts fan out via
   `bun run --filter='*' <script>`; packages without a matching script are
-  silently skipped.
+  silently skipped. `packages/typos`'s `test` script is `go test ./...`.
