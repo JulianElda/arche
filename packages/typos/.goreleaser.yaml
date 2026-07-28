@@ -2,28 +2,72 @@ version: 2
 
 project_name: typos
 
+# One build block per npm platform package (rather than a GOOS/GOARCH
+# matrix) so each target's post-build hook can copy straight into its
+# matching packages/typos/npm/<npm-os>-<npm-cpu>/ directory under the
+# filename that package's package.json `files` entry expects — npm's
+# os/cpu naming ("x64", "win32") doesn't match Go's GOOS/GOARCH ("amd64",
+# "windows"), so there's no template mapping between them to rely on.
 builds:
-  - id: typos
+  - id: linux-x64
     binary: typos
     main: .
     env:
       - CGO_ENABLED=0
-    goos:
-      - linux
-      - darwin
-      - windows
-    goarch:
-      - amd64
-      - arm64
-    ignore:
-      - goos: windows
-        goarch: arm64
+    goos: [linux]
+    goarch: [amd64]
+    hooks:
+      post:
+        - cmd: cp {{ .Path }} npm/linux-x64/typos
 
-# Raw binaries, one per npm optionalDependency platform package — no
-# tar/zip archives, matching how esbuild/oxlint/biome ship binaries.
+  - id: linux-arm64
+    binary: typos
+    main: .
+    env:
+      - CGO_ENABLED=0
+    goos: [linux]
+    goarch: [arm64]
+    hooks:
+      post:
+        - cmd: cp {{ .Path }} npm/linux-arm64/typos
+
+  - id: darwin-x64
+    binary: typos
+    main: .
+    env:
+      - CGO_ENABLED=0
+    goos: [darwin]
+    goarch: [amd64]
+    hooks:
+      post:
+        - cmd: cp {{ .Path }} npm/darwin-x64/typos
+
+  - id: darwin-arm64
+    binary: typos
+    main: .
+    env:
+      - CGO_ENABLED=0
+    goos: [darwin]
+    goarch: [arm64]
+    hooks:
+      post:
+        - cmd: cp {{ .Path }} npm/darwin-arm64/typos
+
+  - id: win32-x64
+    binary: typos
+    main: .
+    env:
+      - CGO_ENABLED=0
+    goos: [windows]
+    goarch: [amd64]
+    hooks:
+      post:
+        - cmd: cp {{ .Path }} npm/win32-x64/typos.exe
+
+# Also archived as raw binaries under dist/ (debugging/manual download
+# convenience) — the npm/ copies above are what actually gets published.
 archives:
-  - id: typos
-    formats:
+  - formats:
       - binary
     name_template: "typos_{{ .Os }}_{{ .Arch }}"
 
@@ -32,9 +76,3 @@ checksum:
 
 release:
   disable: true
-
-# TODO: wire a step (GoReleaser hook or a separate CI script) that copies
-# each dist/typos_<os>_<arch> artifact into its matching
-# packages/typos/npm/<npm-os>-<npm-cpu>/ directory before `npm publish` — see
-# the "GoReleaser config" section of CLAUDE.md/the scaffolding plan for
-# the GOOS/GOARCH -> npm os/cpu mapping. Not implemented yet.

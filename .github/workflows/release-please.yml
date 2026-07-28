@@ -20,13 +20,34 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  publish:
+  # typos' main package and its platform packages (packages/typos/npm/*)
+  # are always released together (release-please-config.json links their
+  # versions) and must be split out of the generic per-path matrix below:
+  # the platform packages carry no binary of their own until `typos`'
+  # GoReleaser build produces one, and matrix jobs each get an isolated
+  # checkout, so that build has to run once and publish everything itself
+  # — see the publish-typos job.
+  paths:
     needs: release-please
     if: ${{ needs.release-please.outputs.paths_released != '[]' }}
     runs-on: ubuntu-latest
+    outputs:
+      other: ${{ steps.split.outputs.other }}
+      typos: ${{ steps.split.outputs.typos }}
+    steps:
+      - id: split
+        run: |
+          paths='${{ needs.release-please.outputs.paths_released }}'
+          echo "other=$(jq -c '[.[] | select(startswith("packages/typos") | not)]' <<<"$paths")" >> "$GITHUB_OUTPUT"
+          echo "typos=$(jq -c '[.[] | select(startswith("packages/typos"))]' <<<"$paths")" >> "$GITHUB_OUTPUT"
+
+  publish:
+    needs: paths
+    if: ${{ needs.paths.outputs.other != '[]' }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        path: ${{ fromJSON(needs.release-please.outputs.paths_released) }}
+        path: ${{ fromJSON(needs.paths.outputs.other) }}
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -43,5 +64,41 @@ jobs:
           fi
       - name: Publish
         run: cd ${{ matrix.path }} && npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-typos:
+    needs: paths
+    if: ${{ needs.paths.outputs.typos != '[]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      # TODO: pin to a commit SHA (like the other actions above) once verified —
+      # not available from this sandbox (no network access to look up the hash).
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: packages/typos/go.mod
+      # TODO: pin to a specific released version once verified, for the same reason.
+      - run: go install github.com/goreleaser/goreleaser/v2@latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: bun install --frozen-lockfile
+      - name: Cross-compile every platform binary
+        run: cd packages/typos && bun run build:all
+      # Platform packages publish first: the main package's
+      # optionalDependencies reference them by exact version, so they
+      # need to already exist on the registry by the time it does.
+      - name: Publish platform packages
+        run: |
+          for dir in packages/typos/npm/*/; do
+            (cd "$dir" && npm publish --access public)
+          done
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish main package
+        run: cd packages/typos && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
