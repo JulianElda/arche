@@ -32,13 +32,18 @@ func run(r io.Reader) int {
 		return 0
 	}
 
-	config, _, ok, err := nanostaged.Discover(filepath.Dir(path))
+	config, configPath, ok, err := nanostaged.Discover(filepath.Dir(path))
 	if !ok || err != nil {
 		return 0
 	}
 
-	// TODO: glob matching and command execution land in later commits (see
-	// the implementation roadmap in CLAUDE.md).
-	_ = config
+	groups, err := config.Match(filepath.Dir(configPath), path)
+	if err != nil || len(groups) == 0 {
+		return 0
+	}
+
+	// TODO: command execution lands in later commits (see the
+	// implementation roadmap in CLAUDE.md).
+	_ = groups
 	return 0
 }

@@ -8,6 +8,9 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
+
+	"github.com/bmatcuk/doublestar/v4"
 )
 
 // ConfigFileName is the config file this package looks for, matching the
@@ -89,4 +92,41 @@ func Discover(dir string) (config Config, path string, ok bool, err error) {
 		return nil, path, true, err
 	}
 	return config, path, true, nil
+}
+
+// MatchedGroup pairs a glob pattern that matched a file with the command
+// chain to run against it.
+type MatchedGroup struct {
+	Pattern  string
+	Commands []string
+}
+
+// Match returns the pattern groups whose glob matches path, relative to
+// configDir (the directory the config file was loaded from). Order is
+// deterministic (sorted by pattern) but otherwise not meaningful — matched
+// groups are run concurrently, not in this order.
+func (c Config) Match(configDir, path string) ([]MatchedGroup, error) {
+	rel, err := filepath.Rel(configDir, path)
+	if err != nil {
+		return nil, err
+	}
+	rel = filepath.ToSlash(rel)
+
+	patterns := make([]string, 0, len(c))
+	for pattern := range c {
+		patterns = append(patterns, pattern)
+	}
+	sort.Strings(patterns)
+
+	var matched []MatchedGroup
+	for _, pattern := range patterns {
+		ok, err := doublestar.Match(pattern, rel)
+		if err != nil {
+			return nil, fmt.Errorf("%s: %w", pattern, err)
+		}
+		if ok {
+			matched = append(matched, MatchedGroup{Pattern: pattern, Commands: c[pattern]})
+		}
+	}
+	return matched, nil
 }

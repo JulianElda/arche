@@ -47,7 +47,23 @@ func TestRun_NoConfigFoundIsNoOp(t *testing.T) {
 	}
 }
 
-func TestRun_ConfigFoundReachesTheTODO(t *testing.T) {
+func TestRun_NoPatternMatchIsNoOp(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(filepath.Join(dir, ".nano-staged.json"), []byte(`{"**/*.ts": "oxfmt"}`), 0o644); err != nil {
+		t.Fatalf("WriteFile() error = %v", err)
+	}
+	filePath := filepath.Join(dir, "README.txt")
+	if err := os.WriteFile(filePath, []byte("hello"), 0o644); err != nil {
+		t.Fatalf("WriteFile() error = %v", err)
+	}
+
+	payload := `{"tool_name":"Write","tool_input":{"file_path":"` + filePath + `"}}`
+	if got := run(strings.NewReader(payload)); got != 0 {
+		t.Errorf("run() = %d, want 0", got)
+	}
+}
+
+func TestRun_PatternMatchReachesTheTODO(t *testing.T) {
 	dir := t.TempDir()
 	if err := os.WriteFile(filepath.Join(dir, ".nano-staged.json"), []byte(`{"**/*.ts": "oxfmt"}`), 0o644); err != nil {
 		t.Fatalf("WriteFile() error = %v", err)
