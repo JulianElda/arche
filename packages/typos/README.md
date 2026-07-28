@@ -1,9 +1,11 @@
 # typos
 
-> Lint/format a single edited file — safe for Claude Code hooks, no git involved
+> In all things shewing thyself a pattern of good works.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../../LICENSE)
 [![npm version](https://img.shields.io/npm/v/@julianelda/typos)](https://www.npmjs.com/package/@julianelda/typos)
+
+Lint/format a single edited file — safe for Claude Code hooks, no git involved.
 
 Reads a repo's existing `.nano-staged.json` and runs the matching
 lint/format commands against a single file path, replicating
