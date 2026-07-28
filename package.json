@@ -22,7 +22,8 @@
   },
   "dependencies": {
     "@julianelda/domos": "workspace:*",
-    "@julianelda/stilo": "workspace:*"
+    "@julianelda/stilo": "workspace:*",
+    "@julianelda/typos": "workspace:*"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.1.0",
