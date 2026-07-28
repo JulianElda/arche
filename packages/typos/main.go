@@ -4,6 +4,8 @@ package main
 
 import (
 	"context"
+	"errors"
+	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -24,13 +26,20 @@ const commandTimeout = 30 * time.Second
 const blockingFeedbackExitCode = 2
 
 func main() {
-	os.Exit(run(os.Stdin, os.Stderr))
+	var configPath string
+	flag.StringVar(&configPath, "c", "", "path to .nano-staged.json (skips auto-discovery)")
+	flag.StringVar(&configPath, "config", "", "path to .nano-staged.json (skips auto-discovery)")
+	flag.Parse()
+
+	os.Exit(run(os.Stdin, os.Stderr, configPath))
 }
 
 // run reads a PostToolUse payload from r, lints/formats the edited file
 // against its repo's .nano-staged.json if applicable, and returns the
 // process exit code. A failing command's output is written to stderr.
-func run(r io.Reader, stderr io.Writer) int {
+// configPathOverride, if non-empty, is used verbatim instead of
+// auto-discovering the nearest .nano-staged.json.
+func run(r io.Reader, stderr io.Writer, configPathOverride string) int {
 	payload, err := hook.Parse(r)
 	if err != nil {
 		return 0
@@ -46,8 +55,8 @@ func run(r io.Reader, stderr io.Writer) int {
 		return 0
 	}
 
-	config, configPath, ok, err := nanostaged.Discover(filepath.Dir(path))
-	if !ok || err != nil {
+	config, configPath, err := resolveConfig(configPathOverride, path)
+	if err != nil {
 		return 0
 	}
 
@@ -64,6 +73,29 @@ func run(r io.Reader, stderr io.Writer) int {
 
 	writeFailure(stderr, failure)
 	return blockingFeedbackExitCode
+}
+
+// resolveConfig loads override if given, otherwise auto-discovers the
+// nearest .nano-staged.json to filePath's directory. err is non-nil for
+// "no usable config" in either case — no config found, or a given/found
+// config that failed to parse.
+func resolveConfig(override, filePath string) (nanostaged.Config, string, error) {
+	if override != "" {
+		config, err := nanostaged.Load(override)
+		if err != nil {
+			return nil, "", err
+		}
+		return config, override, nil
+	}
+
+	config, configPath, ok, err := nanostaged.Discover(filepath.Dir(filePath))
+	if err != nil {
+		return nil, "", err
+	}
+	if !ok {
+		return nil, "", errors.New("no .nano-staged.json found")
+	}
+	return config, configPath, nil
 }
 
 // writeFailure reports a command failure the way Claude should see it:
