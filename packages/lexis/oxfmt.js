@@ -3,7 +3,7 @@ export default {
   bracketSameLine: true,
   bracketSpacing: true,
   endOfLine: "lf",
-  ignorePatterns: ["dist"],
+  ignorePatterns: ["dist", "CHANGELOG.md"],
   insertFinalNewline: true,
   printWidth: 80,
   quoteProps: "as-needed",
