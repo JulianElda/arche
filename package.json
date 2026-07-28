@@ -8,7 +8,8 @@
     "url": "git+https://github.com/JulianElda/arche.git"
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/typos/npm/*"
   ],
   "type": "module",
   "scripts": {

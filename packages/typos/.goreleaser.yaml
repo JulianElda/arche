@@ -1,0 +1,40 @@
+version: 2
+
+project_name: typos
+
+builds:
+  - id: typos
+    binary: typos
+    main: .
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+
+# Raw binaries, one per npm optionalDependency platform package — no
+# tar/zip archives, matching how esbuild/oxlint/biome ship binaries.
+archives:
+  - id: typos
+    formats:
+      - binary
+    name_template: "typos_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  disable: true
+
+release:
+  disable: true
+
+# TODO: wire a step (GoReleaser hook or a separate CI script) that copies
+# each dist/typos_<os>_<arch> artifact into its matching
+# packages/typos/npm/<npm-os>-<npm-cpu>/ directory before `npm publish` — see
+# the "GoReleaser config" section of CLAUDE.md/the scaffolding plan for
+# the GOOS/GOARCH -> npm os/cpu mapping. Not implemented yet.

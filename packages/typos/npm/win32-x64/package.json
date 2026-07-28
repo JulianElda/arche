@@ -1,0 +1,22 @@
+{
+  "name": "@julianelda/typos-win32-x64",
+  "version": "0.1.0",
+  "description": "typos platform binary for win32/x64 — do not depend on directly, see @julianelda/typos",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JulianElda/arche.git",
+    "directory": "packages/typos/npm/win32-x64"
+  },
+  "files": [
+    "typos.exe"
+  ],
+  "os": [
+    "win32"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

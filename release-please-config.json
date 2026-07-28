@@ -22,6 +22,44 @@
     "packages/stilo": {
       "release-type": "node",
       "package-name": "@julianelda/stilo"
+    },
+    "packages/typos": {
+      "release-type": "node",
+      "package-name": "@julianelda/typos"
+    },
+    "packages/typos/npm/darwin-arm64": {
+      "release-type": "node",
+      "package-name": "@julianelda/typos-darwin-arm64"
+    },
+    "packages/typos/npm/darwin-x64": {
+      "release-type": "node",
+      "package-name": "@julianelda/typos-darwin-x64"
+    },
+    "packages/typos/npm/linux-arm64": {
+      "release-type": "node",
+      "package-name": "@julianelda/typos-linux-arm64"
+    },
+    "packages/typos/npm/linux-x64": {
+      "release-type": "node",
+      "package-name": "@julianelda/typos-linux-x64"
+    },
+    "packages/typos/npm/win32-x64": {
+      "release-type": "node",
+      "package-name": "@julianelda/typos-win32-x64"
     }
-  }
+  },
+  "plugins": [
+    {
+      "type": "linked-versions",
+      "groupName": "typos",
+      "components": [
+        "@julianelda/typos",
+        "@julianelda/typos-darwin-arm64",
+        "@julianelda/typos-darwin-x64",
+        "@julianelda/typos-linux-arm64",
+        "@julianelda/typos-linux-x64",
+        "@julianelda/typos-win32-x64"
+      ]
+    }
+  ]
 }

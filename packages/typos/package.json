@@ -1,0 +1,32 @@
+{
+  "name": "@julianelda/typos",
+  "version": "0.1.0",
+  "description": "Lint/format a single file directly, without touching git — a nano-staged-config-compatible replacement for the naive nano-staged-in-a-hook approach",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JulianElda/arche.git",
+    "directory": "packages/typos"
+  },
+  "bin": {
+    "typos": "./bin/typos.js"
+  },
+  "files": [
+    "bin"
+  ],
+  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "goreleaser build --snapshot --clean --single-target",
+    "format": "oxfmt",
+    "lint": "oxlint"
+  },
+  "optionalDependencies": {
+    "@julianelda/typos-darwin-arm64": "0.1.0",
+    "@julianelda/typos-darwin-x64": "0.1.0",
+    "@julianelda/typos-linux-arm64": "0.1.0",
+    "@julianelda/typos-linux-x64": "0.1.0",
+    "@julianelda/typos-win32-x64": "0.1.0"
+  }
+}

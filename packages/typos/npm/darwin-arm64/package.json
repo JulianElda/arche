@@ -1,0 +1,22 @@
+{
+  "name": "@julianelda/typos-darwin-arm64",
+  "version": "0.1.0",
+  "description": "typos platform binary for darwin/arm64 — do not depend on directly, see @julianelda/typos",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JulianElda/arche.git",
+    "directory": "packages/typos/npm/darwin-arm64"
+  },
+  "files": [
+    "typos"
+  ],
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
