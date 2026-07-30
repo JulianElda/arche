@@ -28,7 +28,7 @@ export default {
   jsPlugins: ["eslint-plugin-perfectionist"],
   overrides: [
     {
-      files: ["**/*.test.ts"],
+      files: ["**/*.test.{ts,tsx,js,jsx}"],
       rules: {
         "vitest/consistent-each-for": "error",
         "vitest/consistent-test-it": [
