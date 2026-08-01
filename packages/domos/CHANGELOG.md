@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/JulianElda/arche/compare/domos-v2.1.0...domos-v2.1.1) (2026-08-01)
+
+
+### Bug Fixes
+
+* **deps:** remove duplicate typescript packages that flake oxlint ([#35](https://github.com/JulianElda/arche/issues/35)) ([d807fba](https://github.com/JulianElda/arche/commit/d807fba4dbed2b7c1a7fb1a461610b487fa2071d))
+
 ## [2.1.0](https://github.com/JulianElda/arche/compare/domos-v2.0.1...domos-v2.1.0) (2026-08-01)
 
 
