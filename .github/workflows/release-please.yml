@@ -22,8 +22,9 @@ jobs:
           manifest-file: .release-please-manifest.json
 
   # typos' main package and its platform packages (packages/typos/npm/*)
-  # are always released together (release-please-config.json links their
-  # versions) and must be split out of the generic per-path matrix below:
+  # share one version (release-please-config.json links them) but each
+  # opens its own release PR, so a given run may release any subset of
+  # them. They must be split out of the generic per-path matrix below:
   # the platform packages carry no binary of their own until `typos`'
   # GoReleaser build produces one, and matrix jobs each get an isolated
   # checkout, so that build has to run once and publish everything itself
@@ -101,6 +102,9 @@ jobs:
       # Platform packages publish before the main package where both are
       # in this run: its optionalDependencies reference them by exact
       # version, so they should exist on the registry first when possible.
+      # Across runs that ordering is down to merge order — merge the
+      # platform release PRs before the main `typos` one, or installs
+      # will fail until the platform versions land on the registry.
       - name: Publish released platform packages
         run: |
           echo '${{ needs.paths.outputs.typos }}' \
