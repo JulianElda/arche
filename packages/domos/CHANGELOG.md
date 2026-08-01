@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/JulianElda/arche/compare/domos-v2.0.1...domos-v2.1.0) (2026-08-01)
+
+
+### Features
+
+* **domos:** allow consumers to forward and override component classes ([#31](https://github.com/JulianElda/arche/issues/31)) ([fd92fa4](https://github.com/JulianElda/arche/commit/fd92fa40d26273898d719c820e112b7a6565ab17))
+
 ## [2.0.1](https://github.com/JulianElda/arche/compare/domos-v2.0.0...domos-v2.0.1) (2026-07-28)
 
 
