@@ -52,3 +52,11 @@ test("forwards type attribute", async () => {
   });
   await expect.element(getByRole("button")).toHaveAttribute("type", "submit");
 });
+
+test("consumer class overrides conflicting base classes", async () => {
+  const { getByRole } = render(Button, {
+    props: { ...buttonPropsPrimary, children, class: "p-8" },
+  });
+  await expect.element(getByRole("button")).toHaveClass("p-8");
+  await expect.element(getByRole("button")).not.toHaveClass("p-2");
+});

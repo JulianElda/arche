@@ -1,8 +1,12 @@
 <script lang="ts">
+  import { clsx } from "clsx";
+  import { twMerge } from "tailwind-merge";
+
   import type { SelectFieldProps } from "./select-field.types.ts";
 
   const {
     borderless = false,
+    class: className,
     inInputField = false,
     options,
     ...rest
@@ -11,7 +15,7 @@
 
 <select
   {...rest}
-  class={[
+  class={twMerge(
     "form-select w-full appearance-none rounded-md text-ink-black dark:bg-slate dark:text-ink-white",
     borderless === true
       ? "border-0 bg-transparent p-0 ring-0 outline-none focus:ring-0 focus:outline-none"
@@ -19,7 +23,8 @@
     inInputField === true
       ? "h-full rounded-l-none bg-transparent"
       : "block pl-3",
-  ]}>
+    clsx(className),
+  )}>
   {#each options as option (option.value)}
     <option value={option.value}>
       {option.label}

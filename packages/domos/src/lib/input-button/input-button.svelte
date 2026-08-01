@@ -1,11 +1,14 @@
 <script lang="ts">
   import InputField from "$lib/input-field/input-field.svelte";
   import InputLabel from "$lib/input-label/input-label.svelte";
+  import { clsx } from "clsx";
+  import { twMerge } from "tailwind-merge";
 
   import type { InputButtonProps } from "./input-button.types.ts";
 
   const {
     buttonAriaLabel,
+    class: className,
     hideLabel,
     icon,
     id,
@@ -15,7 +18,7 @@
   }: InputButtonProps = $props();
 </script>
 
-<div class="flex flex-1 flex-col gap-1">
+<div class={twMerge("flex flex-1 flex-col gap-1", clsx(className))}>
   <InputLabel
     hideLabel={Boolean(hideLabel)}
     {id}
