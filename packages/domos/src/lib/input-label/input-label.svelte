@@ -1,16 +1,26 @@
 <script lang="ts">
+  import { clsx } from "clsx";
+  import { twMerge } from "tailwind-merge";
+
   import type { InputLabelProps } from "./input-label.types.ts";
 
   const {
+    class: className,
     hideLabel = false,
     id,
     label,
     value = "",
+    ...rest
   }: InputLabelProps = $props();
 </script>
 
 <label
-  class={["font-heading mr-auto font-bold", hideLabel && "sr-only"]}
+  {...rest}
+  class={twMerge(
+    "font-heading mr-auto font-bold",
+    hideLabel && "sr-only",
+    clsx(className),
+  )}
   for={id}>
   {label}
   {#if value !== ""}

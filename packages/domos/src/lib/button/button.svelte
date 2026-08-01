@@ -1,16 +1,25 @@
 <script lang="ts">
+  import { clsx } from "clsx";
+  import { twMerge } from "tailwind-merge";
+
   import type { ButtonProps } from "./button.types.ts";
 
-  const { children, variant = "primary", ...rest }: ButtonProps = $props();
+  const {
+    children,
+    class: className,
+    variant = "primary",
+    ...rest
+  }: ButtonProps = $props();
 </script>
 
 <button
   {...rest}
-  class={[
+  class={twMerge(
     "cursor-pointer appearance-none rounded-lg p-2 text-lg shadow-sm hover:border-primary-500 hover:bg-primary-500 focus:ring-primary-300 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-primary-300 active:bg-primary-700 dark:hover:bg-primary-500",
     variant === "primary"
       ? "border-primary-700 bg-primary-700 text-ink-white"
       : "border border-ink-500 bg-card-background-light text-ink-black hover:text-white dark:bg-slate dark:text-ink-white",
-  ]}>
+    clsx(className),
+  )}>
   {@render children?.()}
 </button>

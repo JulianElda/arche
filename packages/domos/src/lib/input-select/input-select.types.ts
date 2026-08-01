@@ -6,6 +6,7 @@ export interface InputSelectInputProps extends InputFieldProps {
 }
 
 export interface InputSelectProps {
+  class?: string;
   hideLabel?: boolean;
   inputProps: InputSelectInputProps;
   selectProps: InputSelectSelectProps;

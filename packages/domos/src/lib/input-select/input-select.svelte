@@ -2,10 +2,16 @@
   import InputField from "$lib/input-field/input-field.svelte";
   import InputLabel from "$lib/input-label/input-label.svelte";
   import SelectField from "$lib/select-field/select-field.svelte";
+  import { twMerge } from "tailwind-merge";
 
   import type { InputSelectProps } from "./input-select.types.ts";
 
-  const { hideLabel, inputProps, selectProps }: InputSelectProps = $props();
+  const {
+    class: className,
+    hideLabel,
+    inputProps,
+    selectProps,
+  }: InputSelectProps = $props();
 
   const inputFieldProps = $derived.by(() => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -20,7 +26,7 @@
   });
 </script>
 
-<div class="flex flex-1 flex-col gap-1">
+<div class={twMerge("flex flex-1 flex-col gap-1", className)}>
   <InputLabel
     {hideLabel}
     id={inputProps.id}

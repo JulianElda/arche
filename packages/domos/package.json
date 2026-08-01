@@ -49,7 +49,9 @@
   },
   "dependencies": {
     "@julianelda/chroma": "^1.0.0",
-    "@julianelda/stilo": "^1.0.2"
+    "@julianelda/stilo": "^1.0.2",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
