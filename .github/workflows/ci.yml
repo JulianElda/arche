@@ -19,6 +19,11 @@ jobs:
       # TODO: pin to a specific released version once verified, for the same reason.
       - run: go install github.com/goreleaser/goreleaser/v2@latest
       - run: bun install --ignore-scripts --frozen-lockfile
+      # `--ignore-scripts` skips domos's `prepare` (svelte-kit sync), so
+      # `.svelte-kit/tsconfig.json` is missing — and `packages/domos/tsconfig.json`
+      # extends it. Type-aware oxlint reads tsconfigs, so `lint` fails without this.
+      - run: bunx svelte-kit sync
+        working-directory: packages/domos
       - run: bun run format -- --check
       - run: bun run lint
       - run: bun run check
