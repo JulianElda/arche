@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.5.3](https://github.com/JulianElda/arche/compare/lexis-v3.5.2...lexis-v3.5.3) (2026-08-02)
+
+
+### Bug Fixes
+
+* **deps:** remove duplicate typescript packages that flake oxlint ([#35](https://github.com/JulianElda/arche/issues/35)) ([d807fba](https://github.com/JulianElda/arche/commit/d807fba4dbed2b7c1a7fb1a461610b487fa2071d))
+
 ## [3.5.2](https://github.com/JulianElda/arche/compare/lexis-v3.5.1...lexis-v3.5.2) (2026-07-30)
 
 
