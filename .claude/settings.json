@@ -13,7 +13,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "typos"
+            "command": "bunx @julianelda/typos"
           }
         ]
       }
@@ -23,7 +23,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "typos"
+            "command": "bun run format && bun run lint"
           }
         ]
       }

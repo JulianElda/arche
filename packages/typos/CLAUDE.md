@@ -367,7 +367,7 @@ To verify the whole package after a change:
 ```sh
 cd packages/typos
 go build ./... && go vet ./... && gofmt -l . && go test ./... -race
-bun run --filter='@julianelda/typos' lint
+bun run lint     # from the repo root — oxlint is no longer run per-package
 bun run --filter='@julianelda/typos' format -- --check
 bun run --filter='@julianelda/typos' build:all   # full 5-platform cross-compile
 ```
@@ -388,6 +388,11 @@ bun run --filter='@julianelda/typos' build:all   # full 5-platform cross-compile
 - JS/TS packages extend the shared `@julianelda/lexis` oxlint/oxfmt presets;
   this package's `oxlint.config.ts`/`oxfmt.config.ts` do the same for its
   JS bits (the Go source itself isn't covered by these).
-- Root `format`/`lint`/`build`/`check`/`test` scripts fan out via
+- Root `build`/`check`/`test` scripts fan out via
   `bun run --filter='*' <script>`; packages without a matching script are
   silently skipped. `packages/typos`'s `test` script is `go test ./...`.
+- Root `lint`/`format` deliberately do **not** fan out for oxlint/oxfmt: both
+  run once from the repo root, since oxlint's `options.typeAware` is only
+  legal in a root config and both tools pick up each package's nested config
+  anyway. Root `lint` still fans out afterwards for `packages/domos`'s
+  `eslint .`, the one linter oxlint doesn't cover.
