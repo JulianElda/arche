@@ -21,7 +21,6 @@
     "build": "goreleaser build --snapshot --clean --single-target",
     "build:all": "goreleaser build --snapshot --clean",
     "format": "oxfmt",
-    "lint": "oxlint",
     "test": "go test ./..."
   },
   "optionalDependencies": {

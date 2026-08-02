@@ -26,7 +26,6 @@
     "build": "tsdown",
     "dev": "vite",
     "format": "oxfmt",
-    "lint": "oxlint",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006 --no-open",
     "svgr": "svgr --jsx-runtime automatic --expand-props --typescript --no-prettier --out-dir lib/icons lib/assets/svg",

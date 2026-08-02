@@ -15,8 +15,8 @@
   "scripts": {
     "build": "bun run --filter='*' build",
     "check": "bun run --filter='*' check",
-    "format": "bun run --filter='*' format",
-    "lint": "bun run --filter='*' lint",
+    "format": "oxfmt",
+    "lint": "oxlint && bun run --filter='*' lint",
     "prepare": "lefthook install",
     "test": "bun run --filter='*' test"
   },
