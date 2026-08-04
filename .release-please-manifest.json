@@ -7,7 +7,7 @@
   "packages/typos": "0.3.0",
   "packages/typos/npm/darwin-arm64": "0.3.0",
   "packages/typos/npm/darwin-x64": "0.3.0",
-  "packages/typos/npm/linux-arm64": "0.3.0",
+  "packages/typos/npm/linux-arm64": "1.0.0",
   "packages/typos/npm/linux-x64": "1.0.0",
   "packages/typos/npm/win32-x64": "0.3.0"
 }
