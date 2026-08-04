@@ -14,7 +14,11 @@ import lexis from "@julianelda/lexis/oxlint";
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
-  ...lexis,
+  env: {
+    builtin: true,
+    es2026: true,
+  },
+  extends: [lexis],
   options: {
     typeAware: true,
     typeCheck: true,
@@ -29,7 +33,11 @@ import lexis from "@julianelda/lexis/oxlint/react";
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
-  ...lexis,
+  env: {
+    builtin: true,
+    es2026: true,
+  },
+  extends: [lexis],
   options: {
     typeAware: true,
     typeCheck: true,
@@ -44,7 +52,11 @@ import lexis from "@julianelda/lexis/oxlint/svelte";
 import { defineConfig } from "oxlint";
 
 export default defineConfig({
-  ...lexis,
+  env: {
+    builtin: true,
+    es2026: true,
+  },
+  extends: [lexis],
   options: {
     typeAware: true,
     typeCheck: true,

@@ -1,57 +1,38 @@
+import svelte from "eslint-plugin-svelte";
+
 import lexis from "./oxlint.js";
 
+// `svelte.configs.recommended` is a flat-config array. Its file-scoped blocks
+// only carry parser/processor wiring plus ESLint core rules that oxlint doesn't
+// enable anyway, so take the rules from the unscoped blocks only — hoisting the
+// scoped ones would disable core rules repo-wide.
+const recommended = Object.assign(
+  {},
+  ...svelte.configs.recommended
+    .filter((config) => !config.files)
+    .map((config) => config.rules ?? {}),
+);
+
+// Guard against upstream restructuring the array: silently linting Svelte files
+// with zero Svelte rules is worse than failing to load.
+if (Object.keys(recommended).length === 0) {
+  throw new Error(
+    "@julianelda/lexis: eslint-plugin-svelte's recommended config yielded no rules",
+  );
+}
+
 export default {
-  ...lexis,
-  jsPlugins: [...new Set([...(lexis.jsPlugins ?? []), "eslint-plugin-svelte"])],
+  extends: [lexis],
+  jsPlugins: ["eslint-plugin-svelte"],
   overrides: [
-    ...(lexis.overrides ?? []),
     {
       files: ["*.svelte", "**/*.svelte"],
       jsPlugins: ["eslint-plugin-svelte"],
       rules: {
-        "no-inner-declarations": "off",
+        // Self-assignment is a valid way to trigger Svelte reactivity.
         "no-self-assign": "off",
       },
     },
   ],
-  rules: {
-    ...lexis.rules,
-    "svelte/comment-directive": "error",
-    "svelte/infinite-reactive-loop": "error",
-    "svelte/no-at-debug-tags": "warn",
-    "svelte/no-at-html-tags": "error",
-    "svelte/no-dom-manipulating": "error",
-    "svelte/no-dupe-else-if-blocks": "error",
-    "svelte/no-dupe-on-directives": "error",
-    "svelte/no-dupe-style-properties": "error",
-    "svelte/no-dupe-use-directives": "error",
-    "svelte/no-export-load-in-svelte-module-in-kit-pages": "error",
-    "svelte/no-immutable-reactive-statements": "error",
-    "svelte/no-inner-declarations": "error",
-    "svelte/no-inspect": "warn",
-    "svelte/no-navigation-without-resolve": "error",
-    "svelte/no-not-function-handler": "error",
-    "svelte/no-object-in-text-mustaches": "error",
-    "svelte/no-raw-special-elements": "error",
-    "svelte/no-reactive-functions": "error",
-    "svelte/no-reactive-literals": "error",
-    "svelte/no-reactive-reassign": "error",
-    "svelte/no-shorthand-style-property-overrides": "error",
-    "svelte/no-store-async": "error",
-    "svelte/no-svelte-internal": "error",
-    "svelte/no-unknown-style-directive-property": "error",
-    "svelte/no-unnecessary-state-wrap": "error",
-    "svelte/no-unused-props": "error",
-    "svelte/no-unused-svelte-ignore": "error",
-    "svelte/no-useless-children-snippet": "error",
-    "svelte/no-useless-mustaches": "error",
-    "svelte/prefer-svelte-reactivity": "error",
-    "svelte/prefer-writable-derived": "error",
-    "svelte/require-each-key": "error",
-    "svelte/require-event-dispatcher-types": "error",
-    "svelte/require-store-reactive-access": "error",
-    "svelte/system": "error",
-    "svelte/valid-each-key": "error",
-    "svelte/valid-prop-names-in-kit-pages": "error",
-  },
+  rules: recommended,
 };
