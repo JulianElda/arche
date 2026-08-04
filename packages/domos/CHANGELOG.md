@@ -11,6 +11,17 @@
 
 * **lexis:** compose configs with extends and align rules with upstream presets ([#43](https://github.com/JulianElda/arche/issues/43)) ([88f1676](https://github.com/JulianElda/arche/commit/88f16764d384e80cea2c6a029434941c732782af))
 
+## [3.0.0](https://github.com/JulianElda/arche/compare/domos-v2.1.1...domos-v3.0.0) (2026-08-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* **lexis:** compose configs with extends and align rules with upstream presets ([#43](https://github.com/JulianElda/arche/issues/43))
+
+### Features
+
+* **lexis:** compose configs with extends and align rules with upstream presets ([#43](https://github.com/JulianElda/arche/issues/43)) ([88f1676](https://github.com/JulianElda/arche/commit/88f16764d384e80cea2c6a029434941c732782af))
+
 ## [2.1.1](https://github.com/JulianElda/arche/compare/domos-v2.1.0...domos-v2.1.1) (2026-08-01)
 
 
