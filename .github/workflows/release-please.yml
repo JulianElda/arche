@@ -12,8 +12,6 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-latest
-    outputs:
-      paths_released: ${{ steps.release.outputs.paths_released }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
@@ -21,38 +19,90 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  # typos' main package and its platform packages (packages/typos/npm/*)
-  # share one version (release-please-config.json links them) but each
-  # opens its own release PR, so a given run may release any subset of
-  # them. They must be split out of the generic per-path matrix below:
-  # the platform packages carry no binary of their own until `typos`'
-  # GoReleaser build produces one, and matrix jobs each get an isolated
-  # checkout, so that build has to run once and publish everything itself
-  # — see the publish-typos job.
-  paths:
+  # What to publish is derived from `.release-please-manifest.json` vs. the
+  # registry — deliberately *not* from release-please's `paths_released`.
+  #
+  # release-please handles every pending release PR in one invocation, so a
+  # single failure (e.g. one PR's tag already exists) fails the whole job and
+  # takes every downstream publish with it — while the other PRs still get
+  # tagged and manifest-bumped. Those are then "released" forever with nothing
+  # on the registry and no retry path, because `paths_released` only ever
+  # names them once. That is how @julianelda/typos-win32-x64 ended up stuck at
+  # 0.2.0 while its manifest entry and git tag said 1.0.0.
+  #
+  # Diffing against the registry instead makes publishing converge: it is
+  # idempotent, order-independent (so a `typos` release PR merging before its
+  # platform ones self-corrects on the next run rather than shipping a version
+  # whose optionalDependencies don't exist), and it re-runs on every push to
+  # master, so a gap heals on its own. `if: always()` is what keeps a failed
+  # release-please job from disarming it.
+  plan:
     needs: release-please
-    if: ${{ needs.release-please.outputs.paths_released != '[]' }}
+    if: always()
     runs-on: ubuntu-latest
     outputs:
-      other: ${{ steps.split.outputs.other }}
-      typos: ${{ steps.split.outputs.typos }}
+      other: ${{ steps.plan.outputs.other }}
+      typos: ${{ steps.plan.outputs.typos }}
     steps:
-      - id: split
+      - uses: actions/checkout@v4
+      - id: plan
+        shell: bash
         run: |
-          paths='${{ needs.release-please.outputs.paths_released }}'
-          echo "other=$(jq -c '[.[] | select(startswith("packages/typos") | not)]' <<<"$paths")" >> "$GITHUB_OUTPUT"
-          echo "typos=$(jq -c '[.[] | select(startswith("packages/typos"))]' <<<"$paths")" >> "$GITHUB_OUTPUT"
+          set -euo pipefail
+
+          missing=()
+          while IFS= read -r path; do
+            name=$(jq -r .name "$path/package.json")
+            version=$(jq -r .version "$path/package.json")
+
+            # The registry wants the scope separator percent-encoded.
+            encoded=${name//\//%2f}
+
+            body=$(mktemp)
+            status=$(curl -sS -o "$body" -w '%{http_code}' \
+              -H 'Accept: application/vnd.npm.install-v1+json' \
+              "https://registry.npmjs.org/$encoded" || echo 000)
+
+            case "$status" in
+              200)
+                if jq -e --arg v "$version" '.versions[$v]' "$body" >/dev/null; then
+                  echo "  ok       $name@$version"
+                else
+                  echo "  MISSING  $name@$version (registry has: $(jq -r '.versions | keys | join(",")' "$body"))"
+                  missing+=("$path")
+                fi
+                ;;
+              404)
+                echo "  MISSING  $name@$version (never published)"
+                missing+=("$path")
+                ;;
+              *)
+                # Never guess on an unexpected response: a false "missing"
+                # publishes over nothing and fails, a false "ok" hides a gap.
+                echo "registry lookup for $name failed with HTTP $status" >&2
+                exit 1
+                ;;
+            esac
+            rm -f "$body"
+          done < <(jq -r 'keys[]' .release-please-manifest.json)
+
+          all=$(printf '%s\n' "${missing[@]:-}" | jq -Rsc 'split("\n") | map(select(length > 0))')
+          echo "unpublished: $all"
+          {
+            echo "other=$(jq -c '[.[] | select(startswith("packages/typos") | not)]' <<<"$all")"
+            echo "typos=$(jq -c '[.[] | select(startswith("packages/typos"))]' <<<"$all")"
+          } >> "$GITHUB_OUTPUT"
 
   publish:
-    needs: paths
-    if: ${{ needs.paths.outputs.other != '[]' }}
+    needs: plan
+    if: ${{ needs.plan.outputs.other != '[]' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
     strategy:
       matrix:
-        path: ${{ fromJSON(needs.paths.outputs.other) }}
+        path: ${{ fromJSON(needs.plan.outputs.other) }}
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
@@ -70,9 +120,16 @@ jobs:
       - name: Publish
         run: cd ${{ matrix.path }} && npm publish --access public
 
+  # typos' main package and its platform packages (packages/typos/npm/*) share
+  # one version (release-please-config.json links them) but each opens its own
+  # release PR, so any subset of them can be unpublished at a given moment.
+  # They must be split out of the generic per-path matrix above: the platform
+  # packages carry no binary of their own until `typos`' GoReleaser build
+  # produces one, and matrix jobs each get an isolated checkout, so that build
+  # has to run once and publish everything itself.
   publish-typos:
-    needs: paths
-    if: ${{ needs.paths.outputs.typos != '[]' }}
+    needs: plan
+    if: ${{ needs.plan.outputs.typos != '[]' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -94,24 +151,99 @@ jobs:
       - run: bun install --frozen-lockfile
       - name: Cross-compile every platform binary
         run: cd packages/typos && bun run build:all
-      # Only publish paths release-please actually released in *this* run
-      # (needs.paths.outputs.typos), not every platform package indis-
-      # criminately — the 6 typos components release independently as
-      # their own PRs merge, so a package not in this run's release list
-      # hasn't had its own version bump yet and would publish stale/wrong.
-      # Platform packages publish before the main package where both are
-      # in this run: its optionalDependencies reference them by exact
-      # version, so they should exist on the registry first when possible.
-      # Across runs that ordering is down to merge order — merge the
-      # platform release PRs before the main `typos` one, or installs
-      # will fail until the platform versions land on the registry.
-      - name: Publish released platform packages
+      # Platform packages publish before the main package: its optional-
+      # Dependencies reference them by exact version, so they must exist on the
+      # registry first.
+      #
+      # Every package is attempted even if an earlier one fails, then the step
+      # fails with a summary. Piping `jq` into `while` (as this used to) aborts
+      # the whole loop at the first failure under `bash -e`, silently skipping
+      # the rest — and swallows a `jq` error entirely, since the pipeline's
+      # status is the loop's. The `jq` result is captured into a variable so
+      # `set -e` actually sees a failure there.
+      - name: Publish unpublished platform packages
+        shell: bash
         run: |
-          echo '${{ needs.paths.outputs.typos }}' \
-            | jq -r '.[] | select(startswith("packages/typos/npm/"))' \
-            | while IFS= read -r dir; do
-                (cd "$dir" && npm publish --access public)
-              done
+          set -euo pipefail
+          selected=$(jq -r '.[] | select(startswith("packages/typos/npm/"))' \
+            <<<'${{ needs.plan.outputs.typos }}')
+
+          dirs=()
+          while IFS= read -r line; do
+            [ -n "$line" ] && dirs+=("$line")
+          done <<<"$selected"
+
+          failed=()
+          for dir in ${dirs+"${dirs[@]}"}; do
+            echo "::group::npm publish $dir"
+            if (cd "$dir" && npm publish --access public); then
+              echo "published $dir"
+            else
+              echo "FAILED $dir"
+              failed+=("$dir")
+            fi
+            echo "::endgroup::"
+          done
+
+          if [ ${#failed[@]} -gt 0 ]; then
+            printf 'failed to publish: %s\n' "${failed[*]}" >&2
+            exit 1
+          fi
+      # `typos`' optionalDependencies pin every platform package to an exact
+      # version, so publishing it while any of those is absent ships a release
+      # that installs with no binary at all — they're *optional*, so npm skips
+      # them silently and the failure only surfaces at runtime. The step above
+      # covers packages released in this run; this covers the rest, which may
+      # have been released in an earlier run that failed to publish.
+      #
+      # Retried rather than checked once: a package published seconds ago in
+      # the step above is not necessarily visible on the registry yet.
+      - name: Verify every platform package is on the registry
+        if: ${{ contains(fromJSON(needs.plan.outputs.typos), 'packages/typos') }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          attempts=6
+          deps=$(jq -r '.optionalDependencies | to_entries[] | "\(.key) \(.value)"' \
+            packages/typos/package.json)
+
+          missing=()
+          while read -r name version; do
+            [ -n "$name" ] || continue
+            encoded=${name//\//%2f}
+            body=$(mktemp)
+            found=""
+
+            for attempt in $(seq 1 "$attempts"); do
+              status=$(curl -sS -o "$body" -w '%{http_code}' \
+                -H 'Accept: application/vnd.npm.install-v1+json' \
+                -H 'Cache-Control: no-cache' \
+                "https://registry.npmjs.org/$encoded" || echo 000)
+
+              if [ "$status" = 200 ] && jq -e --arg v "$version" '.versions[$v]' "$body" >/dev/null; then
+                found=yes
+                break
+              fi
+
+              if [ "$attempt" -lt "$attempts" ]; then
+                echo "  $name@$version not visible yet (HTTP $status) — retrying in 10s [$attempt/$attempts]"
+                sleep 10
+              fi
+            done
+
+            rm -f "$body"
+            if [ -n "$found" ]; then
+              echo "  ok       $name@$version"
+            else
+              echo "  MISSING  $name@$version"
+              missing+=("$name@$version")
+            fi
+          done <<<"$deps"
+
+          if [ ${#missing[@]} -gt 0 ]; then
+            printf 'refusing to publish @julianelda/typos: not on registry: %s\n' "${missing[*]}" >&2
+            exit 1
+          fi
       - name: Publish main package
-        if: ${{ contains(fromJSON(needs.paths.outputs.typos), 'packages/typos') }}
+        if: ${{ contains(fromJSON(needs.plan.outputs.typos), 'packages/typos') }}
         run: cd packages/typos && npm publish --access public
