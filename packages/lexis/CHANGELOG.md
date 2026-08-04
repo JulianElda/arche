@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.0.0](https://github.com/JulianElda/arche/compare/lexis-v3.5.3...lexis-v4.0.0) (2026-08-04)
+
+
+### ⚠ BREAKING CHANGES
+
+* **lexis:** compose configs with extends and align rules with upstream presets ([#43](https://github.com/JulianElda/arche/issues/43))
+
+### Features
+
+* **lexis:** compose configs with extends and align rules with upstream presets ([#43](https://github.com/JulianElda/arche/issues/43)) ([88f1676](https://github.com/JulianElda/arche/commit/88f16764d384e80cea2c6a029434941c732782af))
+
 ## [3.5.3](https://github.com/JulianElda/arche/compare/lexis-v3.5.2...lexis-v3.5.3) (2026-08-02)
 
 
