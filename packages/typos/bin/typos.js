@@ -2,7 +2,7 @@
 
 import { spawnSync } from "node:child_process";
 import { createRequire } from "node:module";
-import { dirname, join } from "node:path";
+import path from "node:path";
 
 const require = createRequire(import.meta.url);
 
@@ -30,8 +30,8 @@ const binaryName = process.platform === "win32" ? "typos.exe" : "typos";
 
 let binaryPath;
 try {
-  binaryPath = join(
-    dirname(require.resolve(`${packageName}/package.json`)),
+  binaryPath = path.join(
+    path.dirname(require.resolve(`${packageName}/package.json`)),
     binaryName,
   );
 } catch {

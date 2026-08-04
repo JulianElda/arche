@@ -30,9 +30,16 @@
     "access": "public"
   },
   "peerDependencies": {
-    "oxfmt": "^0.61.0",
-    "oxlint": "^1.76.0",
+    "eslint-plugin-perfectionist": "^5.10.0",
+    "eslint-plugin-svelte": "^3.19.0",
+    "oxfmt": "^0.62.0",
+    "oxlint": "^1.77.0",
     "oxlint-tsgolint": "^7.0.2001",
     "typescript": "^6.0.0"
+  },
+  "peerDependenciesMeta": {
+    "eslint-plugin-svelte": {
+      "optional": true
+    }
   }
 }
