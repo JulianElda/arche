@@ -72,8 +72,10 @@ No matching glob pattern or no config found at all is a silent no-op
 (exit 0).
 
 Every hook invocation pays the command's startup cost, so for the
-lowest overhead point `command` at the native binary (e.g.
-`node_modules/@julianelda/typos-linux-x64/typos`) rather than `bunx typos`.
+lowest overhead point `command` at the native binary rather than
+`bunx typos` — e.g. build it straight onto your `PATH` with
+`bun run --filter=@julianelda/typos build:local` (`~/.local/bin/typos`) and
+wire the hooks once in `~/.claude/settings.json` for every repo.
 
 Called directly, e.g. to try a config against one file:
 

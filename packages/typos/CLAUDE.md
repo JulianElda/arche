@@ -134,10 +134,11 @@ stderr feedback both pass through unchanged) and propagates its exit code.
 **`.goreleaser.yaml`**: one `builds` entry per platform (not a GOOS/GOARCH
 matrix) because npm's os/cpu naming (`x64`, `win32`) doesn't map cleanly
 from Go's (`amd64`, `windows`) — each build's `hooks.post` does a literal
-`cp {{ .Path }} npm/<platform>/typos[.exe]`. `package.json` has two build
-scripts: `build` (single-target snapshot, fast — used for local dev and the
-generic CI `bun run build` step) and `build:all` (all 5 targets — used only
-by the release publish job).
+`cp {{ .Path }} npm/<platform>/typos[.exe]`. `package.json` has three build
+scripts: `build` (single-target goreleaser snapshot, fast — used by the
+generic CI `bun run build` step), `build:all` (all 5 targets — used only
+by the release publish job), and `build:local` (plain
+`go build -o ~/.local/bin/typos .` — the binary actually used day to day).
 
 **Publishing** (`.github/workflows/release-please.yml`): `typos` and its 5
 platform packages are version-linked in `release-please-config.json`
@@ -432,11 +433,16 @@ bun run --filter='@julianelda/typos' build:all   # full 5-platform cross-compile
 **Not yet done** (deliberately, not an oversight):
 
 - Everything under "Explicitly out of scope / deferred for v1" above.
-- The actual cutover: `~/.claude/settings.json`'s `PostToolUse` hook still
-  points at `lint-edited-file.sh`. That's dotfiles, outside this repo, and
-  should only be switched to `typos` after a real npm release is published
-  and manually smoke-tested — not something to do as part of a change in
-  this repo.
+
+**Local use** (dev setup is Linux-only, so no npm install or goreleaser in
+the loop): `build:local` puts the binary at `~/.local/bin/typos`, and
+`~/.claude/settings.json` (dotfiles, outside this repo) wires every hook
+event this tool handles — `SessionStart`, `PreToolUse` (`Bash`),
+`PostToolUse` (`Write|Edit|MultiEdit|Bash`), `PostToolUseFailure` (`Bash`),
+`Stop`, `SessionEnd` — to `~/.local/bin/typos`, once for every repo. Repo
+`.claude/settings.json` files must not wire typos again, or every hook runs
+twice. Rerun `build:local` after changing the Go code; the npm/goreleaser
+distribution is kept but not what's used locally.
 
 ## Repo conventions (see repo-root `AGENTS.md` for the full list)
 
