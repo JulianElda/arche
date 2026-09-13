@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/JulianElda/arche/compare/typos-win32-x64-v1.0.0...typos-win32-x64-v1.1.0) (2026-09-13)
+
+
+### Miscellaneous Chores
+
+* **typos-win32-x64:** Synchronize typos versions
+
 ## [1.0.0](https://github.com/JulianElda/arche/compare/typos-win32-x64-v0.3.0...typos-win32-x64-v1.0.0) (2026-08-04)
 
 
