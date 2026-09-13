@@ -129,6 +129,26 @@ func TestSince(t *testing.T) {
 	}
 }
 
+func TestFindGit_SkipsMissingAndNonExecutable(t *testing.T) {
+	dir := t.TempDir()
+	notExecutable := filepath.Join(dir, "not-executable")
+	writeFile(t, notExecutable, "")
+	executable := filepath.Join(dir, "git")
+	writeFile(t, executable, "")
+	if err := os.Chmod(executable, 0o755); err != nil {
+		t.Fatalf("Chmod() error = %v", err)
+	}
+
+	got, err := findGit([]string{filepath.Join(dir, "missing"), notExecutable, dir, executable})
+	if err != nil || got != executable {
+		t.Errorf("findGit() = %q, %v; want %q, nil", got, err, executable)
+	}
+
+	if _, err := findGit([]string{filepath.Join(dir, "missing")}); err != ErrGitNotFound {
+		t.Errorf("findGit() error = %v, want ErrGitNotFound", err)
+	}
+}
+
 func TestSince_OutsideGitIsNil(t *testing.T) {
 	got, err := Since(context.Background(), t.TempDir(), time.Time{})
 	if err != nil || got != nil {

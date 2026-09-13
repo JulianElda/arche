@@ -77,6 +77,10 @@ changed files are inferred. Two details matter here:
   `--no-optional-locks`, `status` may take `index.lock` to refresh stat
   info and collide with Claude's own concurrent git commands — the same
   class of git race this package exists to avoid.
+- git itself is run from a fixed, root-owned location (`gitCandidates`:
+  `/usr/bin/git`, `/usr/local/bin/git`, Homebrew, Git for Windows), never
+  looked up through `PATH` (Sonar go:S4036) — a writable `PATH` entry could
+  shadow it. git anywhere else → `Since` errors → the Bash/Stop path no-ops.
 
 **`sweep`** (the `Stop` hook): lints files git reports dirty with mtime
 at/after the `session-<id>` marker — no file cap, it's the safety net.

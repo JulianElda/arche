@@ -18,11 +18,40 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"time"
 )
 
 // gitTimeout bounds the `git status` call in Since.
 const gitTimeout = 5 * time.Second
+
+// gitCandidates are the fixed, root-owned locations git is looked up in, in
+// order. PATH is deliberately not searched: a writable directory on it (like
+// the node_modules/.bin that bare lint commands resolve through) could
+// shadow git with anything.
+var gitCandidates = []string{
+	"/usr/bin/git",
+	"/bin/git",
+	"/usr/local/bin/git",
+	"/opt/homebrew/bin/git",
+	`C:\Program Files\Git\cmd\git.exe`,
+}
+
+// ErrGitNotFound is returned by Since when git isn't at any of
+// gitCandidates.
+var ErrGitNotFound = errors.New("git not found in any fixed system location")
+
+// findGit returns the first of candidates that is an executable regular
+// file.
+func findGit(candidates []string) (string, error) {
+	for _, candidate := range candidates {
+		info, err := os.Stat(candidate)
+		if err == nil && info.Mode().IsRegular() && (runtime.GOOS == "windows" || info.Mode()&0o111 != 0) {
+			return candidate, nil
+		}
+	}
+	return "", ErrGitNotFound
+}
 
 // MarkerDir is where markers are recorded: a typos directory in the
 // user's own cache directory (e.g. ~/.cache/typos on Linux). Not the shared
@@ -122,12 +151,17 @@ func Since(ctx context.Context, dir string, start time.Time) ([]string, error) {
 		return nil, nil
 	}
 
+	git, err := findGit(gitCandidates)
+	if err != nil {
+		return nil, err
+	}
+
 	ctx, cancel := context.WithTimeout(ctx, gitTimeout)
 	defer cancel()
 
 	// Porcelain paths are always relative to the work tree root, whatever
 	// the cwd. --no-renames keeps -z output to one path per entry.
-	cmd := exec.CommandContext(ctx, "git", "--no-optional-locks", "status",
+	cmd := exec.CommandContext(ctx, git, "--no-optional-locks", "status",
 		"--porcelain=v1", "-z", "--untracked-files=all", "--no-renames", "--ignore-submodules=all")
 	cmd.Dir = root
 	out, err := cmd.Output()
