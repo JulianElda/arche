@@ -429,6 +429,7 @@ To verify the whole package after a change:
 ```sh
 cd packages/typos
 go build ./... && go vet ./... && gofmt -l . && go test ./... -race
+golangci-lint run   # .golangci.yml; also run by the root `bun run lint` fan-out
 bun run lint     # from the repo root — oxlint is no longer run per-package
 bun run --filter='@julianelda/typos' format -- --check
 bun run --filter='@julianelda/typos' build:all   # full 5-platform cross-compile

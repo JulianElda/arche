@@ -18,6 +18,11 @@ jobs:
           go-version-file: packages/typos/go.mod
       # TODO: pin to a specific released version once verified, for the same reason.
       - run: go install github.com/goreleaser/goreleaser/v2@latest
+      # Installed only: `bun run lint` runs it via packages/typos's `lint` script.
+      - uses: golangci/golangci-lint-action@ba0d7d2ec06a0ea1cb5fa41b2e4a3ab91d21278a # v9.3.0
+        with:
+          version: v2.13.2
+          install-only: true
       - run: bun install --ignore-scripts --frozen-lockfile
       # `--ignore-scripts` skips domos's `prepare` (svelte-kit sync), so
       # `.svelte-kit/tsconfig.json` is missing — and `packages/domos/tsconfig.json`

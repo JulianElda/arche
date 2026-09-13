@@ -70,11 +70,11 @@ func run(r io.Reader, stderr io.Writer, configPathOverride string) int {
 	switch payload.HookEventName {
 	case hook.PreToolUse:
 		if payload.ToolName == hook.BashTool {
-			changes.Begin(markerDir, payload.ToolUseID)
+			_ = changes.Begin(markerDir, payload.ToolUseID)
 		}
 		return 0
 	case hook.SessionStart:
-		changes.BeginOnce(markerDir, sessionMarkerID(payload.SessionID))
+		_ = changes.BeginOnce(markerDir, sessionMarkerID(payload.SessionID))
 		return 0
 	case hook.SessionEnd:
 		changes.End(markerDir, sessionMarkerID(payload.SessionID))
@@ -130,7 +130,7 @@ func sweep(dir string, payload hook.Payload, stderr io.Writer, configPathOverrid
 	session := sessionMarkerID(payload.SessionID)
 	start, ok := changes.Peek(dir, session)
 	if !ok {
-		changes.BeginOnce(dir, session)
+		_ = changes.BeginOnce(dir, session)
 		return 0
 	}
 	if payload.Cwd == "" {
@@ -156,8 +156,8 @@ func sweep(dir string, payload hook.Payload, stderr io.Writer, configPathOverrid
 	}
 	if exitCode != 0 {
 		changes.End(dir, next)
-	} else {
-		changes.Rename(dir, next, session)
+	} else if err := changes.Rename(dir, next, session); err != nil {
+		changes.End(dir, next)
 	}
 
 	if payload.StopHookActive {
@@ -220,11 +220,11 @@ func lint(files []string, stderr io.Writer, configPathOverride string) int {
 // far, why). Output is combined stdout+stderr — some linters (oxlint
 // included) report diagnostics on stdout, not stderr.
 func writeFailure(w io.Writer, f *runner.CommandFailure) {
-	fmt.Fprintf(w, "typos: %q failed (pattern %s)\n", f.Command, f.Pattern)
+	_, _ = fmt.Fprintf(w, "typos: %q failed (pattern %s)\n", f.Command, f.Pattern)
 	if f.Err != nil {
-		fmt.Fprintln(w, f.Err)
+		_, _ = fmt.Fprintln(w, f.Err)
 	}
 	if f.Output != "" {
-		io.WriteString(w, f.Output)
+		_, _ = io.WriteString(w, f.Output)
 	}
 }
