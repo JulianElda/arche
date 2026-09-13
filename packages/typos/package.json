@@ -22,6 +22,7 @@
     "build:all": "goreleaser build --snapshot --clean",
     "build:local": "go build -o ~/.local/bin/typos .",
     "format": "oxfmt",
+    "lint": "golangci-lint run",
     "test": "go test ./..."
   },
   "optionalDependencies": {

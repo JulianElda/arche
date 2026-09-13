@@ -2,6 +2,7 @@ package changes
 
 import (
 	"context"
+	"errors"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -144,7 +145,7 @@ func TestFindGit_SkipsMissingAndNonExecutable(t *testing.T) {
 		t.Errorf("findGit() = %q, %v; want %q, nil", got, err, executable)
 	}
 
-	if _, err := findGit([]string{filepath.Join(dir, "missing")}); err != ErrGitNotFound {
+	if _, err := findGit([]string{filepath.Join(dir, "missing")}); !errors.Is(err, ErrGitNotFound) {
 		t.Errorf("findGit() error = %v, want ErrGitNotFound", err)
 	}
 }

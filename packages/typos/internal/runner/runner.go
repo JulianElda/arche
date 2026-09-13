@@ -143,7 +143,7 @@ func runCommand(ctx context.Context, pattern, command string, files []string, re
 	cmdCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()
 
-	cmd := exec.CommandContext(cmdCtx, resolved, args[1:]...)
+	cmd := exec.CommandContext(cmdCtx, resolved, args[1:]...) //nolint:gosec // G204: running the config's commands is the point
 	cmd.Dir = repoRoot
 	cmd.Env = env
 	// If the context deadline kills this process while it has children

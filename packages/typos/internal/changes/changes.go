@@ -80,8 +80,8 @@ func Begin(dir, id string) error {
 	// Recreate rather than truncate, so an existing marker gets a fresh
 	// kernel-stamped mtime.
 	marker := filepath.Join(dir, id)
-	os.Remove(marker)
-	f, err := os.Create(marker)
+	_ = os.Remove(marker)
+	f, err := os.Create(marker) //nolint:gosec // G304: validID keeps id a bare filename inside dir
 	if err != nil {
 		return err
 	}
@@ -97,7 +97,7 @@ func BeginOnce(dir, id string) error {
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return err
 	}
-	f, err := os.OpenFile(filepath.Join(dir, id), os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	f, err := os.OpenFile(filepath.Join(dir, id), os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600) //nolint:gosec // G304: validID keeps id a bare filename inside dir
 	if errors.Is(err, fs.ErrExist) {
 		return nil
 	}
@@ -125,7 +125,7 @@ func Peek(dir, id string) (start time.Time, ok bool) {
 func End(dir, id string) (start time.Time, ok bool) {
 	start, ok = Peek(dir, id)
 	if ok {
-		os.Remove(filepath.Join(dir, id))
+		_ = os.Remove(filepath.Join(dir, id))
 	}
 	return start, ok
 }
@@ -161,7 +161,7 @@ func Since(ctx context.Context, dir string, start time.Time) ([]string, error) {
 
 	// Porcelain paths are always relative to the work tree root, whatever
 	// the cwd. --no-renames keeps -z output to one path per entry.
-	cmd := exec.CommandContext(ctx, git, "--no-optional-locks", "status",
+	cmd := exec.CommandContext(ctx, git, "--no-optional-locks", "status", //nolint:gosec // G204: git comes from gitCandidates, not input
 		"--porcelain=v1", "-z", "--untracked-files=all", "--no-renames", "--ignore-submodules=all")
 	cmd.Dir = root
 	out, err := cmd.Output()

@@ -43,7 +43,7 @@ func Find(dir string) (path string, ok bool) {
 // value may be a single command string or an array of command strings;
 // both shapes are normalized to []string.
 func Load(path string) (Config, error) {
-	data, err := os.ReadFile(path)
+	data, err := os.ReadFile(path) //nolint:gosec // G304: reading the named config file is the point
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +132,7 @@ func (c Config) Match(configDir string, paths ...string) ([]MatchedGroup, error)
 				return nil, fmt.Errorf("%s: %w", pattern, err)
 			}
 			if ok {
-				files = append(files, paths[i])
+				files = append(files, paths[i]) //nolint:gosec // G602: rels was made with len(paths)
 			}
 		}
 		if len(files) > 0 {
