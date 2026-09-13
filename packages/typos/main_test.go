@@ -211,6 +211,102 @@ func TestRun_Bash_TooManyChangedFilesIsSkipped(t *testing.T) {
 	}
 }
 
+func TestRun_Stop_LintsFilesChangedDuringTheSession(t *testing.T) {
+	t.Setenv("TMPDIR", t.TempDir())
+	repoRoot := newGitRepo(t)
+	fail := writeScript(t, t.TempDir(), "fail.sh", `echo "lint error in $*" >&2`+"\nexit 1\n")
+	writeConfigFile(t, repoRoot, `{"**/*.ts": "`+fail+`"}`)
+	before := writeTS(t, repoRoot, "before.ts")
+	backdate(t, before)
+
+	run(strings.NewReader(sessionPayload("SessionStart", repoRoot, false)), &bytes.Buffer{}, "")
+	edited := writeTS(t, repoRoot, "src/edited.ts")
+
+	var stderr bytes.Buffer
+	if got := run(strings.NewReader(sessionPayload("Stop", repoRoot, false)), &stderr, ""); got != 2 {
+		t.Fatalf("Stop run() = %d, want 2; stderr = %s", got, stderr.String())
+	}
+	if want := "lint error in " + edited + "\n"; !strings.Contains(stderr.String(), want) {
+		t.Errorf("stderr = %q, want it to contain %q (only the file changed during the session)", stderr.String(), want)
+	}
+
+	// Still failing, but Claude is already continuing because of a Stop
+	// hook: report without blocking again.
+	if got := run(strings.NewReader(sessionPayload("Stop", repoRoot, true)), &bytes.Buffer{}, ""); got != 0 {
+		t.Errorf("Stop run() with stop_hook_active = %d, want 0", got)
+	}
+
+	// The failed sweeps didn't move the session marker forward, so the
+	// same file is still checked at the next Stop.
+	if got := run(strings.NewReader(sessionPayload("Stop", repoRoot, false)), &bytes.Buffer{}, ""); got != 2 {
+		t.Errorf("next Stop run() = %d, want 2", got)
+	}
+}
+
+func TestRun_Stop_CleanSweepIsNotRepeated(t *testing.T) {
+	t.Setenv("TMPDIR", t.TempDir())
+	repoRoot := newGitRepo(t)
+	marker := filepath.Join(t.TempDir(), "runs")
+	count := writeScript(t, t.TempDir(), "count.sh", "echo run >> "+marker+"\n")
+	writeConfigFile(t, repoRoot, `{"**/*.ts": "`+count+`"}`)
+
+	run(strings.NewReader(sessionPayload("SessionStart", repoRoot, false)), &bytes.Buffer{}, "")
+	backdate(t, filepath.Join(os.TempDir(), "typos", "session-"+testSessionID))
+	// A minute ago: after the (backdated) session start, but clearly before
+	// the first sweep, which a same-tick mtime wouldn't be.
+	a := writeTS(t, repoRoot, "a.ts")
+	minuteAgo := time.Now().Add(-time.Minute)
+	if err := os.Chtimes(a, minuteAgo, minuteAgo); err != nil {
+		t.Fatalf("Chtimes() error = %v", err)
+	}
+
+	for range 2 {
+		if got := run(strings.NewReader(sessionPayload("Stop", repoRoot, false)), &bytes.Buffer{}, ""); got != 0 {
+			t.Fatalf("Stop run() = %d, want 0", got)
+		}
+	}
+	got, err := os.ReadFile(marker)
+	if err != nil {
+		t.Fatalf("ReadFile() error = %v", err)
+	}
+	if string(got) != "run\n" {
+		t.Errorf("lint ran %q, want exactly once (the second sweep had nothing new)", got)
+	}
+}
+
+func TestRun_Stop_WithoutSessionStartIsNoOp(t *testing.T) {
+	t.Setenv("TMPDIR", t.TempDir())
+	repoRoot := newGitRepo(t)
+	fail := writeScript(t, t.TempDir(), "fail.sh", "exit 1\n")
+	writeConfigFile(t, repoRoot, `{"**/*.ts": "`+fail+`"}`)
+	writeTS(t, repoRoot, "a.ts")
+
+	if got := run(strings.NewReader(sessionPayload("Stop", repoRoot, false)), &bytes.Buffer{}, ""); got != 0 {
+		t.Errorf("Stop run() = %d, want 0", got)
+	}
+}
+
+// sessionPayload returns a session-level hook payload for the given event.
+func sessionPayload(event, cwd string, stopHookActive bool) string {
+	return fmt.Sprintf(`{"hook_event_name":%q,"session_id":%q,"cwd":%q,"stop_hook_active":%t}`, event, testSessionID, cwd, stopHookActive)
+}
+
+// testSessionID is the session_id sessionPayload sends.
+const testSessionID = "0b8e2c1a-5f3d-4c2e-9a7b-1d2e3f4a5b6c"
+
+// writeTS writes an empty TypeScript module to root/rel and returns its path.
+func writeTS(t *testing.T, root, rel string) string {
+	t.Helper()
+	path := filepath.Join(root, filepath.FromSlash(rel))
+	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		t.Fatalf("MkdirAll() error = %v", err)
+	}
+	if err := os.WriteFile(path, []byte("export {}"), 0o644); err != nil {
+		t.Fatalf("WriteFile() error = %v", err)
+	}
+	return path
+}
+
 // newGitRepo returns a fresh temp dir initialized as a git work tree.
 func newGitRepo(t *testing.T) string {
 	t.Helper()
@@ -230,11 +326,7 @@ func bashPayload(event, toolUseID, cwd string) string {
 // changed before the Bash call under test started.
 func backdate(t *testing.T, path string) {
 	t.Helper()
-	info, err := os.Stat(path)
-	if err != nil {
-		t.Fatalf("Stat() error = %v", err)
-	}
-	past := info.ModTime().Add(-time.Hour)
+	past := time.Now().Add(-time.Hour)
 	if err := os.Chtimes(path, past, past); err != nil {
 		t.Fatalf("Chtimes() error = %v", err)
 	}

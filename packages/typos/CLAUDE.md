@@ -29,8 +29,13 @@ is the whole pipeline, in order, no-op'ing (return 0) at the first
 inapplicable step:
 
 1. `hook.Parse(r)` — decode the tool hook payload; bail on malformed JSON.
-2. A `PreToolUse` payload only ever does one thing: for `Bash`,
-   `changes.Begin` drops a marker file keyed by `tool_use_id`; exit 0.
+2. Non-tool events are handled up front, by `hook_event_name`:
+   - `PreToolUse`: for `Bash`, `changes.Begin` drops a marker file keyed
+     by `tool_use_id`; exit 0.
+   - `SessionStart`: `changes.BeginOnce` drops a `session-<session_id>`
+     marker, keeping an existing one (resume/compact); exit 0.
+   - `SessionEnd`: remove the session's markers; exit 0.
+   - `Stop`: `sweep` — see below.
 3. Work out the file list:
    - `Bash` (`PostToolUse`/`PostToolUseFailure`): `bashChangedFiles` —
      `changes.End` reads back and removes the marker (no marker → bail),
@@ -59,8 +64,8 @@ inapplicable step:
 payload actionable at all" (supported tool + non-empty path) — everything
 else in `main.go` assumes that's already been checked.
 
-**`internal/changes`**: Bash payloads have no `file_path`, so changed
-files are inferred. Two details matter here:
+**`internal/changes`**: Bash and Stop payloads have no `file_path`, so
+changed files are inferred. Two details matter here:
 
 - The start time is the **marker file's own mtime**, not a `time.Now()`
   stored in it. Linux stamps mtimes from a coarse clock that can lag
@@ -72,6 +77,18 @@ files are inferred. Two details matter here:
   `--no-optional-locks`, `status` may take `index.lock` to refresh stat
   info and collide with Claude's own concurrent git commands — the same
   class of git race this package exists to avoid.
+
+**`sweep`** (the `Stop` hook): lints files git reports dirty with mtime
+at/after the `session-<id>` marker — no file cap, it's the safety net.
+Before asking git it `Begin`s a `sweep-<id>` marker; after a sweep with no
+failures that's `Rename`d over the session marker (rename keeps the
+kernel-stamped mtime, see above), so the next sweep only covers newer
+changes. A failing sweep drops it instead, so failing files are rechecked
+at the next Stop. Failure → exit 2 (Claude keeps going), except when
+`stop_hook_active` is set → exit 0, so an unfixable file can't loop the
+session. No session marker (SessionStart not wired up, or typos added
+mid-session) → create one and no-op. The sweep can't tell Claude's edits
+from yours, so files you edit mid-session get linted too.
 
 Known, accepted gaps: overlapping parallel tool calls can attribute each
 other's edits (worst case a file is linted twice); `mv` preserves mtime so
@@ -390,6 +407,9 @@ was built incrementally, one commit per concern, each left green
     edits via `sed -i`/heredocs, which the Write/Edit-only hook never saw.
     Supersedes the "`Bash` calls silently no-op" v1 decision below (still
     true outside a git work tree or without the PreToolUse hook wired up).
+11. `Stop` sweep (`sweep` in `main.go`): lints everything changed during
+    the session as a safety net for edits the per-tool hooks missed,
+    using `SessionStart`/`SessionEnd` to manage a per-session marker.
 
 Tests favor real execution over mocking: `internal/runner`'s tests write
 actual executable shell script fixtures to a `t.TempDir()` and run them

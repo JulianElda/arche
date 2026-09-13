@@ -49,18 +49,29 @@ const maxBashChangedFiles = 20
 // Write/Edit/MultiEdit payloads name their file directly. Bash payloads
 // don't, so a PreToolUse Bash payload records the call's start time and
 // the matching PostToolUse payload lints whatever git reports as changed
-// since — see internal/changes.
+// since — see internal/changes. Session and Stop payloads drive the
+// end-of-turn sweep — see sweep.
 func run(r io.Reader, stderr io.Writer, configPathOverride string) int {
 	payload, err := hook.Parse(r)
 	if err != nil {
 		return 0
 	}
 
-	if payload.HookEventName == hook.PreToolUse {
+	switch payload.HookEventName {
+	case hook.PreToolUse:
 		if payload.ToolName == hook.BashTool {
 			changes.Begin(changes.MarkerDir(), payload.ToolUseID)
 		}
 		return 0
+	case hook.SessionStart:
+		changes.BeginOnce(changes.MarkerDir(), sessionMarkerID(payload.SessionID))
+		return 0
+	case hook.SessionEnd:
+		changes.End(changes.MarkerDir(), sessionMarkerID(payload.SessionID))
+		changes.End(changes.MarkerDir(), sweepMarkerID(payload.SessionID))
+		return 0
+	case hook.Stop:
+		return sweep(payload, stderr, configPathOverride)
 	}
 
 	var files []string
@@ -93,6 +104,63 @@ func bashChangedFiles(payload hook.Payload) []string {
 	}
 	return files
 }
+
+// sweep lints every file changed since the session's last clean sweep (or
+// since it started), as a safety net for edits the per-tool hooks missed:
+// Bash calls over maxBashChangedFiles, edits outside the call's cwd, a
+// missing PreToolUse marker. The session marker only moves forward after
+// a sweep with no failures, so failing files are checked again at the
+// next Stop. With no session marker (SessionStart not wired up, or typos
+// added mid-session) it starts one now and does nothing else.
+//
+// A failure exits 2, which keeps Claude from ending its turn. When Claude
+// is already continuing because of a Stop hook, it exits 0 instead so a
+// file Claude can't fix doesn't loop the session forever.
+func sweep(payload hook.Payload, stderr io.Writer, configPathOverride string) int {
+	dir := changes.MarkerDir()
+	session := sessionMarkerID(payload.SessionID)
+	start, ok := changes.Peek(dir, session)
+	if !ok {
+		changes.BeginOnce(dir, session)
+		return 0
+	}
+	if payload.Cwd == "" {
+		return 0
+	}
+
+	// Stamped before git is asked, so anything changed during the sweep
+	// (formatters included) is picked up again next time.
+	next := sweepMarkerID(payload.SessionID)
+	if err := changes.Begin(dir, next); err != nil {
+		return 0
+	}
+
+	files, err := changes.Since(context.Background(), payload.Cwd, start)
+	if err != nil {
+		changes.End(dir, next)
+		return 0
+	}
+
+	exitCode := 0
+	if len(files) > 0 {
+		exitCode = lint(files, stderr, configPathOverride)
+	}
+	if exitCode != 0 {
+		changes.End(dir, next)
+	} else {
+		changes.Rename(dir, next, session)
+	}
+
+	if payload.StopHookActive {
+		return 0
+	}
+	return exitCode
+}
+
+// sessionMarkerID and sweepMarkerID name a session's marker files. The
+// prefixes keep them apart from each other and from tool_use_id markers.
+func sessionMarkerID(sessionID string) string { return "session-" + sessionID }
+func sweepMarkerID(sessionID string) string   { return "sweep-" + sessionID }
 
 // lint groups files by the .nano-staged.json that applies to each (the
 // override, or the nearest one found walking up from the file) and runs

@@ -1,7 +1,9 @@
-// Package changes works out which files a Bash tool call modified, since
-// Bash hook payloads carry no file_path. A PreToolUse hook records when the
-// call started (Begin); the matching PostToolUse hook reads that back (End)
-// and asks git which files are dirty and were modified since (Since).
+// Package changes works out which files were modified during some window,
+// for hook payloads that carry no file_path. A marker file records when the
+// window started (Begin, BeginOnce), a later hook reads that back (Peek,
+// End) and asks git which files are dirty and were modified since (Since).
+// Bash tool calls use one marker per tool_use_id; the Stop sweep uses one
+// per session.
 //
 // git is only ever read, never written: Since runs `git status` with
 // --no-optional-locks so it doesn't even take index.lock to refresh stat
@@ -11,6 +13,8 @@ package changes
 import (
 	"bytes"
 	"context"
+	"errors"
+	"io/fs"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -25,8 +29,8 @@ func MarkerDir() string {
 	return filepath.Join(os.TempDir(), "typos")
 }
 
-// Begin records that the tool call id is about to run, as an empty marker
-// file under dir. The marker's own mtime is the start time: the kernel
+// Begin records that the window id starts now, as an empty marker file
+// under dir, replacing any existing marker for id. The marker's own mtime is the start time: the kernel
 // stamps file mtimes from a coarse clock that can lag time.Now() by a
 // tick, so comparing against another file's mtime (rather than a
 // time.Now() taken here) can't miss a file edited right after Begin.
@@ -37,26 +41,67 @@ func Begin(dir, id string) error {
 	if err := os.MkdirAll(dir, 0o700); err != nil {
 		return err
 	}
-	f, err := os.Create(filepath.Join(dir, id))
+	// Recreate rather than truncate, so an existing marker gets a fresh
+	// kernel-stamped mtime.
+	marker := filepath.Join(dir, id)
+	os.Remove(marker)
+	f, err := os.Create(marker)
 	if err != nil {
 		return err
 	}
 	return f.Close()
 }
 
-// End returns the start time Begin recorded for id and removes its marker.
-// ok is false if there's no marker, e.g. the PreToolUse hook isn't wired up.
-func End(dir, id string) (start time.Time, ok bool) {
+// BeginOnce is Begin, except an existing marker for id — and the start
+// time it records — is left alone.
+func BeginOnce(dir, id string) error {
+	if !validID(id) {
+		return os.ErrInvalid
+	}
+	if err := os.MkdirAll(dir, 0o700); err != nil {
+		return err
+	}
+	f, err := os.OpenFile(filepath.Join(dir, id), os.O_WRONLY|os.O_CREATE|os.O_EXCL, 0o600)
+	if errors.Is(err, fs.ErrExist) {
+		return nil
+	}
+	if err != nil {
+		return err
+	}
+	return f.Close()
+}
+
+// Peek returns the start time recorded for id, leaving its marker in place.
+// ok is false if there's no marker, e.g. the hook that records it isn't
+// wired up.
+func Peek(dir, id string) (start time.Time, ok bool) {
 	if !validID(id) {
 		return time.Time{}, false
 	}
-	marker := filepath.Join(dir, id)
-	info, err := os.Stat(marker)
+	info, err := os.Stat(filepath.Join(dir, id))
 	if err != nil {
 		return time.Time{}, false
 	}
-	os.Remove(marker)
 	return info.ModTime(), true
+}
+
+// End is Peek, but also removes id's marker.
+func End(dir, id string) (start time.Time, ok bool) {
+	start, ok = Peek(dir, id)
+	if ok {
+		os.Remove(filepath.Join(dir, id))
+	}
+	return start, ok
+}
+
+// Rename replaces the marker for to with the marker for from, keeping
+// from's start time. The kernel stamps no new mtime on rename, so this is
+// how a marker's start time is moved forward without a time.Now().
+func Rename(dir, from, to string) error {
+	if !validID(from) || !validID(to) {
+		return os.ErrInvalid
+	}
+	return os.Rename(filepath.Join(dir, from), filepath.Join(dir, to))
 }
 
 // Since returns the absolute paths of regular files in the git work tree

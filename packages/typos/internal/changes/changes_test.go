@@ -45,6 +45,52 @@ func TestBegin_RejectsUnsafeIDs(t *testing.T) {
 	}
 }
 
+func TestBeginOnce_KeepsExistingStartTime(t *testing.T) {
+	dir := t.TempDir()
+	if err := BeginOnce(dir, "session-1"); err != nil {
+		t.Fatalf("BeginOnce() error = %v", err)
+	}
+	past := time.Now().Add(-time.Hour)
+	if err := os.Chtimes(filepath.Join(dir, "session-1"), past, past); err != nil {
+		t.Fatalf("Chtimes() error = %v", err)
+	}
+
+	if err := BeginOnce(dir, "session-1"); err != nil {
+		t.Fatalf("second BeginOnce() error = %v", err)
+	}
+	start, ok := Peek(dir, "session-1")
+	if !ok || !start.Equal(past) {
+		t.Errorf("Peek() = %v, %v; want %v, true", start, ok, past)
+	}
+	if _, ok := Peek(dir, "session-1"); !ok {
+		t.Error("Peek() removed the marker, want it left in place")
+	}
+}
+
+func TestRename_MovesStartTime(t *testing.T) {
+	dir := t.TempDir()
+	past := time.Now().Add(-time.Hour)
+	if err := Begin(dir, "old"); err != nil {
+		t.Fatalf("Begin() error = %v", err)
+	}
+	if err := Begin(dir, "next"); err != nil {
+		t.Fatalf("Begin() error = %v", err)
+	}
+	if err := os.Chtimes(filepath.Join(dir, "next"), past, past); err != nil {
+		t.Fatalf("Chtimes() error = %v", err)
+	}
+
+	if err := Rename(dir, "next", "old"); err != nil {
+		t.Fatalf("Rename() error = %v", err)
+	}
+	if start, ok := Peek(dir, "old"); !ok || !start.Equal(past) {
+		t.Errorf("Peek(old) = %v, %v; want %v, true", start, ok, past)
+	}
+	if _, ok := Peek(dir, "next"); ok {
+		t.Error("Peek(next) ok = true, want the renamed marker gone")
+	}
+}
+
 func TestSince(t *testing.T) {
 	root := t.TempDir()
 	git(t, root, "init", "-q")

@@ -6,8 +6,14 @@ import (
 	"io"
 )
 
-// PreToolUse is the hook_event_name of a payload sent before a tool runs.
-const PreToolUse = "PreToolUse"
+// hook_event_name values this tool handles besides PostToolUse and
+// PostToolUseFailure, which share the default path.
+const (
+	PreToolUse   = "PreToolUse"   // before a tool runs
+	SessionStart = "SessionStart" // session started, resumed, cleared or compacted
+	SessionEnd   = "SessionEnd"   // session ended
+	Stop         = "Stop"         // Claude is about to end its turn
+)
 
 // BashTool is the tool_name of a Bash call, whose changed files have to be
 // worked out after the fact — see internal/changes.
@@ -25,11 +31,13 @@ var SupportedTools = map[string]bool{
 // Unrecognized fields (session_id, tool_response, ...) are ignored by
 // encoding/json.
 type Payload struct {
-	HookEventName string `json:"hook_event_name"`
-	ToolName      string `json:"tool_name"`
-	ToolUseID     string `json:"tool_use_id"`
-	Cwd           string `json:"cwd"`
-	ToolInput     struct {
+	HookEventName  string `json:"hook_event_name"`
+	SessionID      string `json:"session_id"`
+	Cwd            string `json:"cwd"`
+	StopHookActive bool   `json:"stop_hook_active"`
+	ToolName       string `json:"tool_name"`
+	ToolUseID      string `json:"tool_use_id"`
+	ToolInput      struct {
 		FilePath string `json:"file_path"`
 	} `json:"tool_input"`
 }

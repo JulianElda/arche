@@ -37,7 +37,10 @@ Wired up as a Claude Code hook, in `.claude/settings.json`:
         "matcher": "Bash",
         "hooks": [{ "type": "command", "command": "typos" }]
       }
-    ]
+    ],
+    "SessionStart": [{ "hooks": [{ "type": "command", "command": "typos" }] }],
+    "Stop": [{ "hooks": [{ "type": "command", "command": "typos" }] }],
+    "SessionEnd": [{ "hooks": [{ "type": "command", "command": "typos" }] }]
   }
 }
 ```
@@ -56,6 +59,14 @@ dirty before the call are left alone, and a call that changed more than
 20 files is skipped. `PostToolUseFailure` covers commands that edited
 files and then exited nonzero. Outside a git work tree, `Bash` calls are
 a no-op.
+
+When Claude is about to end its turn, the `Stop` hook sweeps every file
+changed during the session (since the `SessionStart` hook ran) — a safety
+net for anything the per-edit hooks missed, like a `Bash` call over the
+20-file cap. Failures exit 2, which keeps Claude working with the errors
+in front of it; if it's already continuing because of a Stop hook, `typos`
+lets it stop rather than loop. After a clean sweep, the next one only
+looks at files changed since. `SessionEnd` cleans up the session's marker.
 
 No matching glob pattern or no config found at all is a silent no-op
 (exit 0).
