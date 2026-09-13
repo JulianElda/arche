@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.1.0](https://github.com/JulianElda/arche/compare/typos-v1.0.0...typos-v1.1.0) (2026-09-13)
+
+
+### Features
+
+* **typos:** lint files changed by bash calls and sweep on stop ([#58](https://github.com/JulianElda/arche/issues/58)) ([35f431d](https://github.com/JulianElda/arche/commit/35f431d9c57cfdc50f33117a5583c62ce38c2318))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * optionalDependencies
+    * @julianelda/typos-darwin-arm64 bumped from 1.0.0 to 1.1.0
+    * @julianelda/typos-darwin-x64 bumped from 1.0.0 to 1.1.0
+    * @julianelda/typos-linux-arm64 bumped from 1.0.0 to 1.1.0
+    * @julianelda/typos-linux-x64 bumped from 1.0.0 to 1.1.0
+    * @julianelda/typos-win32-x64 bumped from 1.0.0 to 1.1.0
+
 ## [1.0.0](https://github.com/JulianElda/arche/compare/typos-v0.3.0...typos-v1.0.0) (2026-08-04)
 
 
