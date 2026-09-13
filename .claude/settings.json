@@ -56,10 +56,6 @@
           {
             "type": "command",
             "command": "\"$CLAUDE_PROJECT_DIR\"/packages/typos/npm/linux-x64/typos"
-          },
-          {
-            "type": "command",
-            "command": "bun run format && bun run lint"
           }
         ]
       }
