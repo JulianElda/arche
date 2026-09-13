@@ -24,9 +24,16 @@ import (
 // gitTimeout bounds the `git status` call in Since.
 const gitTimeout = 5 * time.Second
 
-// MarkerDir is where Begin records in-flight Bash calls.
-func MarkerDir() string {
-	return filepath.Join(os.TempDir(), "typos")
+// MarkerDir is where markers are recorded: a typos directory in the
+// user's own cache directory (e.g. ~/.cache/typos on Linux). Not the shared
+// temp dir — there another local user could create the predictable
+// /tmp/typos first, and own or symlink the markers inside it.
+func MarkerDir() (string, error) {
+	cache, err := os.UserCacheDir()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(cache, "typos"), nil
 }
 
 // Begin records that the window id starts now, as an empty marker file

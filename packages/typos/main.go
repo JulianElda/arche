@@ -57,26 +57,36 @@ func run(r io.Reader, stderr io.Writer, configPathOverride string) int {
 		return 0
 	}
 
+	// Without a marker directory, everything that needs one no-ops.
+	markerDir, markerErr := changes.MarkerDir()
+	usesMarkers := payload.ToolName == hook.BashTool ||
+		payload.HookEventName == hook.SessionStart ||
+		payload.HookEventName == hook.SessionEnd ||
+		payload.HookEventName == hook.Stop
+	if usesMarkers && markerErr != nil {
+		return 0
+	}
+
 	switch payload.HookEventName {
 	case hook.PreToolUse:
 		if payload.ToolName == hook.BashTool {
-			changes.Begin(changes.MarkerDir(), payload.ToolUseID)
+			changes.Begin(markerDir, payload.ToolUseID)
 		}
 		return 0
 	case hook.SessionStart:
-		changes.BeginOnce(changes.MarkerDir(), sessionMarkerID(payload.SessionID))
+		changes.BeginOnce(markerDir, sessionMarkerID(payload.SessionID))
 		return 0
 	case hook.SessionEnd:
-		changes.End(changes.MarkerDir(), sessionMarkerID(payload.SessionID))
-		changes.End(changes.MarkerDir(), sweepMarkerID(payload.SessionID))
+		changes.End(markerDir, sessionMarkerID(payload.SessionID))
+		changes.End(markerDir, sweepMarkerID(payload.SessionID))
 		return 0
 	case hook.Stop:
-		return sweep(payload, stderr, configPathOverride)
+		return sweep(markerDir, payload, stderr, configPathOverride)
 	}
 
 	var files []string
 	if payload.ToolName == hook.BashTool {
-		files = bashChangedFiles(payload)
+		files = bashChangedFiles(markerDir, payload)
 	} else if path, ok := payload.FilePath(); ok {
 		if info, err := os.Stat(path); err == nil && info.Mode().IsRegular() {
 			files = []string{path}
@@ -92,8 +102,8 @@ func run(r io.Reader, stderr io.Writer, configPathOverride string) int {
 // bashChangedFiles returns the files changed since the PreToolUse hook
 // recorded this Bash call, or nil if it didn't, git can't tell, or the
 // call changed more than maxBashChangedFiles.
-func bashChangedFiles(payload hook.Payload) []string {
-	start, ok := changes.End(changes.MarkerDir(), payload.ToolUseID)
+func bashChangedFiles(markerDir string, payload hook.Payload) []string {
+	start, ok := changes.End(markerDir, payload.ToolUseID)
 	if !ok || payload.Cwd == "" {
 		return nil
 	}
@@ -116,8 +126,7 @@ func bashChangedFiles(payload hook.Payload) []string {
 // A failure exits 2, which keeps Claude from ending its turn. When Claude
 // is already continuing because of a Stop hook, it exits 0 instead so a
 // file Claude can't fix doesn't loop the session forever.
-func sweep(payload hook.Payload, stderr io.Writer, configPathOverride string) int {
-	dir := changes.MarkerDir()
+func sweep(dir string, payload hook.Payload, stderr io.Writer, configPathOverride string) int {
 	session := sessionMarkerID(payload.SessionID)
 	start, ok := changes.Peek(dir, session)
 	if !ok {

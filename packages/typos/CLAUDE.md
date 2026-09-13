@@ -94,7 +94,7 @@ Known, accepted gaps: overlapping parallel tool calls can attribute each
 other's edits (worst case a file is linted twice); `mv` preserves mtime so
 moved files aren't picked up; edits outside the `cwd`'s work tree aren't
 seen; markers for calls whose Post hook never fires are left behind in
-`$TMPDIR/typos` (empty files).
+`~/.cache/typos` (empty files) — the per-user cache dir (`os.UserCacheDir`), not the shared temp dir, where another local user could pre-create a predictable `/tmp/typos` (Sonar go:S5445).
 
 **`internal/nanostaged`**: `Config` is `map[string][]string` (pattern →
 commands, both `"cmd"` and `["cmd1","cmd2"]` config shapes normalized to the

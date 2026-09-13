@@ -9,10 +9,12 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/JulianElda/arche/packages/typos/internal/changes"
 )
 
 func TestRun_BashWithoutPreToolUseIsNoOp(t *testing.T) {
-	t.Setenv("TMPDIR", t.TempDir())
+	isolateMarkers(t)
 	payload := `{"hook_event_name":"PostToolUse","tool_name":"Bash","tool_use_id":"toolu_1","cwd":"/","tool_input":{"command":"ls"}}`
 	if got := run(strings.NewReader(payload), &bytes.Buffer{}, ""); got != 0 {
 		t.Errorf("run() = %d, want 0", got)
@@ -160,7 +162,7 @@ func TestRun_ConfigOverride_MissingFileIsNoOp(t *testing.T) {
 }
 
 func TestRun_Bash_LintsFilesChangedDuringTheCall(t *testing.T) {
-	t.Setenv("TMPDIR", t.TempDir())
+	isolateMarkers(t)
 	repoRoot := newGitRepo(t)
 	fail := writeScript(t, t.TempDir(), "fail.sh", `echo "lint error in $*" >&2`+"\nexit 1\n")
 	writeConfigFile(t, repoRoot, `{"**/*.ts": "`+fail+`"}`)
@@ -193,7 +195,7 @@ func TestRun_Bash_LintsFilesChangedDuringTheCall(t *testing.T) {
 }
 
 func TestRun_Bash_TooManyChangedFilesIsSkipped(t *testing.T) {
-	t.Setenv("TMPDIR", t.TempDir())
+	isolateMarkers(t)
 	repoRoot := newGitRepo(t)
 	fail := writeScript(t, t.TempDir(), "fail.sh", "exit 1\n")
 	writeConfigFile(t, repoRoot, `{"**/*.ts": "`+fail+`"}`)
@@ -212,7 +214,7 @@ func TestRun_Bash_TooManyChangedFilesIsSkipped(t *testing.T) {
 }
 
 func TestRun_Stop_LintsFilesChangedDuringTheSession(t *testing.T) {
-	t.Setenv("TMPDIR", t.TempDir())
+	isolateMarkers(t)
 	repoRoot := newGitRepo(t)
 	fail := writeScript(t, t.TempDir(), "fail.sh", `echo "lint error in $*" >&2`+"\nexit 1\n")
 	writeConfigFile(t, repoRoot, `{"**/*.ts": "`+fail+`"}`)
@@ -244,14 +246,18 @@ func TestRun_Stop_LintsFilesChangedDuringTheSession(t *testing.T) {
 }
 
 func TestRun_Stop_CleanSweepIsNotRepeated(t *testing.T) {
-	t.Setenv("TMPDIR", t.TempDir())
+	isolateMarkers(t)
 	repoRoot := newGitRepo(t)
 	marker := filepath.Join(t.TempDir(), "runs")
 	count := writeScript(t, t.TempDir(), "count.sh", "echo run >> "+marker+"\n")
 	writeConfigFile(t, repoRoot, `{"**/*.ts": "`+count+`"}`)
 
 	run(strings.NewReader(sessionPayload("SessionStart", repoRoot, false)), &bytes.Buffer{}, "")
-	backdate(t, filepath.Join(os.TempDir(), "typos", "session-"+testSessionID))
+	markerDir, err := changes.MarkerDir()
+	if err != nil {
+		t.Fatalf("MarkerDir() error = %v", err)
+	}
+	backdate(t, filepath.Join(markerDir, "session-"+testSessionID))
 	// A minute ago: after the (backdated) session start, but clearly before
 	// the first sweep, which a same-tick mtime wouldn't be.
 	a := writeTS(t, repoRoot, "a.ts")
@@ -275,7 +281,7 @@ func TestRun_Stop_CleanSweepIsNotRepeated(t *testing.T) {
 }
 
 func TestRun_Stop_WithoutSessionStartIsNoOp(t *testing.T) {
-	t.Setenv("TMPDIR", t.TempDir())
+	isolateMarkers(t)
 	repoRoot := newGitRepo(t)
 	fail := writeScript(t, t.TempDir(), "fail.sh", "exit 1\n")
 	writeConfigFile(t, repoRoot, `{"**/*.ts": "`+fail+`"}`)
@@ -305,6 +311,16 @@ func writeTS(t *testing.T, root, rel string) string {
 		t.Fatalf("WriteFile() error = %v", err)
 	}
 	return path
+}
+
+// isolateMarkers points changes.MarkerDir at a fresh temp dir for this
+// test, so markers neither leak into nor read from the real user cache.
+func isolateMarkers(t *testing.T) {
+	t.Helper()
+	dir := t.TempDir()
+	t.Setenv("XDG_CACHE_HOME", dir) // Linux
+	t.Setenv("HOME", dir)           // macOS
+	t.Setenv("LocalAppData", dir)   // Windows
 }
 
 // newGitRepo returns a fresh temp dir initialized as a git work tree.
