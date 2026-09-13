@@ -15,7 +15,8 @@ at the bottom for exactly what's landed). Package layout:
 packages/typos/
   main.go                    # entrypoint: wires everything below together
   internal/
-    hook/hook.go              # PostToolUse JSON payload parsing
+    hook/hook.go              # PreToolUse/PostToolUse JSON payload parsing
+    changes/changes.go        # which files a Bash call changed (markers + read-only git status)
     nanostaged/nanostaged.go  # .nano-staged.json discovery, parsing, glob matching
     runner/runner.go          # tokenization, PATH resolution, command execution
   bin/typos.js                # npm dispatcher: resolves + execs the platform binary
@@ -27,19 +28,29 @@ packages/typos/
 is the whole pipeline, in order, no-op'ing (return 0) at the first
 inapplicable step:
 
-1. `hook.Parse(r)` — decode the PostToolUse payload; bail on malformed JSON.
-2. `payload.FilePath()` — bail unless `tool_name` is `Write`/`Edit`/`MultiEdit`
-   and `tool_input.file_path` is non-empty.
-3. `os.Stat` the path — bail if it's not a regular file.
-4. `resolveConfig` — either `nanostaged.Load(configPathOverride)` if `-c`/
-   `--config` was given, or `nanostaged.Discover(filepath.Dir(path))` to
-   walk up looking for the nearest `.nano-staged.json`; bail if neither
-   yields a usable config.
-5. `config.Match(repoRoot, path)` — bail if no glob pattern matches.
-6. `runner.Run(ctx, groups, path, repoRoot, commandTimeout)` — actually run
-   the matched commands. `repoRoot` (the config file's directory) is used
+1. `hook.Parse(r)` — decode the tool hook payload; bail on malformed JSON.
+2. A `PreToolUse` payload only ever does one thing: for `Bash`,
+   `changes.Begin` drops a marker file keyed by `tool_use_id`; exit 0.
+3. Work out the file list:
+   - `Bash` (`PostToolUse`/`PostToolUseFailure`): `bashChangedFiles` —
+     `changes.End` reads back and removes the marker (no marker → bail),
+     then `changes.Since(cwd, start)` lists files git reports dirty whose
+     mtime is at/after the marker's. More than `maxBashChangedFiles` (20)
+     → bail.
+   - otherwise `payload.FilePath()` — bail unless `tool_name` is
+     `Write`/`Edit`/`MultiEdit`, `tool_input.file_path` is non-empty, and
+     it's a regular file.
+4. `lint` — group files by config: `-c`/`--config` if given, else
+   `nanostaged.Find(filepath.Dir(file))` per file; files with no config
+   are dropped. For each config, `nanostaged.Load` (skip on parse error)
+   and `config.Match(repoRoot, files...)`, which returns one group per
+   matching pattern with the subset of files it matched.
+5. `runner.Run(ctx, groups, repoRoot, commandTimeout)` — actually run
+   the matched commands, each with its group's `Files` appended as
+   trailing args (one spawn per command, like nano-staged's
+   `args.concat(files)`). `repoRoot` (the config file's directory) is used
    as both `cmd.Dir` and the base for `node_modules/.bin` PATH resolution.
-7. Any `*runner.CommandFailure` gets written to stderr and maps to exit
+6. Any `*runner.CommandFailure` gets written to stderr and maps to exit
    code 2 (`blockingFeedbackExitCode`) — Claude Code's PostToolUse
    "blocking feedback" convention, so Claude sees the real lint/format
    error and can self-correct.
@@ -48,13 +59,33 @@ inapplicable step:
 payload actionable at all" (supported tool + non-empty path) — everything
 else in `main.go` assumes that's already been checked.
 
+**`internal/changes`**: Bash payloads have no `file_path`, so changed
+files are inferred. Two details matter here:
+
+- The start time is the **marker file's own mtime**, not a `time.Now()`
+  stored in it. Linux stamps mtimes from a coarse clock that can lag
+  `time.Now()` by a tick, so a file written right after `Begin` could
+  otherwise look older than the call and be missed.
+- git is strictly read: `git --no-optional-locks status --porcelain=v1 -z
+--untracked-files=all --no-renames --ignore-submodules=all` from the work
+  tree root (found by walking up for `.git`, no extra git spawn). Without
+  `--no-optional-locks`, `status` may take `index.lock` to refresh stat
+  info and collide with Claude's own concurrent git commands — the same
+  class of git race this package exists to avoid.
+
+Known, accepted gaps: overlapping parallel tool calls can attribute each
+other's edits (worst case a file is linted twice); `mv` preserves mtime so
+moved files aren't picked up; edits outside the `cwd`'s work tree aren't
+seen; markers for calls whose Post hook never fires are left behind in
+`$TMPDIR/typos` (empty files).
+
 **`internal/nanostaged`**: `Config` is `map[string][]string` (pattern →
 commands, both `"cmd"` and `["cmd1","cmd2"]` config shapes normalized to the
 latter). `Find`/`Discover` walk up the directory tree exactly like
 `internal/runner.FindNodeModulesBin` does (same pattern, different target
 file — not shared code, kept separate per package since they're
-conceptually unrelated lookups). `Config.Match` returns `[]MatchedGroup`
-sorted by pattern string for determinism — actual execution order across
+conceptually unrelated lookups). `Config.Match(configDir, paths...)` returns `[]MatchedGroup` (each with the
+subset of `paths` it matched), sorted by pattern string for determinism — actual execution order across
 groups doesn't matter since they run concurrently.
 
 **`internal/runner`**: `Tokenize` wraps `go-shellwords`; `Run` executes
@@ -353,6 +384,12 @@ was built incrementally, one commit per concern, each left green
 8. `.goreleaser.yaml` → npm platform package wiring, plus restructuring
    `release-please.yml`'s publish job (see "Publishing" above).
 9. The `-c`/`--config` override flag.
+10. `Bash` support (`internal/changes`): a `PreToolUse` marker plus
+    read-only `git status` after the call, files batched per pattern,
+    capped at 20 changed files. Added because in auto mode Claude often
+    edits via `sed -i`/heredocs, which the Write/Edit-only hook never saw.
+    Supersedes the "`Bash` calls silently no-op" v1 decision below (still
+    true outside a git work tree or without the PreToolUse hook wired up).
 
 Tests favor real execution over mocking: `internal/runner`'s tests write
 actual executable shell script fixtures to a `t.TempDir()` and run them

@@ -1,10 +1,9 @@
-// Command typos lints/formats the single file Claude Code just wrote or
-// edited, without ever touching git — see CLAUDE.md for the full design.
+// Command typos lints/formats the file(s) Claude Code just wrote or edited,
+// without ever writing to git — see CLAUDE.md for the full design.
 package main
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -12,6 +11,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/JulianElda/arche/packages/typos/internal/changes"
 	"github.com/JulianElda/arche/packages/typos/internal/hook"
 	"github.com/JulianElda/arche/packages/typos/internal/nanostaged"
 	"github.com/JulianElda/arche/packages/typos/internal/runner"
@@ -34,68 +34,108 @@ func main() {
 	os.Exit(run(os.Stdin, os.Stderr, configPath))
 }
 
-// run reads a PostToolUse payload from r, lints/formats the edited file
-// against its repo's .nano-staged.json if applicable, and returns the
-// process exit code. A failing command's output is written to stderr.
-// configPathOverride, if non-empty, is used verbatim instead of
+// maxBashChangedFiles caps how many files a single Bash call can queue for
+// linting. A call that touched more (a codemod, `git checkout .`) is
+// skipped: per-edit feedback is for small edits, and linting hundreds of
+// files would stall Claude after that one call.
+const maxBashChangedFiles = 20
+
+// run reads a tool hook payload from r, lints/formats the file(s) it
+// changed against their repo's .nano-staged.json if applicable, and
+// returns the process exit code. A failing command's output is written to
+// stderr. configPathOverride, if non-empty, is used verbatim instead of
 // auto-discovering the nearest .nano-staged.json.
+//
+// Write/Edit/MultiEdit payloads name their file directly. Bash payloads
+// don't, so a PreToolUse Bash payload records the call's start time and
+// the matching PostToolUse payload lints whatever git reports as changed
+// since — see internal/changes.
 func run(r io.Reader, stderr io.Writer, configPathOverride string) int {
 	payload, err := hook.Parse(r)
 	if err != nil {
 		return 0
 	}
 
-	path, ok := payload.FilePath()
-	if !ok {
+	if payload.HookEventName == hook.PreToolUse {
+		if payload.ToolName == hook.BashTool {
+			changes.Begin(changes.MarkerDir(), payload.ToolUseID)
+		}
 		return 0
 	}
 
-	info, err := os.Stat(path)
-	if err != nil || !info.Mode().IsRegular() {
+	var files []string
+	if payload.ToolName == hook.BashTool {
+		files = bashChangedFiles(payload)
+	} else if path, ok := payload.FilePath(); ok {
+		if info, err := os.Stat(path); err == nil && info.Mode().IsRegular() {
+			files = []string{path}
+		}
+	}
+	if len(files) == 0 {
 		return 0
 	}
 
-	config, configPath, err := resolveConfig(configPathOverride, path)
-	if err != nil {
-		return 0
-	}
-
-	repoRoot := filepath.Dir(configPath)
-	groups, err := config.Match(repoRoot, path)
-	if err != nil || len(groups) == 0 {
-		return 0
-	}
-
-	failure := runner.Run(context.Background(), groups, path, repoRoot, commandTimeout)
-	if failure == nil {
-		return 0
-	}
-
-	writeFailure(stderr, failure)
-	return blockingFeedbackExitCode
+	return lint(files, stderr, configPathOverride)
 }
 
-// resolveConfig loads override if given, otherwise auto-discovers the
-// nearest .nano-staged.json to filePath's directory. err is non-nil for
-// "no usable config" in either case — no config found, or a given/found
-// config that failed to parse.
-func resolveConfig(override, filePath string) (nanostaged.Config, string, error) {
-	if override != "" {
-		config, err := nanostaged.Load(override)
-		if err != nil {
-			return nil, "", err
-		}
-		return config, override, nil
+// bashChangedFiles returns the files changed since the PreToolUse hook
+// recorded this Bash call, or nil if it didn't, git can't tell, or the
+// call changed more than maxBashChangedFiles.
+func bashChangedFiles(payload hook.Payload) []string {
+	start, ok := changes.End(changes.MarkerDir(), payload.ToolUseID)
+	if !ok || payload.Cwd == "" {
+		return nil
 	}
 
-	config, configPath, ok, err := nanostaged.Discover(filepath.Dir(filePath))
-	if err != nil {
-		return nil, "", err
+	files, err := changes.Since(context.Background(), payload.Cwd, start)
+	if err != nil || len(files) > maxBashChangedFiles {
+		return nil
 	}
-	if !ok {
-		return nil, "", errors.New("no .nano-staged.json found")
+	return files
+}
+
+// lint groups files by the .nano-staged.json that applies to each (the
+// override, or the nearest one found walking up from the file) and runs
+// every matched command chain, with each group's matching files appended
+// to its commands in one spawn. Files with no config, no parseable config
+// or no matching pattern are skipped.
+func lint(files []string, stderr io.Writer, configPathOverride string) int {
+	var configPaths []string
+	filesByConfig := make(map[string][]string)
+	for _, file := range files {
+		configPath := configPathOverride
+		if configPath == "" {
+			found, ok := nanostaged.Find(filepath.Dir(file))
+			if !ok {
+				continue
+			}
+			configPath = found
+		}
+		if _, seen := filesByConfig[configPath]; !seen {
+			configPaths = append(configPaths, configPath)
+		}
+		filesByConfig[configPath] = append(filesByConfig[configPath], file)
 	}
-	return config, configPath, nil
+
+	exitCode := 0
+	for _, configPath := range configPaths {
+		config, err := nanostaged.Load(configPath)
+		if err != nil {
+			continue
+		}
+
+		repoRoot := filepath.Dir(configPath)
+		groups, err := config.Match(repoRoot, filesByConfig[configPath]...)
+		if err != nil || len(groups) == 0 {
+			continue
+		}
+
+		if failure := runner.Run(context.Background(), groups, repoRoot, commandTimeout); failure != nil {
+			writeFailure(stderr, failure)
+			exitCode = blockingFeedbackExitCode
+		}
+	}
+	return exitCode
 }
 
 // writeFailure reports a command failure the way Claude should see it:

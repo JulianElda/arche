@@ -236,6 +236,30 @@ func TestConfig_Match_OverlappingPatternsBothMatch(t *testing.T) {
 	}
 }
 
+func TestConfig_Match_MultipleFilesAreGroupedPerPattern(t *testing.T) {
+	root := t.TempDir()
+	config := Config{
+		"**/*.ts":  {"oxlint --fix", "oxfmt"},
+		"**/*.css": {"oxfmt"},
+	}
+	a := filepath.Join(root, "a.ts")
+	style := filepath.Join(root, "style.css")
+	b := filepath.Join(root, "src", "b.ts")
+	readme := filepath.Join(root, "README.txt")
+
+	groups, err := config.Match(root, a, style, readme, b)
+	if err != nil {
+		t.Fatalf("Match() error = %v", err)
+	}
+	want := []MatchedGroup{
+		{Pattern: "**/*.css", Commands: []string{"oxfmt"}, Files: []string{style}},
+		{Pattern: "**/*.ts", Commands: []string{"oxlint --fix", "oxfmt"}, Files: []string{a, b}},
+	}
+	if !reflect.DeepEqual(groups, want) {
+		t.Errorf("Match() = %#v, want %#v", groups, want)
+	}
+}
+
 // writeConfig writes contents to a fresh temp dir's .nano-staged.json and
 // returns the config file's path.
 func writeConfig(t *testing.T, contents string) string {

@@ -20,26 +20,49 @@ Wired up as a Claude Code hook, in `.claude/settings.json`:
 ```json
 {
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": "typos" }]
+      }
+    ],
     "PostToolUse": [
       {
-        "matcher": "Write|Edit|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "typos"
-          }
-        ]
+        "matcher": "Write|Edit|MultiEdit|Bash",
+        "hooks": [{ "type": "command", "command": "typos" }]
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": "typos" }]
       }
     ]
   }
 }
 ```
 
-Claude Code pipes the tool call's JSON payload to the command's stdin;
-`typos` reads `tool_input.file_path` from it, finds the nearest
-`.nano-staged.json` by walking up from that file's directory, and runs
-whichever configured commands match it. Anything else — a `Bash` call, no
-matching glob pattern, no config found at all — is a silent no-op (exit 0).
+Claude Code pipes the tool call's JSON payload to the command's stdin.
+For `Write`/`Edit`/`MultiEdit`, `typos` reads `tool_input.file_path`,
+finds the nearest `.nano-staged.json` by walking up from that file's
+directory, and runs whichever configured commands match it.
+
+`Bash` calls (`sed -i`, `cat > file`, ...) name no file, so `typos` works
+it out: the `PreToolUse` hook records when the call started, and the
+`PostToolUse` hook asks git (read-only, `git --no-optional-locks status`)
+which files are dirty and were modified since, then lints those — each
+pattern's matching files batched into one command spawn. Files already
+dirty before the call are left alone, and a call that changed more than
+20 files is skipped. `PostToolUseFailure` covers commands that edited
+files and then exited nonzero. Outside a git work tree, `Bash` calls are
+a no-op.
+
+No matching glob pattern or no config found at all is a silent no-op
+(exit 0).
+
+Every hook invocation pays the command's startup cost, so for the
+lowest overhead point `command` at the native binary (e.g.
+`node_modules/@julianelda/typos-linux-x64/typos`) rather than `bunx typos`.
 
 Called directly, e.g. to try a config against one file:
 

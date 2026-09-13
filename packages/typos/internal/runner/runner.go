@@ -1,5 +1,5 @@
 // Package runner tokenizes and executes .nano-staged.json command chains
-// against a single file, replicating nano-staged's own execution
+// against matched files, replicating nano-staged's own execution
 // semantics — see CLAUDE.md for the full design.
 package runner
 
@@ -78,8 +78,8 @@ type CommandFailure struct {
 	Err      error  // non-nil only when ExitCode is -1 (tokenize error, command not found, timeout, ...)
 }
 
-// Run executes each matched group's commands against filePath, appended
-// as each command's trailing argument. Groups run concurrently; commands
+// Run executes each matched group's commands against that group's Files,
+// appended as each command's trailing arguments. Groups run concurrently; commands
 // within a single group run sequentially and stop at that group's first
 // failure. repoRoot is used both as the working directory for every
 // spawned command and as the starting point for locating the nearest
@@ -88,7 +88,7 @@ type CommandFailure struct {
 // Run returns the first CommandFailure found, in matched-group order
 // (which is deterministic — sorted by pattern — even though the groups
 // themselves run concurrently), or nil if every group's chain succeeded.
-func Run(ctx context.Context, groups []nanostaged.MatchedGroup, filePath, repoRoot string, timeout time.Duration) *CommandFailure {
+func Run(ctx context.Context, groups []nanostaged.MatchedGroup, repoRoot string, timeout time.Duration) *CommandFailure {
 	binDir, _ := FindNodeModulesBin(repoRoot)
 	env := PrependPath(os.Environ(), binDir)
 
@@ -98,7 +98,7 @@ func Run(ctx context.Context, groups []nanostaged.MatchedGroup, filePath, repoRo
 		wg.Add(1)
 		go func(i int, group nanostaged.MatchedGroup) {
 			defer wg.Done()
-			failures[i] = runGroup(ctx, group, filePath, repoRoot, env, timeout)
+			failures[i] = runGroup(ctx, group, repoRoot, env, timeout)
 		}(i, group)
 	}
 	wg.Wait()
@@ -113,16 +113,16 @@ func Run(ctx context.Context, groups []nanostaged.MatchedGroup, filePath, repoRo
 
 // runGroup runs one matched group's commands sequentially, stopping at
 // the first failure.
-func runGroup(ctx context.Context, group nanostaged.MatchedGroup, filePath, repoRoot string, env []string, timeout time.Duration) *CommandFailure {
+func runGroup(ctx context.Context, group nanostaged.MatchedGroup, repoRoot string, env []string, timeout time.Duration) *CommandFailure {
 	for _, command := range group.Commands {
-		if failure := runCommand(ctx, group.Pattern, command, filePath, repoRoot, env, timeout); failure != nil {
+		if failure := runCommand(ctx, group.Pattern, command, group.Files, repoRoot, env, timeout); failure != nil {
 			return failure
 		}
 	}
 	return nil
 }
 
-func runCommand(ctx context.Context, pattern, command, filePath, repoRoot string, env []string, timeout time.Duration) *CommandFailure {
+func runCommand(ctx context.Context, pattern, command string, files []string, repoRoot string, env []string, timeout time.Duration) *CommandFailure {
 	args, err := Tokenize(command)
 	if err != nil {
 		return &CommandFailure{Pattern: pattern, Command: command, ExitCode: -1, Err: err}
@@ -138,7 +138,7 @@ func runCommand(ctx context.Context, pattern, command, filePath, repoRoot string
 	if err != nil {
 		return &CommandFailure{Pattern: pattern, Command: command, ExitCode: -1, Err: err}
 	}
-	args = append(args, filePath)
+	args = append(args, files...)
 
 	cmdCtx, cancel := context.WithTimeout(ctx, timeout)
 	defer cancel()

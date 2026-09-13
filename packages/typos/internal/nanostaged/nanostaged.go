@@ -94,23 +94,28 @@ func Discover(dir string) (config Config, path string, ok bool, err error) {
 	return config, path, true, nil
 }
 
-// MatchedGroup pairs a glob pattern that matched a file with the command
-// chain to run against it.
+// MatchedGroup pairs a glob pattern with the command chain to run and the
+// files it matched, which get appended to each command as trailing args.
 type MatchedGroup struct {
 	Pattern  string
 	Commands []string
+	Files    []string
 }
 
-// Match returns the pattern groups whose glob matches path, relative to
-// configDir (the directory the config file was loaded from). Order is
+// Match returns the pattern groups whose glob matches at least one of
+// paths, relative to configDir (the directory the config file was loaded
+// from). Each group's Files keeps paths' order. Group order is
 // deterministic (sorted by pattern) but otherwise not meaningful — matched
 // groups are run concurrently, not in this order.
-func (c Config) Match(configDir, path string) ([]MatchedGroup, error) {
-	rel, err := filepath.Rel(configDir, path)
-	if err != nil {
-		return nil, err
+func (c Config) Match(configDir string, paths ...string) ([]MatchedGroup, error) {
+	rels := make([]string, len(paths))
+	for i, path := range paths {
+		rel, err := filepath.Rel(configDir, path)
+		if err != nil {
+			return nil, err
+		}
+		rels[i] = filepath.ToSlash(rel)
 	}
-	rel = filepath.ToSlash(rel)
 
 	patterns := make([]string, 0, len(c))
 	for pattern := range c {
@@ -120,12 +125,18 @@ func (c Config) Match(configDir, path string) ([]MatchedGroup, error) {
 
 	var matched []MatchedGroup
 	for _, pattern := range patterns {
-		ok, err := doublestar.Match(pattern, rel)
-		if err != nil {
-			return nil, fmt.Errorf("%s: %w", pattern, err)
+		var files []string
+		for i, rel := range rels {
+			ok, err := doublestar.Match(pattern, rel)
+			if err != nil {
+				return nil, fmt.Errorf("%s: %w", pattern, err)
+			}
+			if ok {
+				files = append(files, paths[i])
+			}
 		}
-		if ok {
-			matched = append(matched, MatchedGroup{Pattern: pattern, Commands: c[pattern]})
+		if len(files) > 0 {
+			matched = append(matched, MatchedGroup{Pattern: pattern, Commands: c[pattern], Files: files})
 		}
 	}
 	return matched, nil

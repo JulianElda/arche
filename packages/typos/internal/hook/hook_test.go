@@ -74,3 +74,25 @@ func TestPayload_FilePath(t *testing.T) {
 		})
 	}
 }
+
+func TestParse_BashCallFields(t *testing.T) {
+	payload, err := Parse(strings.NewReader(`{
+		"hook_event_name": "PreToolUse",
+		"tool_name": "Bash",
+		"tool_use_id": "toolu_01ABC",
+		"cwd": "/repo",
+		"tool_input": {"command": "sed -i s/a/b/ a.ts"}
+	}`))
+	if err != nil {
+		t.Fatalf("Parse() error = %v", err)
+	}
+	if payload.HookEventName != PreToolUse {
+		t.Errorf("HookEventName = %q, want %q", payload.HookEventName, PreToolUse)
+	}
+	if payload.ToolUseID != "toolu_01ABC" {
+		t.Errorf("ToolUseID = %q, want %q", payload.ToolUseID, "toolu_01ABC")
+	}
+	if payload.Cwd != "/repo" {
+		t.Errorf("Cwd = %q, want %q", payload.Cwd, "/repo")
+	}
+}
