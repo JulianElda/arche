@@ -435,13 +435,11 @@ bun run --filter='@julianelda/typos' build:all   # full 5-platform cross-compile
 - Everything under "Explicitly out of scope / deferred for v1" above.
 
 **Local use** (dev setup is Linux-only, so no npm install or goreleaser in
-the loop): `build:local` puts the binary at `~/.local/bin/typos`, and
-`~/.claude/settings.json` (dotfiles, outside this repo) wires every hook
-event this tool handles — `SessionStart`, `PreToolUse` (`Bash`),
+the loop): `build:local` puts the binary at `~/.local/bin/typos`, and each repo that
+wants it wires it in its own `.claude/settings.json` (not globally) for every
+hook event this tool handles — `SessionStart`, `PreToolUse` (`Bash`),
 `PostToolUse` (`Write|Edit|MultiEdit|Bash`), `PostToolUseFailure` (`Bash`),
-`Stop`, `SessionEnd` — to `~/.local/bin/typos`, once for every repo. Repo
-`.claude/settings.json` files must not wire typos again, or every hook runs
-twice. Rerun `build:local` after changing the Go code; the npm/goreleaser
+`Stop`, `SessionEnd` — see this repo's `.claude/settings.json`. Rerun `build:local` after changing the Go code; the npm/goreleaser
 distribution is kept but not what's used locally.
 
 ## Repo conventions (see repo-root `AGENTS.md` for the full list)
