@@ -110,7 +110,11 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-      - run: bun install --frozen-lockfile
+      # Not --frozen-lockfile: bun.lock records every workspace package's
+      # version, and release PRs bump package.json without touching it, so a
+      # frozen install fails on exactly the commits that need publishing. PR
+      # CI still enforces a frozen lockfile.
+      - run: bun install
       - name: Build
         run: |
           cd ${{ matrix.path }}
@@ -148,7 +152,11 @@ jobs:
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
-      - run: bun install --frozen-lockfile
+      # Not --frozen-lockfile: bun.lock records every workspace package's
+      # version, and release PRs bump package.json without touching it, so a
+      # frozen install fails on exactly the commits that need publishing. PR
+      # CI still enforces a frozen lockfile.
+      - run: bun install
       - name: Cross-compile every platform binary
         run: cd packages/typos && bun run build:all
       # Platform packages publish before the main package: its optional-

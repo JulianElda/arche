@@ -42,7 +42,7 @@
     },
     "packages/domos": {
       "name": "@julianelda/domos",
-      "version": "2.1.1",
+      "version": "3.0.0",
       "dependencies": {
         "@julianelda/chroma": "^1.0.0",
         "@julianelda/stilo": "^1.0.2",
@@ -75,7 +75,7 @@
     },
     "packages/lexis": {
       "name": "@julianelda/lexis",
-      "version": "3.5.3",
+      "version": "4.0.0",
       "peerDependencies": {
         "eslint-plugin-perfectionist": "^5.10.0",
         "eslint-plugin-svelte": "^3.19.0",
@@ -90,7 +90,7 @@
     },
     "packages/scratchpad": {
       "name": "@julianelda/scratchpad",
-      "version": "1.19.1",
+      "version": "2.0.0",
       "dependencies": {
         "ajv": "^8.20.0",
         "js-cookie": "^3.0.5",
@@ -128,7 +128,7 @@
     },
     "packages/typos": {
       "name": "@julianelda/typos",
-      "version": "0.3.0",
+      "version": "1.1.0",
       "bin": {
         "typos": "./bin/typos.js",
       },
@@ -142,23 +142,23 @@
     },
     "packages/typos/npm/darwin-arm64": {
       "name": "@julianelda/typos-darwin-arm64",
-      "version": "0.3.0",
+      "version": "1.1.0",
     },
     "packages/typos/npm/darwin-x64": {
       "name": "@julianelda/typos-darwin-x64",
-      "version": "0.3.0",
+      "version": "1.1.0",
     },
     "packages/typos/npm/linux-arm64": {
       "name": "@julianelda/typos-linux-arm64",
-      "version": "0.3.0",
+      "version": "1.1.0",
     },
     "packages/typos/npm/linux-x64": {
       "name": "@julianelda/typos-linux-x64",
-      "version": "0.3.0",
+      "version": "1.1.0",
     },
     "packages/typos/npm/win32-x64": {
       "name": "@julianelda/typos-win32-x64",
-      "version": "0.3.0",
+      "version": "1.1.0",
     },
   },
   "packages": {

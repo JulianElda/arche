@@ -62,7 +62,7 @@
     {
       "type": "linked-versions",
       "groupName": "typos",
-      "merge": false,
+      "merge": true,
       "components": [
         "typos",
         "typos-darwin-arm64",
