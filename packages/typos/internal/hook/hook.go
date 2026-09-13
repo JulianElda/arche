@@ -1,10 +1,23 @@
-// Package hook parses Claude Code's PostToolUse hook JSON payload.
+// Package hook parses Claude Code's PreToolUse/PostToolUse hook JSON payload.
 package hook
 
 import (
 	"encoding/json"
 	"io"
 )
+
+// hook_event_name values this tool handles besides PostToolUse and
+// PostToolUseFailure, which share the default path.
+const (
+	PreToolUse   = "PreToolUse"   // before a tool runs
+	SessionStart = "SessionStart" // session started, resumed, cleared or compacted
+	SessionEnd   = "SessionEnd"   // session ended
+	Stop         = "Stop"         // Claude is about to end its turn
+)
+
+// BashTool is the tool_name of a Bash call, whose changed files have to be
+// worked out after the fact — see internal/changes.
+const BashTool = "Bash"
 
 // SupportedTools are the tool_name values this hook can resolve a single
 // edited file path from. Bash calls have no single file_path to scope to.
@@ -14,17 +27,22 @@ var SupportedTools = map[string]bool{
 	"Write":     true,
 }
 
-// Payload is the subset of Claude Code's PostToolUse hook JSON this tool
-// needs. Unrecognized fields (session_id, cwd, tool_response, ...) are
-// ignored by encoding/json.
+// Payload is the subset of Claude Code's tool hook JSON this tool needs.
+// Unrecognized fields (session_id, tool_response, ...) are ignored by
+// encoding/json.
 type Payload struct {
-	ToolName  string `json:"tool_name"`
-	ToolInput struct {
+	HookEventName  string `json:"hook_event_name"`
+	SessionID      string `json:"session_id"`
+	Cwd            string `json:"cwd"`
+	StopHookActive bool   `json:"stop_hook_active"`
+	ToolName       string `json:"tool_name"`
+	ToolUseID      string `json:"tool_use_id"`
+	ToolInput      struct {
 		FilePath string `json:"file_path"`
 	} `json:"tool_input"`
 }
 
-// Parse decodes a PostToolUse payload from r.
+// Parse decodes a tool hook payload from r.
 func Parse(r io.Reader) (Payload, error) {
 	var payload Payload
 	if err := json.NewDecoder(r).Decode(&payload); err != nil {

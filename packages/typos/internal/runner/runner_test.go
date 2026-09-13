@@ -124,9 +124,9 @@ func writeScript(t *testing.T, dir, name, contents string) string {
 func TestRun_AllCommandsSucceed(t *testing.T) {
 	repoRoot := t.TempDir()
 	ok := writeScript(t, repoRoot, "ok.sh", "exit 0\n")
-	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{ok}}}
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{ok}, Files: []string{filepath.Join(repoRoot, "a.ts")}}}
 
-	if failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, time.Second); failure != nil {
+	if failure := Run(context.Background(), groups, repoRoot, time.Second); failure != nil {
 		t.Errorf("Run() = %#v, want nil", failure)
 	}
 }
@@ -134,9 +134,9 @@ func TestRun_AllCommandsSucceed(t *testing.T) {
 func TestRun_CapturesExitCodeAndStderrOutput(t *testing.T) {
 	repoRoot := t.TempDir()
 	failing := writeScript(t, repoRoot, "fail.sh", "echo boom >&2\nexit 3\n")
-	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{failing}}}
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{failing}, Files: []string{filepath.Join(repoRoot, "a.ts")}}}
 
-	failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, time.Second)
+	failure := Run(context.Background(), groups, repoRoot, time.Second)
 	if failure == nil {
 		t.Fatal("Run() = nil, want a failure")
 	}
@@ -157,9 +157,9 @@ func TestRun_CapturesStdoutOutput(t *testing.T) {
 	// the failing command actually used.
 	repoRoot := t.TempDir()
 	failing := writeScript(t, repoRoot, "fail.sh", "echo diagnostic-on-stdout\nexit 1\n")
-	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{failing}}}
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{failing}, Files: []string{filepath.Join(repoRoot, "a.ts")}}}
 
-	failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, time.Second)
+	failure := Run(context.Background(), groups, repoRoot, time.Second)
 	if failure == nil {
 		t.Fatal("Run() = nil, want a failure")
 	}
@@ -173,9 +173,9 @@ func TestRun_BailsOnFirstFailureWithinGroup(t *testing.T) {
 	failing := writeScript(t, repoRoot, "fail.sh", "exit 1\n")
 	marker := filepath.Join(repoRoot, "marker")
 	second := writeScript(t, repoRoot, "second.sh", "touch "+marker+"\n")
-	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{failing, second}}}
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{failing, second}, Files: []string{filepath.Join(repoRoot, "a.ts")}}}
 
-	failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, time.Second)
+	failure := Run(context.Background(), groups, repoRoot, time.Second)
 	if failure == nil {
 		t.Fatal("Run() = nil, want a failure")
 	}
@@ -191,12 +191,12 @@ func TestRun_GroupsRunConcurrently(t *testing.T) {
 	repoRoot := t.TempDir()
 	slow := writeScript(t, repoRoot, "slow.sh", "sleep 0.2\n")
 	groups := []nanostaged.MatchedGroup{
-		{Pattern: "**/*.ts", Commands: []string{slow}},
-		{Pattern: "**/*.css", Commands: []string{slow}},
+		{Pattern: "**/*.ts", Commands: []string{slow}, Files: []string{filepath.Join(repoRoot, "a.ts")}},
+		{Pattern: "**/*.css", Commands: []string{slow}, Files: []string{filepath.Join(repoRoot, "a.ts")}},
 	}
 
 	start := time.Now()
-	if failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, time.Second); failure != nil {
+	if failure := Run(context.Background(), groups, repoRoot, time.Second); failure != nil {
 		t.Fatalf("Run() = %#v, want nil", failure)
 	}
 	if elapsed := time.Since(start); elapsed > 350*time.Millisecond {
@@ -204,13 +204,14 @@ func TestRun_GroupsRunConcurrently(t *testing.T) {
 	}
 }
 
-func TestRun_AppendsFilePathAsTrailingArgUnderRepoRootCwd(t *testing.T) {
+func TestRun_AppendsFilesAsTrailingArgsUnderRepoRootCwd(t *testing.T) {
 	repoRoot := t.TempDir()
-	echoArg := writeScript(t, repoRoot, "echo-arg.sh", `echo "$1" > out.txt`+"\n")
-	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{echoArg}}}
+	echoArgs := writeScript(t, repoRoot, "echo-args.sh", `printf '%s\n' "$@" > out.txt`+"\n")
+	a := filepath.Join(repoRoot, "a.ts")
+	b := filepath.Join(repoRoot, "b.ts")
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{echoArgs + " --fix"}, Files: []string{a, b}}}
 
-	filePath := filepath.Join(repoRoot, "a.ts")
-	if failure := Run(context.Background(), groups, filePath, repoRoot, time.Second); failure != nil {
+	if failure := Run(context.Background(), groups, repoRoot, time.Second); failure != nil {
 		t.Fatalf("Run() = %#v, want nil", failure)
 	}
 
@@ -218,7 +219,7 @@ func TestRun_AppendsFilePathAsTrailingArgUnderRepoRootCwd(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ReadFile() error = %v", err)
 	}
-	if want := filePath + "\n"; string(got) != want {
+	if want := "--fix\n" + a + "\n" + b + "\n"; string(got) != want {
 		t.Errorf("out.txt = %q, want %q", got, want)
 	}
 }
@@ -230,9 +231,9 @@ func TestRun_PrependsNodeModulesBinToPATH(t *testing.T) {
 		t.Fatalf("MkdirAll() error = %v", err)
 	}
 	writeScript(t, binDir, "fakelint", "exit 0\n")
-	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{"fakelint"}}}
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{"fakelint"}, Files: []string{filepath.Join(repoRoot, "a.ts")}}}
 
-	if failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, time.Second); failure != nil {
+	if failure := Run(context.Background(), groups, repoRoot, time.Second); failure != nil {
 		t.Errorf("Run() = %#v, want nil (fakelint should resolve via the prepended PATH)", failure)
 	}
 }
@@ -240,9 +241,9 @@ func TestRun_PrependsNodeModulesBinToPATH(t *testing.T) {
 func TestRun_TimeoutAbortsTheCommand(t *testing.T) {
 	repoRoot := t.TempDir()
 	slow := writeScript(t, repoRoot, "slow.sh", "sleep 1\n")
-	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{slow}}}
+	groups := []nanostaged.MatchedGroup{{Pattern: "**/*.ts", Commands: []string{slow}, Files: []string{filepath.Join(repoRoot, "a.ts")}}}
 
-	failure := Run(context.Background(), groups, filepath.Join(repoRoot, "a.ts"), repoRoot, 50*time.Millisecond)
+	failure := Run(context.Background(), groups, repoRoot, 50*time.Millisecond)
 	if failure == nil {
 		t.Fatal("Run() = nil, want a failure from the timeout")
 	}

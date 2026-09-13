@@ -1,5 +1,9 @@
 {
   "**/*.{js,jsx,ts,tsx}": ["oxlint --fix", "oxfmt"],
   "**/*.{css,html,json,yaml,yml,md}": "oxfmt",
-  "**/*.svelte": ["bunx eslint --fix", "oxfmt"]
+  "**/*.svelte": [
+    "oxlint --fix",
+    "./packages/domos/node_modules/.bin/eslint --fix",
+    "oxfmt"
+  ]
 }

@@ -15,7 +15,8 @@ at the bottom for exactly what's landed). Package layout:
 packages/typos/
   main.go                    # entrypoint: wires everything below together
   internal/
-    hook/hook.go              # PostToolUse JSON payload parsing
+    hook/hook.go              # PreToolUse/PostToolUse JSON payload parsing
+    changes/changes.go        # which files a Bash call changed (markers + read-only git status)
     nanostaged/nanostaged.go  # .nano-staged.json discovery, parsing, glob matching
     runner/runner.go          # tokenization, PATH resolution, command execution
   bin/typos.js                # npm dispatcher: resolves + execs the platform binary
@@ -27,19 +28,34 @@ packages/typos/
 is the whole pipeline, in order, no-op'ing (return 0) at the first
 inapplicable step:
 
-1. `hook.Parse(r)` — decode the PostToolUse payload; bail on malformed JSON.
-2. `payload.FilePath()` — bail unless `tool_name` is `Write`/`Edit`/`MultiEdit`
-   and `tool_input.file_path` is non-empty.
-3. `os.Stat` the path — bail if it's not a regular file.
-4. `resolveConfig` — either `nanostaged.Load(configPathOverride)` if `-c`/
-   `--config` was given, or `nanostaged.Discover(filepath.Dir(path))` to
-   walk up looking for the nearest `.nano-staged.json`; bail if neither
-   yields a usable config.
-5. `config.Match(repoRoot, path)` — bail if no glob pattern matches.
-6. `runner.Run(ctx, groups, path, repoRoot, commandTimeout)` — actually run
-   the matched commands. `repoRoot` (the config file's directory) is used
+1. `hook.Parse(r)` — decode the tool hook payload; bail on malformed JSON.
+2. Non-tool events are handled up front, by `hook_event_name`:
+   - `PreToolUse`: for `Bash`, `changes.Begin` drops a marker file keyed
+     by `tool_use_id`; exit 0.
+   - `SessionStart`: `changes.BeginOnce` drops a `session-<session_id>`
+     marker, keeping an existing one (resume/compact); exit 0.
+   - `SessionEnd`: remove the session's markers; exit 0.
+   - `Stop`: `sweep` — see below.
+3. Work out the file list:
+   - `Bash` (`PostToolUse`/`PostToolUseFailure`): `bashChangedFiles` —
+     `changes.End` reads back and removes the marker (no marker → bail),
+     then `changes.Since(cwd, start)` lists files git reports dirty whose
+     mtime is at/after the marker's. More than `maxBashChangedFiles` (20)
+     → bail.
+   - otherwise `payload.FilePath()` — bail unless `tool_name` is
+     `Write`/`Edit`/`MultiEdit`, `tool_input.file_path` is non-empty, and
+     it's a regular file.
+4. `lint` — group files by config: `-c`/`--config` if given, else
+   `nanostaged.Find(filepath.Dir(file))` per file; files with no config
+   are dropped. For each config, `nanostaged.Load` (skip on parse error)
+   and `config.Match(repoRoot, files...)`, which returns one group per
+   matching pattern with the subset of files it matched.
+5. `runner.Run(ctx, groups, repoRoot, commandTimeout)` — actually run
+   the matched commands, each with its group's `Files` appended as
+   trailing args (one spawn per command, like nano-staged's
+   `args.concat(files)`). `repoRoot` (the config file's directory) is used
    as both `cmd.Dir` and the base for `node_modules/.bin` PATH resolution.
-7. Any `*runner.CommandFailure` gets written to stderr and maps to exit
+6. Any `*runner.CommandFailure` gets written to stderr and maps to exit
    code 2 (`blockingFeedbackExitCode`) — Claude Code's PostToolUse
    "blocking feedback" convention, so Claude sees the real lint/format
    error and can self-correct.
@@ -48,13 +64,49 @@ inapplicable step:
 payload actionable at all" (supported tool + non-empty path) — everything
 else in `main.go` assumes that's already been checked.
 
+**`internal/changes`**: Bash and Stop payloads have no `file_path`, so
+changed files are inferred. Two details matter here:
+
+- The start time is the **marker file's own mtime**, not a `time.Now()`
+  stored in it. Linux stamps mtimes from a coarse clock that can lag
+  `time.Now()` by a tick, so a file written right after `Begin` could
+  otherwise look older than the call and be missed.
+- git is strictly read: `git --no-optional-locks status --porcelain=v1 -z
+--untracked-files=all --no-renames --ignore-submodules=all` from the work
+  tree root (found by walking up for `.git`, no extra git spawn). Without
+  `--no-optional-locks`, `status` may take `index.lock` to refresh stat
+  info and collide with Claude's own concurrent git commands — the same
+  class of git race this package exists to avoid.
+- git itself is run from a fixed, root-owned location (`gitCandidates`:
+  `/usr/bin/git`, `/usr/local/bin/git`, Homebrew, Git for Windows), never
+  looked up through `PATH` (Sonar go:S4036) — a writable `PATH` entry could
+  shadow it. git anywhere else → `Since` errors → the Bash/Stop path no-ops.
+
+**`sweep`** (the `Stop` hook): lints files git reports dirty with mtime
+at/after the `session-<id>` marker — no file cap, it's the safety net.
+Before asking git it `Begin`s a `sweep-<id>` marker; after a sweep with no
+failures that's `Rename`d over the session marker (rename keeps the
+kernel-stamped mtime, see above), so the next sweep only covers newer
+changes. A failing sweep drops it instead, so failing files are rechecked
+at the next Stop. Failure → exit 2 (Claude keeps going), except when
+`stop_hook_active` is set → exit 0, so an unfixable file can't loop the
+session. No session marker (SessionStart not wired up, or typos added
+mid-session) → create one and no-op. The sweep can't tell Claude's edits
+from yours, so files you edit mid-session get linted too.
+
+Known, accepted gaps: overlapping parallel tool calls can attribute each
+other's edits (worst case a file is linted twice); `mv` preserves mtime so
+moved files aren't picked up; edits outside the `cwd`'s work tree aren't
+seen; markers for calls whose Post hook never fires are left behind in
+`~/.cache/typos` (empty files) — the per-user cache dir (`os.UserCacheDir`), not the shared temp dir, where another local user could pre-create a predictable `/tmp/typos` (Sonar go:S5445).
+
 **`internal/nanostaged`**: `Config` is `map[string][]string` (pattern →
 commands, both `"cmd"` and `["cmd1","cmd2"]` config shapes normalized to the
 latter). `Find`/`Discover` walk up the directory tree exactly like
 `internal/runner.FindNodeModulesBin` does (same pattern, different target
 file — not shared code, kept separate per package since they're
-conceptually unrelated lookups). `Config.Match` returns `[]MatchedGroup`
-sorted by pattern string for determinism — actual execution order across
+conceptually unrelated lookups). `Config.Match(configDir, paths...)` returns `[]MatchedGroup` (each with the
+subset of `paths` it matched), sorted by pattern string for determinism — actual execution order across
 groups doesn't matter since they run concurrently.
 
 **`internal/runner`**: `Tokenize` wraps `go-shellwords`; `Run` executes
@@ -86,10 +138,11 @@ stderr feedback both pass through unchanged) and propagates its exit code.
 **`.goreleaser.yaml`**: one `builds` entry per platform (not a GOOS/GOARCH
 matrix) because npm's os/cpu naming (`x64`, `win32`) doesn't map cleanly
 from Go's (`amd64`, `windows`) — each build's `hooks.post` does a literal
-`cp {{ .Path }} npm/<platform>/typos[.exe]`. `package.json` has two build
-scripts: `build` (single-target snapshot, fast — used for local dev and the
-generic CI `bun run build` step) and `build:all` (all 5 targets — used only
-by the release publish job).
+`cp {{ .Path }} npm/<platform>/typos[.exe]`. `package.json` has three build
+scripts: `build` (single-target goreleaser snapshot, fast — used by the
+generic CI `bun run build` step), `build:all` (all 5 targets — used only
+by the release publish job), and `build:local` (plain
+`go build -o ~/.local/bin/typos .` — the binary actually used day to day).
 
 **Publishing** (`.github/workflows/release-please.yml`): `typos` and its 5
 platform packages are version-linked in `release-please-config.json`
@@ -353,6 +406,15 @@ was built incrementally, one commit per concern, each left green
 8. `.goreleaser.yaml` → npm platform package wiring, plus restructuring
    `release-please.yml`'s publish job (see "Publishing" above).
 9. The `-c`/`--config` override flag.
+10. `Bash` support (`internal/changes`): a `PreToolUse` marker plus
+    read-only `git status` after the call, files batched per pattern,
+    capped at 20 changed files. Added because in auto mode Claude often
+    edits via `sed -i`/heredocs, which the Write/Edit-only hook never saw.
+    Supersedes the "`Bash` calls silently no-op" v1 decision below (still
+    true outside a git work tree or without the PreToolUse hook wired up).
+11. `Stop` sweep (`sweep` in `main.go`): lints everything changed during
+    the session as a safety net for edits the per-tool hooks missed,
+    using `SessionStart`/`SessionEnd` to manage a per-session marker.
 
 Tests favor real execution over mocking: `internal/runner`'s tests write
 actual executable shell script fixtures to a `t.TempDir()` and run them
@@ -375,11 +437,14 @@ bun run --filter='@julianelda/typos' build:all   # full 5-platform cross-compile
 **Not yet done** (deliberately, not an oversight):
 
 - Everything under "Explicitly out of scope / deferred for v1" above.
-- The actual cutover: `~/.claude/settings.json`'s `PostToolUse` hook still
-  points at `lint-edited-file.sh`. That's dotfiles, outside this repo, and
-  should only be switched to `typos` after a real npm release is published
-  and manually smoke-tested — not something to do as part of a change in
-  this repo.
+
+**Local use** (dev setup is Linux-only, so no npm install or goreleaser in
+the loop): `build:local` puts the binary at `~/.local/bin/typos`, and each repo that
+wants it wires it in its own `.claude/settings.json` (not globally) for every
+hook event this tool handles — `SessionStart`, `PreToolUse` (`Bash`),
+`PostToolUse` (`Write|Edit|MultiEdit|Bash`), `PostToolUseFailure` (`Bash`),
+`Stop`, `SessionEnd` — see this repo's `.claude/settings.json`. Rerun `build:local` after changing the Go code; the npm/goreleaser
+distribution is kept but not what's used locally.
 
 ## Repo conventions (see repo-root `AGENTS.md` for the full list)
 
