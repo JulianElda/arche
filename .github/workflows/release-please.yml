@@ -184,12 +184,23 @@ jobs:
           failed=()
           for dir in ${dirs+"${dirs[@]}"}; do
             echo "::group::npm publish $dir"
-            if (cd "$dir" && npm publish --access public); then
+            log=$(mktemp)
+            if (cd "$dir" && npm publish --access public) 2>&1 | tee "$log"; then
               echo "published $dir"
+            elif grep -qiE 'EPUBLISHCONFLICT|cannot publish over' "$log"; then
+              # "Re-run failed jobs" replays this job against `plan`'s *cached*
+              # outputs, which still name every package the failed attempt
+              # already published — so a re-run would 403 on the first one and
+              # never reach the main package. Treating "this exact version is
+              # already there" as done is what makes a re-run a usable recovery
+              # path; publishing is meant to converge, not to demand a
+              # pristine starting state.
+              echo "already published $dir"
             else
               echo "FAILED $dir"
               failed+=("$dir")
             fi
+            rm -f "$log"
             echo "::endgroup::"
           done
 
@@ -206,12 +217,20 @@ jobs:
       #
       # Retried rather than checked once: a package published seconds ago in
       # the step above is not necessarily visible on the registry yet.
+      #
+      # The budget is deliberately generous. npm returns 200 with a stale
+      # packument while the new version propagates across CDN edges, and that
+      # delay has a long tail: in run 35523182556, typos-darwin-arm64 took 48s
+      # while typos-darwin-x64 needed over 94s and blew a 50s budget, failing
+      # a release whose packages had all published correctly. Waiting is only
+      # ever paid when a package really is absent, since the loop breaks on
+      # the first success.
       - name: Verify every platform package is on the registry
         if: ${{ contains(fromJSON(needs.plan.outputs.typos), 'packages/typos') }}
         shell: bash
         run: |
           set -euo pipefail
-          attempts=6
+          attempts=30
           deps=$(jq -r '.optionalDependencies | to_entries[] | "\(.key) \(.value)"' \
             packages/typos/package.json)
 
