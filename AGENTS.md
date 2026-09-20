@@ -11,21 +11,34 @@ file extension so they load only when a matching file is in context.
 
 # Commands
 
-The dev shell is the supported way to run these. It pins `bun`, `node`, `go`,
-`golangci-lint` and `goreleaser`, and points Playwright at browsers from the same
-nixpkgs lock. `direnv allow` once, and every shell in the repo has them; without
-it, `nix develop` per command. Outside the shell the checks run against whatever
-the host happens to install, and the browser suites are the first to break.
+`just` from the repo root, and `just` alone lists every recipe. The recipes wrap
+the `package.json` scripts rather than replacing them: CI installs bun with
+`setup-bun`, release-please's publish job runs in an isolated checkout, and
+`lefthook.yml` calls `./node_modules/.bin/*` directly — none of the three can
+reach `just`, so the scripts stay the contract.
 
-- `bun run format -- --check` — oxfmt, whole repo
-- `bun run lint` — oxlint, then each package's own (`eslint` in domos,
-  `golangci-lint run` in typos)
-- `bun run check` — svelte-check in domos
-- `bun run build` — every package, including typos' goreleaser snapshot
-- `bun run --filter '@julianelda/domos' test -- run` — browser-mode vitest.
-  `run` is needed because the script is bare `vitest`, which otherwise watches
-- `bun run --filter '@julianelda/scratchpad' test -- run` — same
-- `bun run --filter '@julianelda/typos' test` — `go test ./...`
+The dev shell is the supported way to run these. It pins `bun`, `node`, `go`,
+`golangci-lint`, `goreleaser` and `just`, and points Playwright at browsers from
+the same nixpkgs lock. `direnv allow` once, and every shell in the repo has them;
+without it, `nix develop` per command. Outside the shell the checks run against
+whatever the host happens to install, and the browser suites are the first to
+break.
+
+- `just ci` — everything `.github/workflows/ci.yml` runs, in its order:
+  `format-check`, `lint`, `check`, `build`, then the three suites. It skips the
+  workflow's `bunx svelte-kit sync`, which is there only because CI installs with
+  `--ignore-scripts`
+- `just check` — svelte-check in domos, the same narrow thing the `check` script
+  means. The whole gate is `just ci`
+- `just test` — all three suites. `just test-domos`, `just test-scratchpad` and
+  `just test-typos` run one, and each takes that suite's own flags
+  (`just test-domos --coverage`, `just test-typos -run TestRun`), which is why
+  they are three recipes and not one parameterised by package
+- `just dev-domos`, `just dev-scratchpad` — vite dev servers.
+  `just storybook-domos`, `just storybook-scratchpad` — storybooks; both bind
+  6006, so run one at a time
+- `just typos-install` — rebuilds `~/.local/bin/typos`, the binary the hooks in
+  `.claude/settings.json` actually run
 
 ## Bumping the toolchain
 
@@ -36,16 +49,21 @@ nixpkgs, and the npm `playwright` version is a mirror of
 driver is not reachable by bumping npm alone.
 
 ```sh
-nix flake update
-direnv reload    # the shellHook names any version that no longer matches
-bun add -d -E playwright@$PLAYWRIGHT_DRIVER_VERSION
-bun add -d -E -F '@julianelda/domos' @playwright/test@$PLAYWRIGHT_DRIVER_VERSION
-# set "packageManager" to the bun version the hook reports, then:
+just bump-toolchain
 direnv reload    # silent
 ```
 
-`-E` is not optional: `bun add` writes a caret range by default, which would undo
-the exact pin and let `bun update` walk away from the flake on its own.
+The recipe runs `nix flake update`, then re-pins both playwright packages and
+`packageManager` from the updated flake. It reads the versions with `nix eval` on
+`PLAYWRIGHT_DRIVER_VERSION` and `BUN_VERSION` rather than from the environment,
+because a recipe is a subprocess: a `direnv reload` inside it cannot update the
+shell that invoked it, so the environment it can see is the stale one. The
+`direnv reload` above is yours to run afterwards, and it should be silent — the
+shellHook names any version that still does not match.
+
+It passes `-E` to both `bun add` calls, and that is not optional: `bun add` writes
+a caret range by default, which would undo the exact pin and let `bun update` walk
+away from the flake on its own.
 
 CI needs no step here. It runs `setup-bun`, which reads `packageManager`, and
 `playwright install chromium`, which fetches whatever build the npm version asks

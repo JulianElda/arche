@@ -18,6 +18,7 @@
             go # packages/typos
             golangci-lint # v2 config in packages/typos/.golangci.yml, run by its `lint` script
             goreleaser # packages/typos build + build:all
+            just # the justfile at the repo root, this repo's entry point
           ];
 
           # Playwright cannot use its own downloaded browsers here: the Chrome it
@@ -31,6 +32,11 @@
           # readable handle on the locked driver. The bump commands in AGENTS.md
           # take it directly.
           PLAYWRIGHT_DRIVER_VERSION = pkgs.playwright-driver.version;
+
+          # Same reasoning one step over: `bun --version` is the shell's bun, not
+          # the locked one, so this is the readable handle `just bump-toolchain`
+          # rewrites `packageManager` from.
+          BUN_VERSION = pkgs.bun.version;
 
           # Those browsers only satisfy the npm playwright of the same version,
           # and `nix flake update` moves bun as well, so both pins are checked on
