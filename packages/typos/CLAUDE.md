@@ -78,9 +78,20 @@ changed files are inferred. Two details matter here:
   info and collide with Claude's own concurrent git commands — the same
   class of git race this package exists to avoid.
 - git itself is run from a fixed, root-owned location (`gitCandidates`:
-  `/usr/bin/git`, `/usr/local/bin/git`, Homebrew, Git for Windows), never
-  looked up through `PATH` (Sonar go:S4036) — a writable `PATH` entry could
-  shadow it. git anywhere else → `Since` errors → the Bash/Stop path no-ops.
+  `/usr/bin/git`, `/bin/git`, `/usr/local/bin/git`, Homebrew, Git for Windows),
+  never looked up through `PATH` (Sonar go:S4036) — a writable `PATH` entry
+  could shadow it. git anywhere else → `Since` errors → the Bash/Stop path
+  no-ops. Both callers swallow the error deliberately: `bashChangedFiles`
+  returns no files and `sweep` returns 0, so a missing git never fails a hook.
+- **On NixOS that "anywhere else" is always the case.** git lives under
+  `/run/current-system/sw/bin`, which is a per-generation profile symlink, not
+  a fixed root-owned path, so `findGit` never matches and the `Bash` and `Stop`
+  paths are permanently inert there — silently, by the design above.
+  `PostToolUse` on `Write`/`Edit`/`MultiEdit` is unaffected: it takes
+  `tool_input.file_path` and never asks git. CI cannot catch this (ubuntu
+  runners have `/usr/bin/git`, the first candidate); locally it shows up as
+  four failing tests, `TestSince` plus the three `TestRun_*` cases that go
+  through `changes.Since`.
 
 **`sweep`** (the `Stop` hook): lints files git reports dirty with mtime
 at/after the `session-<id>` marker — no file cap, it's the safety net.
