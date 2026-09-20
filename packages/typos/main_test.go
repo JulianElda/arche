@@ -323,6 +323,35 @@ func TestDoctor(t *testing.T) {
 		}
 	})
 
+	t.Run("defaults to the process's working directory", func(t *testing.T) {
+		isolateMarkers(t)
+		repoRoot := newGitRepo(t)
+		writeConfigFile(t, repoRoot, `{"**/*.ts": "oxfmt"}`)
+		t.Chdir(repoRoot)
+
+		var out bytes.Buffer
+		if got := doctorFromCwd(&out); got != 0 {
+			t.Fatalf("doctorFromCwd() = %d, want 0; output = %s", got, out.String())
+		}
+		if want := "config:   " + filepath.Join(repoRoot, ".nano-staged.json") + "\n"; !strings.Contains(out.String(), want) {
+			t.Errorf("doctorFromCwd() output = %q, want it to contain %q", out.String(), want)
+		}
+	})
+
+	t.Run("reports an unavailable cache directory", func(t *testing.T) {
+		// os.UserCacheDir needs one of these; with neither, the markers
+		// line reports instead of naming a path.
+		t.Setenv("XDG_CACHE_HOME", "")
+		t.Setenv("HOME", "")
+		t.Setenv("LocalAppData", "")
+
+		var out bytes.Buffer
+		doctor(&out, t.TempDir())
+		if want := "markers:  no user cache directory: "; !strings.Contains(out.String(), want) {
+			t.Errorf("doctor() output = %q, want it to contain %q", out.String(), want)
+		}
+	})
+
 	t.Run("exits 1 when git can't be found", func(t *testing.T) {
 		isolateMarkers(t)
 		// The fixed candidates exist wherever these tests run, so the real

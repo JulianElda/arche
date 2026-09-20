@@ -69,10 +69,7 @@ func findGit(candidates []string, pathEnv, workTree string) (path, source string
 		}
 	}
 
-	name := "git"
-	if runtime.GOOS == "windows" {
-		name = "git.exe"
-	}
+	name := gitBinaryName(runtime.GOOS)
 	for _, dir := range filepath.SplitList(pathEnv) {
 		if untrusted(dir, workTree) {
 			continue
@@ -88,6 +85,15 @@ func findGit(candidates []string, pathEnv, workTree string) (path, source string
 		return candidate, sourcePATH, nil
 	}
 	return "", "", ErrGitNotFound
+}
+
+// gitBinaryName returns the filename git has on goos. Split out from findGit
+// so both branches are reachable from a test on any platform.
+func gitBinaryName(goos string) string {
+	if goos == "windows" {
+		return "git.exe"
+	}
+	return "git"
 }
 
 // untrusted reports whether path must not be used to supply git: an empty
@@ -114,8 +120,9 @@ func untrusted(path, workTree string) bool {
 	// everything under it read as outside.
 	rel, err := filepath.Rel(resolveSymlinks(workTree), resolveSymlinks(path))
 	if err != nil {
-		// No relative path exists (different Windows volumes). Nothing
-		// is known about containment, so don't extend trust.
+		// No relative path exists: a relative workTree against this
+		// absolute path, or different Windows volumes. Nothing is known
+		// about containment, so don't extend trust.
 		return true
 	}
 	return rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator))

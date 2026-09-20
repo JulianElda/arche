@@ -61,8 +61,10 @@ inapplicable step:
    error and can self-correct.
 
 **`main.go`'s `doctor(w io.Writer, dir string) int`** is the other entry
-point, reached when `flag.Arg(0)` is `doctor`. Hook payloads arrive on stdin
-and never carry positional arguments, so it can't collide with the hook path.
+point, reached via `doctorFromCwd` when `flag.Arg(0)` is `doctor`. Hook payloads
+arrive on stdin and never carry positional arguments, so it can't collide with
+the hook path. `main` keeps nothing but process plumbing — resolving the cwd
+lives in `doctorFromCwd` — so everything below it stays testable.
 It prints one line each for git (and whether that was a fixed location or
 `PATH`), the marker directory, the work tree and the config that apply when
 run from `dir`, and exits 1 if git didn't resolve, 0 otherwise. It exists

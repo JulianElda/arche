@@ -233,6 +233,74 @@ func TestFindGit_RefusesASymlinkIntoTheWorkTree(t *testing.T) {
 	}
 }
 
+func TestGitBinaryName(t *testing.T) {
+	if got := gitBinaryName("windows"); got != "git.exe" {
+		t.Errorf("gitBinaryName(\"windows\") = %q, want \"git.exe\"", got)
+	}
+	for _, goos := range []string{"linux", "darwin"} {
+		if got := gitBinaryName(goos); got != "git" {
+			t.Errorf("gitBinaryName(%q) = %q, want \"git\"", goos, got)
+		}
+	}
+}
+
+// TestFindGit_WithoutAWorkTreeRefusesNothingOnContainment covers Since's
+// out-of-work-tree case: there's no tree to be inside, so only the other two
+// rules apply.
+func TestFindGit_WithoutAWorkTreeRefusesNothingOnContainment(t *testing.T) {
+	dir := t.TempDir()
+	want := writeExecutable(t, dir, "git")
+
+	got, source, err := findGit(nil, dir, "")
+	if err != nil || got != want || source != sourcePATH {
+		t.Errorf("findGit() = %q, %q, %v; want %q, %q, nil", got, source, err, want, sourcePATH)
+	}
+}
+
+// TestFindGit_RefusesEverythingForARelativeWorkTree pins the fail-closed
+// behavior when containment can't be decided: filepath.Rel has no answer for a
+// relative work tree against an absolute entry, and an undecidable answer must
+// not become trust.
+func TestFindGit_RefusesEverythingForARelativeWorkTree(t *testing.T) {
+	dir := t.TempDir()
+	writeExecutable(t, dir, "git")
+
+	if _, _, err := findGit(nil, dir, "some/relative/tree"); !errors.Is(err, ErrGitNotFound) {
+		t.Errorf("findGit() error = %v, want ErrGitNotFound", err)
+	}
+}
+
+// TestWorkTree and TestFindGit_Exported cover the two wrappers doctor calls.
+// main_test.go exercises them too, but cross-package calls don't count toward
+// this package's coverage profile.
+func TestWorkTree(t *testing.T) {
+	dir := t.TempDir()
+	if root, ok := WorkTree(dir); ok {
+		t.Errorf("WorkTree() = %q, %t; want \"\", false outside a work tree", root, ok)
+	}
+
+	writeFile(t, filepath.Join(dir, ".git", "HEAD"), "ref: refs/heads/main\n")
+	sub := mkdir(t, filepath.Join(dir, "src", "nested"))
+	if root, ok := WorkTree(sub); !ok || root != dir {
+		t.Errorf("WorkTree() = %q, %t; want %q, true", root, ok, dir)
+	}
+}
+
+func TestFindGit_Exported(t *testing.T) {
+	// Resolves against the real PATH and gitCandidates; the tests already
+	// require a usable git, so it must find one.
+	got, source, err := FindGit(t.TempDir())
+	if err != nil {
+		t.Fatalf("FindGit() error = %v", err)
+	}
+	if !isExecutableFile(got) {
+		t.Errorf("FindGit() = %q, want an executable file", got)
+	}
+	if source != sourceFixed && source != sourcePATH {
+		t.Errorf("FindGit() source = %q, want %q or %q", source, sourceFixed, sourcePATH)
+	}
+}
+
 func TestSince_OutsideGitIsNil(t *testing.T) {
 	got, err := Since(context.Background(), t.TempDir(), time.Time{})
 	if err != nil || got != nil {

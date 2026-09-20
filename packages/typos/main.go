@@ -35,14 +35,20 @@ func main() {
 	// Hook payloads arrive on stdin and never carry positional arguments,
 	// so a subcommand here can't collide with the hook path.
 	if flag.Arg(0) == "doctor" {
-		cwd, err := os.Getwd()
-		if err != nil {
-			cwd = "."
-		}
-		os.Exit(doctor(os.Stdout, cwd))
+		os.Exit(doctorFromCwd(os.Stdout))
 	}
 
 	os.Exit(run(os.Stdin, os.Stderr, configPath))
+}
+
+// doctorFromCwd runs doctor against the process's working directory. main is
+// left with nothing but process plumbing, which keeps this testable.
+func doctorFromCwd(w io.Writer) int {
+	cwd, err := os.Getwd()
+	if err != nil {
+		cwd = "."
+	}
+	return doctor(w, cwd)
 }
 
 // lookupGit is indirected only so TestDoctor can drive the failure path:
