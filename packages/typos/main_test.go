@@ -292,6 +292,90 @@ func TestRun_Stop_WithoutSessionStartIsNoOp(t *testing.T) {
 	}
 }
 
+func TestDoctor(t *testing.T) {
+	t.Run("names where each dependency resolved", func(t *testing.T) {
+		isolateMarkers(t)
+		repoRoot := newGitRepo(t)
+		writeConfigFile(t, repoRoot, `{"**/*.ts": "oxfmt"}`)
+
+		var out bytes.Buffer
+		if got := doctor(&out, repoRoot); got != 0 {
+			t.Fatalf("doctor() = %d, want 0; output = %s", got, out.String())
+		}
+
+		git, source, err := changes.FindGit(repoRoot)
+		if err != nil {
+			t.Fatalf("FindGit() error = %v", err)
+		}
+		markerDir, err := changes.MarkerDir()
+		if err != nil {
+			t.Fatalf("MarkerDir() error = %v", err)
+		}
+		for _, want := range []string{
+			"git:      " + git + " (" + source + ")\n",
+			"markers:  " + markerDir + "\n",
+			"worktree: " + repoRoot + "\n",
+			"config:   " + filepath.Join(repoRoot, ".nano-staged.json") + "\n",
+		} {
+			if !strings.Contains(out.String(), want) {
+				t.Errorf("doctor() output = %q, want it to contain %q", out.String(), want)
+			}
+		}
+	})
+
+	t.Run("defaults to the process's working directory", func(t *testing.T) {
+		isolateMarkers(t)
+		repoRoot := newGitRepo(t)
+		writeConfigFile(t, repoRoot, `{"**/*.ts": "oxfmt"}`)
+		t.Chdir(repoRoot)
+
+		var out bytes.Buffer
+		if got := doctorFromCwd(&out); got != 0 {
+			t.Fatalf("doctorFromCwd() = %d, want 0; output = %s", got, out.String())
+		}
+		if want := "config:   " + filepath.Join(repoRoot, ".nano-staged.json") + "\n"; !strings.Contains(out.String(), want) {
+			t.Errorf("doctorFromCwd() output = %q, want it to contain %q", out.String(), want)
+		}
+	})
+
+	t.Run("reports an unavailable cache directory", func(t *testing.T) {
+		// os.UserCacheDir needs one of these; with neither, the markers
+		// line reports instead of naming a path.
+		t.Setenv("XDG_CACHE_HOME", "")
+		t.Setenv("HOME", "")
+		t.Setenv("LocalAppData", "")
+
+		var out bytes.Buffer
+		doctor(&out, t.TempDir())
+		if want := "markers:  no user cache directory: "; !strings.Contains(out.String(), want) {
+			t.Errorf("doctor() output = %q, want it to contain %q", out.String(), want)
+		}
+	})
+
+	t.Run("exits 1 when git can't be found", func(t *testing.T) {
+		isolateMarkers(t)
+		// The fixed candidates exist wherever these tests run, so the real
+		// lookup can't be made to fail — see lookupGit.
+		original := lookupGit
+		t.Cleanup(func() { lookupGit = original })
+		lookupGit = func(string) (string, string, error) { return "", "", changes.ErrGitNotFound }
+
+		var out bytes.Buffer
+		if got := doctor(&out, t.TempDir()); got != 1 {
+			t.Errorf("doctor() = %d, want 1; output = %s", got, out.String())
+		}
+		for _, want := range []string{
+			"git:      not found in any fixed system location or trusted PATH entry\n",
+			"worktree: not in a git work tree\n",
+			"config:   none found\n",
+		} {
+			if !strings.Contains(out.String(), want) {
+				t.Errorf("doctor() output = %q, want it to contain %q", out.String(), want)
+			}
+		}
+	})
+}
+
 // sessionPayload returns a session-level hook payload for the given event.
 func sessionPayload(event, cwd string, stopHookActive bool) string {
 	return fmt.Sprintf(`{"hook_event_name":%q,"session_id":%q,"cwd":%q,"stop_hook_active":%t}`, event, testSessionID, cwd, stopHookActive)

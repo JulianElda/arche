@@ -60,6 +60,20 @@ inapplicable step:
    "blocking feedback" convention, so Claude sees the real lint/format
    error and can self-correct.
 
+**`main.go`'s `doctor(w io.Writer, dir string) int`** is the other entry
+point, reached via `doctorFromCwd` when `flag.Arg(0)` is `doctor`. Hook payloads
+arrive on stdin and never carry positional arguments, so it can't collide with
+the hook path. `main` keeps nothing but process plumbing — resolving the cwd
+lives in `doctorFromCwd` — so everything below it stays testable.
+It prints one line each for git (and whether that was a fixed location or
+`PATH`), the marker directory, the work tree and the config that apply when
+run from `dir`, and exits 1 if git didn't resolve, 0 otherwise. It exists
+because a hook must never fail over a missing tool, which leaves the
+`Bash`/`Stop` no-op unreportable from inside the hook path — `doctor` moves
+the reporting somewhere it can be read on demand. `lookupGit` is a package
+var only so its failure path is testable: the fixed candidates exist on every
+machine the tests run on.
+
 **`internal/hook`**: `Payload.FilePath()` is the single gate for "is this
 payload actionable at all" (supported tool + non-empty path) — everything
 else in `main.go` assumes that's already been checked.
@@ -77,21 +91,39 @@ changed files are inferred. Two details matter here:
   `--no-optional-locks`, `status` may take `index.lock` to refresh stat
   info and collide with Claude's own concurrent git commands — the same
   class of git race this package exists to avoid.
-- git itself is run from a fixed, root-owned location (`gitCandidates`:
-  `/usr/bin/git`, `/bin/git`, `/usr/local/bin/git`, Homebrew, Git for Windows),
-  never looked up through `PATH` (Sonar go:S4036) — a writable `PATH` entry
-  could shadow it. git anywhere else → `Since` errors → the Bash/Stop path
+- git is looked up by `findGit` in two steps, and never via `exec.LookPath` —
+  the path handed to `exec.CommandContext` is always one resolved here (Sonar
+  go:S4036).
+  1. `gitCandidates`, the fixed, root-owned locations (`/usr/bin/git`,
+     `/bin/git`, `/usr/local/bin/git`, Homebrew, Git for Windows). They come
+     first precisely because nothing can shadow them, so CI and macOS never
+     reach step 2 and their behavior is unchanged.
+  2. Failing that, `PATH`, entry by entry. An entry is refused outright if it
+     is empty or relative (both mean the cwd), has a `node_modules` segment
+     (where bare lint commands resolve through, so a repo's own dependencies
+     could drop a git there), or sits at or under the work tree being
+     inspected — which is writable by whatever Claude just ran, by
+     definition. The same three rules are re-applied to the binary's
+     `EvalSymlinks`-resolved path, so a link in an otherwise trusted
+     directory can't point back into the repo. Containment compares resolved
+     paths on **both** sides: a temp dir is itself a symlink on macOS
+     (`/tmp` → `/private/tmp`), and an unresolved work tree would make
+     everything under it read as outside.
+
+  Step 2 exists because git is not at a fixed location on every system. On
+  NixOS it lives under `/run/current-system/sw/bin`, a per-generation profile
+  symlink no candidate names, and until the fallback landed the `Bash` and
+  `Stop` paths were permanently inert there — silently, by the design below.
+  CI could not catch it (ubuntu runners have `/usr/bin/git`, the first
+  candidate); locally it showed up as four failing tests, `TestSince` plus
+  the three `TestRun_*` cases that go through `changes.Since`.
+
+- git found in no trusted place at all → `Since` errors → the Bash/Stop path
   no-ops. Both callers swallow the error deliberately: `bashChangedFiles`
   returns no files and `sweep` returns 0, so a missing git never fails a hook.
-- **On NixOS that "anywhere else" is always the case.** git lives under
-  `/run/current-system/sw/bin`, which is a per-generation profile symlink, not
-  a fixed root-owned path, so `findGit` never matches and the `Bash` and `Stop`
-  paths are permanently inert there — silently, by the design above.
-  `PostToolUse` on `Write`/`Edit`/`MultiEdit` is unaffected: it takes
-  `tool_input.file_path` and never asks git. CI cannot catch this (ubuntu
-  runners have `/usr/bin/git`, the first candidate); locally it shows up as
-  four failing tests, `TestSince` plus the three `TestRun_*` cases that go
-  through `changes.Since`.
+  `PostToolUse` on `Write`/`Edit`/`MultiEdit` never asks git: it takes
+  `tool_input.file_path`. Because that silence is by design, the one place it
+  gets reported is `typos doctor` — see `main.go` above.
 
 **`sweep`** (the `Stop` hook): lints files git reports dirty with mtime
 at/after the `session-<id>` marker — no file cap, it's the safety net.
@@ -426,6 +458,10 @@ was built incrementally, one commit per concern, each left green
 11. `Stop` sweep (`sweep` in `main.go`): lints everything changed during
     the session as a safety net for edits the per-tool hooks missed,
     using `SessionStart`/`SessionEnd` to manage a per-session marker.
+12. A guarded `PATH` fallback in `findGit`, so the `Bash`/`Stop` paths
+    work where git isn't at a fixed location (NixOS), plus the `doctor`
+    subcommand to report what resolved — the hook path can't, since it
+    no-ops on purpose.
 
 Tests favor real execution over mocking: `internal/runner`'s tests write
 actual executable shell script fixtures to a `t.TempDir()` and run them
