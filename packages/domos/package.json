@@ -56,7 +56,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@lucide/svelte": "^1.21.0",
-    "@playwright/test": "^1.61.1",
+    "@playwright/test": "1.63.0",
     "@storybook/addon-svelte-csf": "^5.0.10",
     "@storybook/sveltekit": "^10.4.6",
     "@sveltejs/kit": "^2.68.0",
