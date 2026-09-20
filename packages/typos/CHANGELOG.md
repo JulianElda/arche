@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.2.0](https://github.com/JulianElda/arche/compare/typos-v1.1.0...typos-v1.2.0) (2026-09-20)
+
+
+### Features
+
+* **typos:** find git through a guarded PATH fallback and report it with doctor ([#75](https://github.com/JulianElda/arche/issues/75)) ([e6706f1](https://github.com/JulianElda/arche/commit/e6706f10c432015e49b8611ff511f37f020c37ed))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * optionalDependencies
+    * @julianelda/typos-darwin-arm64 bumped from 1.1.0 to 1.2.0
+    * @julianelda/typos-darwin-x64 bumped from 1.1.0 to 1.2.0
+    * @julianelda/typos-linux-arm64 bumped from 1.1.0 to 1.2.0
+    * @julianelda/typos-linux-x64 bumped from 1.1.0 to 1.2.0
+    * @julianelda/typos-win32-x64 bumped from 1.1.0 to 1.2.0
+
 ## [1.1.0](https://github.com/JulianElda/arche/compare/typos-v1.0.0...typos-v1.1.0) (2026-09-13)
 
 
