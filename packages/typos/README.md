@@ -91,6 +91,25 @@ echo '{"tool_name":"Write","tool_input":{"file_path":"src/index.ts"}}' \
   | typos --config ./.nano-staged.json
 ```
 
+`typos doctor` reports what `typos` resolves from the current directory, and
+is the only way to see it — the hooks no-op silently rather than fail when
+something is missing:
+
+```sh
+$ typos doctor
+git:      /run/current-system/sw/bin/git (PATH)
+markers:  /home/you/.cache/typos
+worktree: /home/you/work/my-repo
+config:   /home/you/work/my-repo/.nano-staged.json
+```
+
+git is looked for in fixed system locations first, then on `PATH`, skipping
+any entry that's relative, has a `node_modules` segment or sits inside the
+work tree being inspected — so a directory the repo itself controls can't
+supply it. Without git, `Bash` and `Stop` do nothing (`Write`/`Edit`/
+`MultiEdit` are unaffected), and `doctor` exits 1 to say so; every other line
+is informational and exits 0.
+
 A failing command's exit code and stderr are surfaced as Claude Code's
 "blocking feedback" (exit code 2), so Claude sees the actual lint/format
 error and can self-correct.

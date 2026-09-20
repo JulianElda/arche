@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"sort"
+	"strings"
 	"testing"
 	"time"
 )
@@ -134,19 +135,101 @@ func TestFindGit_SkipsMissingAndNonExecutable(t *testing.T) {
 	dir := t.TempDir()
 	notExecutable := filepath.Join(dir, "not-executable")
 	writeFile(t, notExecutable, "")
-	executable := filepath.Join(dir, "git")
-	writeFile(t, executable, "")
-	if err := os.Chmod(executable, 0o755); err != nil {
-		t.Fatalf("Chmod() error = %v", err)
+	executable := writeExecutable(t, dir, "git")
+
+	got, source, err := findGit([]string{filepath.Join(dir, "missing"), notExecutable, dir, executable}, "", "")
+	if err != nil || got != executable || source != sourceFixed {
+		t.Errorf("findGit() = %q, %q, %v; want %q, %q, nil", got, source, err, executable, sourceFixed)
 	}
 
-	got, err := findGit([]string{filepath.Join(dir, "missing"), notExecutable, dir, executable})
-	if err != nil || got != executable {
-		t.Errorf("findGit() = %q, %v; want %q, nil", got, err, executable)
-	}
-
-	if _, err := findGit([]string{filepath.Join(dir, "missing")}); !errors.Is(err, ErrGitNotFound) {
+	if _, _, err := findGit([]string{filepath.Join(dir, "missing")}, "", ""); !errors.Is(err, ErrGitNotFound) {
 		t.Errorf("findGit() error = %v, want ErrGitNotFound", err)
+	}
+}
+
+func TestFindGit_PrefersAFixedCandidateOverPath(t *testing.T) {
+	fixed := writeExecutable(t, t.TempDir(), "git")
+	onPath := t.TempDir()
+	writeExecutable(t, onPath, "git")
+
+	got, source, err := findGit([]string{fixed}, onPath, t.TempDir())
+	if err != nil || got != fixed || source != sourceFixed {
+		t.Errorf("findGit() = %q, %q, %v; want %q, %q, nil", got, source, err, fixed, sourceFixed)
+	}
+}
+
+func TestFindGit_ResolvesViaPathWhenNoFixedCandidate(t *testing.T) {
+	dir := t.TempDir()
+	want := writeExecutable(t, dir, "git")
+
+	// Every fixed candidate absent, as on NixOS, where git lives under a
+	// per-generation profile symlink none of them names.
+	got, source, err := findGit([]string{filepath.Join(dir, "missing")}, dir, t.TempDir())
+	if err != nil || got != want || source != sourcePATH {
+		t.Errorf("findGit() = %q, %q, %v; want %q, %q, nil", got, source, err, want, sourcePATH)
+	}
+}
+
+// TestFindGit_RefusesUntrustedPathEntries covers the hole the PATH fallback
+// must not reopen: a directory Claude's own tool calls could write to must
+// never supply git, however early it sits on PATH.
+//
+// Every untrusted entry's git is a symlink to a binary that is itself
+// beyond reproach, so resolving it reveals nothing wrong and the entry
+// alone is grounds for refusal. That is the real threat: a writable PATH
+// directory doesn't have to host the payload, only point at it.
+func TestFindGit_RefusesUntrustedPathEntries(t *testing.T) {
+	workTree := t.TempDir()
+	innocent := writeExecutable(t, t.TempDir(), "real-git")
+
+	// An empty entry and a relative one both mean the cwd, which only has
+	// meaning against a real one. t.Chdir restores it after the test.
+	cwd := t.TempDir()
+	t.Chdir(cwd)
+	relative := "relative-bin"
+
+	untrustedEntries := []string{
+		filepath.Join(workTree, ".direnv", "bin"), // real, from this repo's own hook environment
+		filepath.Join(t.TempDir(), "node_modules", ".bin"),
+		cwd,                          // what the empty entry names
+		filepath.Join(cwd, relative), // what the relative entry names
+	}
+	for _, dir := range untrustedEntries {
+		if err := os.Symlink(innocent, filepath.Join(mkdir(t, dir), "git")); err != nil {
+			t.Fatalf("Symlink() error = %v", err)
+		}
+	}
+
+	want := writeExecutable(t, t.TempDir(), "git")
+	ordered := []string{"", relative, untrustedEntries[0], untrustedEntries[1]}
+
+	got, source, err := findGit(nil, pathList(append(ordered, filepath.Dir(want))...), workTree)
+	if err != nil || got != want || source != sourcePATH {
+		t.Errorf("findGit() = %q, %q, %v; want %q, %q, nil (only the trusted entry may supply git)", got, source, err, want, sourcePATH)
+	}
+
+	// With no trusted entry there is no fallback at all, rather than the
+	// first untrusted one.
+	if _, _, err := findGit(nil, pathList(ordered...), workTree); !errors.Is(err, ErrGitNotFound) {
+		t.Errorf("findGit() error = %v, want ErrGitNotFound", err)
+	}
+}
+
+func TestFindGit_RefusesASymlinkIntoTheWorkTree(t *testing.T) {
+	workTree := t.TempDir()
+	evil := writeExecutable(t, mkdir(t, filepath.Join(workTree, "evil")), "git")
+
+	// The entry itself is outside the work tree and passes every check; only
+	// resolving its git reveals where it really points.
+	trap := t.TempDir()
+	if err := os.Symlink(evil, filepath.Join(trap, "git")); err != nil {
+		t.Fatalf("Symlink() error = %v", err)
+	}
+
+	want := writeExecutable(t, t.TempDir(), "git")
+	got, source, err := findGit(nil, pathList(trap, filepath.Dir(want)), workTree)
+	if err != nil || got != want || source != sourcePATH {
+		t.Errorf("findGit() = %q, %q, %v; want %q, %q, nil (the symlink into the work tree must be skipped)", got, source, err, want, sourcePATH)
 	}
 }
 
@@ -164,6 +247,32 @@ func git(t *testing.T, dir string, args ...string) {
 	if out, err := cmd.CombinedOutput(); err != nil {
 		t.Fatalf("git %v error = %v\n%s", args, err, out)
 	}
+}
+
+// writeExecutable writes an empty executable file to dir/name and returns
+// its path — a stand-in git, only ever stat'd, never run.
+func writeExecutable(t *testing.T, dir, name string) string {
+	t.Helper()
+	path := filepath.Join(dir, name)
+	writeFile(t, path, "")
+	if err := os.Chmod(path, 0o755); err != nil {
+		t.Fatalf("Chmod(%q) error = %v", path, err)
+	}
+	return path
+}
+
+// mkdir creates dir and returns it, for use inline as an argument.
+func mkdir(t *testing.T, dir string) string {
+	t.Helper()
+	if err := os.MkdirAll(dir, 0o755); err != nil {
+		t.Fatalf("MkdirAll(%q) error = %v", dir, err)
+	}
+	return dir
+}
+
+// pathList joins entries the way PATH does on this platform.
+func pathList(entries ...string) string {
+	return strings.Join(entries, string(os.PathListSeparator))
 }
 
 func writeFile(t *testing.T, path, contents string) {

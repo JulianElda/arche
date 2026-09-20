@@ -9,6 +9,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/JulianElda/arche/packages/typos/internal/changes"
@@ -31,7 +32,72 @@ func main() {
 	flag.StringVar(&configPath, "config", "", "path to .nano-staged.json (skips auto-discovery)")
 	flag.Parse()
 
+	// Hook payloads arrive on stdin and never carry positional arguments,
+	// so a subcommand here can't collide with the hook path.
+	if flag.Arg(0) == "doctor" {
+		cwd, err := os.Getwd()
+		if err != nil {
+			cwd = "."
+		}
+		os.Exit(doctor(os.Stdout, cwd))
+	}
+
 	os.Exit(run(os.Stdin, os.Stderr, configPath))
+}
+
+// lookupGit is indirected only so TestDoctor can drive the failure path:
+// the fixed candidates in internal/changes exist on every machine the
+// tests run on, so a real lookup can't be made to fail there.
+var lookupGit = changes.FindGit
+
+// doctor prints where typos resolves each thing the hooks depend on when
+// run from dir, and exits nonzero if git isn't among them.
+//
+// It exists because the Bash and Stop paths no-op deliberately when git
+// can't be found — a hook must never fail over a missing tool — which
+// leaves nowhere inside the hook path for that to be reported. Moving the
+// reporting to a subcommand keeps the silence and makes it inspectable on
+// demand. git is the only line that sets the exit code; the others are
+// informational, since typos is a no-op rather than broken without them.
+func doctor(w io.Writer, dir string) int {
+	root, inWorkTree := changes.WorkTree(dir)
+
+	exitCode := 0
+	// The work tree is what git must not be taken from. Outside one it's
+	// empty, and nothing is refused on that ground.
+	if git, source, err := lookupGit(root); err == nil {
+		reportLine(w, "git", git+" ("+source+")")
+	} else {
+		// The sentinel's own text opens with "git", which the label says.
+		reportLine(w, "git", strings.TrimPrefix(err.Error(), "git "))
+		exitCode = 1
+	}
+
+	if markerDir, err := changes.MarkerDir(); err == nil {
+		reportLine(w, "markers", markerDir)
+	} else {
+		reportLine(w, "markers", "no user cache directory: "+err.Error())
+	}
+
+	if inWorkTree {
+		reportLine(w, "worktree", root)
+	} else {
+		reportLine(w, "worktree", "not in a git work tree")
+	}
+
+	if configPath, ok := nanostaged.Find(dir); ok {
+		reportLine(w, "config", configPath)
+	} else {
+		reportLine(w, "config", "none found")
+	}
+
+	return exitCode
+}
+
+// reportLine writes one doctor line, padded to the longest label so the
+// values line up.
+func reportLine(w io.Writer, label, value string) {
+	_, _ = fmt.Fprintf(w, "%-9s %s\n", label+":", value)
 }
 
 // maxBashChangedFiles caps how many files a single Bash call can queue for

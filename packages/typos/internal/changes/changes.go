@@ -19,16 +19,16 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"time"
 )
 
 // gitTimeout bounds the `git status` call in Since.
 const gitTimeout = 5 * time.Second
 
-// gitCandidates are the fixed, root-owned locations git is looked up in, in
-// order. PATH is deliberately not searched: a writable directory on it (like
-// the node_modules/.bin that bare lint commands resolve through) could
-// shadow git with anything.
+// gitCandidates are the fixed, root-owned locations git is looked up in
+// first, in order. They can't be shadowed, so they always win over PATH —
+// see findGit for why PATH is only a fallback.
 var gitCandidates = []string{
 	"/usr/bin/git",
 	"/bin/git",
@@ -37,20 +37,121 @@ var gitCandidates = []string{
 	`C:\Program Files\Git\cmd\git.exe`,
 }
 
-// ErrGitNotFound is returned by Since when git isn't at any of
-// gitCandidates.
-var ErrGitNotFound = errors.New("git not found in any fixed system location")
+// ErrGitNotFound is returned by Since when git is at none of gitCandidates
+// and no trusted PATH entry supplies it either.
+var ErrGitNotFound = errors.New("git not found in any fixed system location or trusted PATH entry")
 
-// findGit returns the first of candidates that is an executable regular
-// file.
-func findGit(candidates []string) (string, error) {
+// Where findGit resolved git, for doctor to report. Since ignores it.
+const (
+	sourceFixed = "fixed location"
+	sourcePATH  = "PATH"
+)
+
+// findGit returns the path git should be run from for a hook inspecting
+// workTree, and where it was found.
+//
+// candidates come first and are preferred precisely because they can't be
+// shadowed. Only if none of them exists is pathEnv walked — git isn't at a
+// fixed location on every system (on NixOS it lives under
+// /run/current-system/sw/bin, a per-generation profile symlink), and
+// without a fallback the whole Bash/Stop path is inert there.
+//
+// An entry supplies git only if untrusted rejects neither the entry nor the
+// binary's symlink-resolved path, so a link planted in a trusted directory
+// can't point back into the repo under inspection.
+// Resolution mirrors internal/runner.lookPath rather than calling
+// exec.LookPath, so exec.CommandContext still receives a path resolved
+// here (Sonar go:S4036).
+func findGit(candidates []string, pathEnv, workTree string) (path, source string, err error) {
 	for _, candidate := range candidates {
-		info, err := os.Stat(candidate)
-		if err == nil && info.Mode().IsRegular() && (runtime.GOOS == "windows" || info.Mode()&0o111 != 0) {
-			return candidate, nil
+		if isExecutableFile(candidate) {
+			return candidate, sourceFixed, nil
 		}
 	}
-	return "", ErrGitNotFound
+
+	name := "git"
+	if runtime.GOOS == "windows" {
+		name = "git.exe"
+	}
+	for _, dir := range filepath.SplitList(pathEnv) {
+		if untrusted(dir, workTree) {
+			continue
+		}
+		candidate := filepath.Join(dir, name)
+		if !isExecutableFile(candidate) {
+			continue
+		}
+		resolved, err := filepath.EvalSymlinks(candidate)
+		if err != nil || untrusted(resolved, workTree) {
+			continue
+		}
+		return candidate, sourcePATH, nil
+	}
+	return "", "", ErrGitNotFound
+}
+
+// untrusted reports whether path must not be used to supply git: an empty
+// PATH entry (which means the cwd) or any relative one, anything with a
+// node_modules segment — where bare lint commands resolve through, so the
+// repo's own dependencies could drop a git there — or anything at or under
+// workTree, the tree being inspected and therefore writable by whatever
+// Claude just ran. An empty workTree contains nothing.
+func untrusted(path, workTree string) bool {
+	if path == "" || !filepath.IsAbs(path) {
+		return true
+	}
+	for _, segment := range strings.Split(filepath.ToSlash(path), "/") {
+		if segment == "node_modules" {
+			return true
+		}
+	}
+	if workTree == "" {
+		return false
+	}
+
+	// Both sides resolved: a temp dir is itself a symlink on macOS
+	// (/tmp -> /private/tmp), and an unresolved work tree would make
+	// everything under it read as outside.
+	rel, err := filepath.Rel(resolveSymlinks(workTree), resolveSymlinks(path))
+	if err != nil {
+		// No relative path exists (different Windows volumes). Nothing
+		// is known about containment, so don't extend trust.
+		return true
+	}
+	return rel != ".." && !strings.HasPrefix(rel, ".."+string(filepath.Separator))
+}
+
+// resolveSymlinks returns path with its symlinks resolved, or path itself
+// when it can't be resolved (it doesn't exist, or a link is broken).
+func resolveSymlinks(path string) string {
+	if resolved, err := filepath.EvalSymlinks(path); err == nil {
+		return resolved
+	}
+	return path
+}
+
+// isExecutableFile reports whether path is a regular file with an execute
+// bit. Windows carries no execute bit, so there the mode isn't consulted.
+//
+// path is Cleaned first only so gosec's taint analysis can see it sanitized
+// (G703): every caller already passes a clean path, but one of them derives
+// from PATH. Don't drop the call without re-running golangci-lint.
+func isExecutableFile(path string) bool {
+	info, err := os.Stat(filepath.Clean(path))
+	return err == nil && info.Mode().IsRegular() && (runtime.GOOS == "windows" || info.Mode()&0o111 != 0)
+}
+
+// WorkTree reports the root of the git work tree containing dir, for
+// doctor to print. Since finds it itself.
+func WorkTree(dir string) (root string, ok bool) {
+	return findWorkTree(dir)
+}
+
+// FindGit reports where git resolves for a hook inspecting workTree, and
+// whether that was a fixed location or PATH, for doctor to print. Since
+// resolves it itself.
+func FindGit(workTree string) (path, source string, err error) {
+	return findGit(gitCandidates, os.Getenv("PATH"), workTree)
 }
 
 // MarkerDir is where markers are recorded: a typos directory in the
@@ -151,7 +252,7 @@ func Since(ctx context.Context, dir string, start time.Time) ([]string, error) {
 		return nil, nil
 	}
 
-	git, err := findGit(gitCandidates)
+	git, _, err := findGit(gitCandidates, os.Getenv("PATH"), root)
 	if err != nil {
 		return nil, err
 	}
@@ -161,7 +262,7 @@ func Since(ctx context.Context, dir string, start time.Time) ([]string, error) {
 
 	// Porcelain paths are always relative to the work tree root, whatever
 	// the cwd. --no-renames keeps -z output to one path per entry.
-	cmd := exec.CommandContext(ctx, git, "--no-optional-locks", "status", //nolint:gosec // G204: git comes from gitCandidates, not input
+	cmd := exec.CommandContext(ctx, git, "--no-optional-locks", "status", //nolint:gosec // G204: git comes from findGit, not from input
 		"--porcelain=v1", "-z", "--untracked-files=all", "--no-renames", "--ignore-submodules=all")
 	cmd.Dir = root
 	out, err := cmd.Output()
