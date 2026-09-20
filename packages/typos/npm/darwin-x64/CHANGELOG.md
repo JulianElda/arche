@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/JulianElda/arche/compare/typos-darwin-x64-v1.1.0...typos-darwin-x64-v1.2.0) (2026-09-20)
+
+
+### Miscellaneous Chores
+
+* **typos-darwin-x64:** Synchronize typos versions
+
 ## [1.1.0](https://github.com/JulianElda/arche/compare/typos-darwin-x64-v1.0.0...typos-darwin-x64-v1.1.0) (2026-09-13)
 
 
