@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "sonarqube": {
+      "type": "http",
+      "url": "https://api.sonarcloud.io/mcp",
+      "headersHelper": "kleidos reveal SONARQUBE_TOKEN | jq -Rsce 'rtrimstr(\"\\n\") | select(length > 0) | {Authorization: (\"Bearer \" + .)}'",
+      "headers": {
+        "SONARQUBE_ORG": "julianelda",
+        "SONARQUBE_READ_ONLY": "true",
+        "SONARQUBE_TOOLSETS": "issues,quality-gates,measures,coverage,projects,rules,security-hotspots,duplications"
+      }
+    }
+  }
+}
