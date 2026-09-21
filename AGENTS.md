@@ -39,6 +39,8 @@ break.
   6006, so run one at a time
 - `just typos-install` — rebuilds `~/.local/bin/typos`, the binary the hooks in
   `.claude/settings.json` actually run
+- `just sisyphos-install` — symlinks each skill in `packages/sisyphos/skills`
+  into `~/.claude/skills`, so it loads in every repo
 
 ## Bumping the toolchain
 
