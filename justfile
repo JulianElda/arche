@@ -66,6 +66,23 @@ storybook-scratchpad:
 typos-install:
     bun run --filter '@julianelda/typos' build:local
 
+# Symlink each sisyphos skill into ~/.claude/skills.
+sisyphos-install:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    mkdir -p ~/.claude/skills
+    for skill in "{{justfile_directory()}}"/packages/sisyphos/skills/*/; do
+        skill=${skill%/}
+        name=$(basename "$skill")
+        link=~/.claude/skills/$name
+        if [[ -e $link && ! -L $link ]]; then
+            echo "skipped $name: $link exists and is not a symlink" >&2
+            continue
+        fi
+        ln -sfn "$skill" "$link"
+        echo "linked $name"
+    done
+
 # nix flake update, then re-pin playwright and bun to match it.
 bump-toolchain:
     #!/usr/bin/env bash
