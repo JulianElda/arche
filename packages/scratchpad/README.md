@@ -1,9 +1,11 @@
 # scratchpad
 
-> React components and styles. Designed and developed by Julius Polar.
+> Prepare thy work without, and make it fit for thyself in the field; and afterwards build thine house.
 
 [![npm version](https://img.shields.io/npm/v/@julianelda/scratchpad)](https://www.npmjs.com/package/@julianelda/scratchpad)
 [![license](https://img.shields.io/github/license/JulianElda/scratchpad)](https://github.com/JulianElda/scratchpad/blob/master/LICENSE)
+
+React components and styles. Designed and developed by Julius Polar.
 
 # Usage
 
