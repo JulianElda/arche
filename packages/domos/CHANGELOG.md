@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.1](https://github.com/JulianElda/arche/compare/domos-v3.0.0...domos-v3.0.1) (2026-11-07)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @julianelda/stilo bumped from ^1.0.2 to ^2.0.0
+
 ## [3.0.0](https://github.com/JulianElda/arche/compare/domos-v2.1.1...domos-v3.0.0) (2026-08-04)
 
 
