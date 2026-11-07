@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.0](https://github.com/JulianElda/arche/compare/scratchpad-v2.0.1...scratchpad-v3.0.0) (2026-11-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **domos:** drop stilo so apps name their own fonts ([#89](https://github.com/JulianElda/arche/issues/89))
+
+### Features
+
+* **domos:** drop stilo so apps name their own fonts ([#89](https://github.com/JulianElda/arche/issues/89)) ([1d58a80](https://github.com/JulianElda/arche/commit/1d58a80508370b2984d52b8a3b2658552ebf1e31))
+
 ## [2.0.1](https://github.com/JulianElda/arche/compare/scratchpad-v2.0.0...scratchpad-v2.0.1) (2026-11-07)
 
 

@@ -1,8 +1,8 @@
 {
   "packages/chroma": "1.0.0",
-  "packages/domos": "3.0.1",
+  "packages/domos": "4.0.0",
   "packages/lexis": "4.0.0",
-  "packages/scratchpad": "2.0.1",
+  "packages/scratchpad": "3.0.0",
   "packages/typos": "1.2.0",
   "packages/typos/npm/darwin-arm64": "1.2.0",
   "packages/typos/npm/darwin-x64": "1.2.0",
