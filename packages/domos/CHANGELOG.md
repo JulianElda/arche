@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/JulianElda/arche/compare/domos-v3.0.0...domos-v3.0.1) (2026-11-07)
+
+
+### Bug Fixes
+
+* **domos:** require stilo 2 so installs stop pulling in the font files ([#87](https://github.com/JulianElda/arche/issues/87)) ([5178a1c](https://github.com/JulianElda/arche/commit/5178a1c394088cd0d08bec0ad04f137a5beea1b9))
+
 ## [3.0.0](https://github.com/JulianElda/arche/compare/domos-v2.1.1...domos-v3.0.0) (2026-08-04)
 
 
