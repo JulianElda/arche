@@ -9,6 +9,15 @@ permissions:
   contents: write
   pull-requests: write
 
+# One run at a time: two merges in quick succession would otherwise run
+# release-please concurrently and race to publish the same versions. Never
+# cancel-in-progress, which could stop a publish halfway. GitHub keeps only the
+# newest pending run and drops the others, which is fine: every run derives
+# what to do from the manifest and the registry, not from its own push.
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
 jobs:
   release-please:
     runs-on: ubuntu-latest
