@@ -19,10 +19,6 @@
       "release-type": "node",
       "package-name": "@julianelda/scratchpad"
     },
-    "packages/stilo": {
-      "release-type": "node",
-      "package-name": "@julianelda/stilo"
-    },
     "packages/typos": {
       "release-type": "node",
       "package-name": "@julianelda/typos",

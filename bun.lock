@@ -6,7 +6,6 @@
       "name": "arche",
       "dependencies": {
         "@julianelda/domos": "workspace:*",
-        "@julianelda/stilo": "workspace:*",
         "@julianelda/typos": "workspace:*",
       },
       "devDependencies": {
@@ -122,10 +121,6 @@
     },
     "packages/sisyphos": {
       "name": "@julianelda/sisyphos",
-    },
-    "packages/stilo": {
-      "name": "@julianelda/stilo",
-      "version": "2.0.0",
     },
     "packages/typos": {
       "name": "@julianelda/typos",
@@ -346,8 +341,6 @@
     "@julianelda/scratchpad": ["@julianelda/scratchpad@workspace:packages/scratchpad"],
 
     "@julianelda/sisyphos": ["@julianelda/sisyphos@workspace:packages/sisyphos"],
-
-    "@julianelda/stilo": ["@julianelda/stilo@workspace:packages/stilo"],
 
     "@julianelda/typos": ["@julianelda/typos@workspace:packages/typos"],
 
