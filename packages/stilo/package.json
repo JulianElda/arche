@@ -8,7 +8,6 @@
   },
   "style": "./src/index.css",
   "files": [
-    "fonts",
     "src"
   ],
   "type": "module",
