@@ -89,14 +89,13 @@
     },
     "packages/scratchpad": {
       "name": "@julianelda/scratchpad",
-      "version": "2.0.0",
+      "version": "2.0.1",
       "dependencies": {
         "ajv": "^8.20.0",
         "js-cookie": "^3.0.5",
       },
       "devDependencies": {
         "@julianelda/chroma": "^1.0.0",
-        "@julianelda/stilo": "^2.0.0",
         "@storybook/addon-docs": "^10.3.6",
         "@storybook/react-vite": "^10.3.6",
         "@svgr/cli": "^8.1.0",
