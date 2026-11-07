@@ -125,8 +125,9 @@ jobs:
         run: cd ${{ matrix.path }} && npm publish --access public
 
   # typos' main package and its platform packages (packages/typos/npm/*) share
-  # one version (release-please-config.json links them) but each opens its own
-  # release PR, so any subset of them can be unpublished at a given moment.
+  # one version (release-please-config.json links them) and release together
+  # from the combined release PR, but a failed publish can still leave any
+  # subset of them unpublished at a given moment.
   # They must be split out of the generic per-path matrix above: the platform
   # packages carry no binary of their own until `typos`' GoReleaser build
   # produces one, and matrix jobs each get an isolated checkout, so that build
