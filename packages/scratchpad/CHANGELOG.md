@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.1](https://github.com/JulianElda/arche/compare/scratchpad-v2.0.0...scratchpad-v2.0.1) (2026-11-07)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @julianelda/stilo bumped from ^1.0.2 to ^2.0.0
+
 ## [2.0.0](https://github.com/JulianElda/arche/compare/scratchpad-v1.19.1...scratchpad-v2.0.0) (2026-08-04)
 
 
