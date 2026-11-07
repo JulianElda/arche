@@ -6,7 +6,6 @@
       "name": "arche",
       "dependencies": {
         "@julianelda/domos": "workspace:*",
-        "@julianelda/stilo": "workspace:*",
         "@julianelda/typos": "workspace:*",
       },
       "devDependencies": {
@@ -42,10 +41,9 @@
     },
     "packages/domos": {
       "name": "@julianelda/domos",
-      "version": "3.0.0",
+      "version": "3.0.1",
       "dependencies": {
         "@julianelda/chroma": "^1.0.0",
-        "@julianelda/stilo": "^2.0.0",
         "clsx": "^2.1.1",
         "tailwind-merge": "^3.6.0",
       },
@@ -90,14 +88,13 @@
     },
     "packages/scratchpad": {
       "name": "@julianelda/scratchpad",
-      "version": "2.0.0",
+      "version": "2.0.1",
       "dependencies": {
         "ajv": "^8.20.0",
         "js-cookie": "^3.0.5",
       },
       "devDependencies": {
         "@julianelda/chroma": "^1.0.0",
-        "@julianelda/stilo": "^2.0.0",
         "@storybook/addon-docs": "^10.3.6",
         "@storybook/react-vite": "^10.3.6",
         "@svgr/cli": "^8.1.0",
@@ -124,10 +121,6 @@
     },
     "packages/sisyphos": {
       "name": "@julianelda/sisyphos",
-    },
-    "packages/stilo": {
-      "name": "@julianelda/stilo",
-      "version": "2.0.0",
     },
     "packages/typos": {
       "name": "@julianelda/typos",
@@ -348,8 +341,6 @@
     "@julianelda/scratchpad": ["@julianelda/scratchpad@workspace:packages/scratchpad"],
 
     "@julianelda/sisyphos": ["@julianelda/sisyphos@workspace:packages/sisyphos"],
-
-    "@julianelda/stilo": ["@julianelda/stilo@workspace:packages/stilo"],
 
     "@julianelda/typos": ["@julianelda/typos@workspace:packages/typos"],
 
