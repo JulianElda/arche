@@ -35,7 +35,10 @@ jobs:
   # platform ones self-corrects on the next run rather than shipping a version
   # whose optionalDependencies don't exist), and it re-runs on every push to
   # master, so a gap heals on its own. `if: always()` is what keeps a failed
-  # release-please job from disarming it.
+  # release-please job from disarming it, and the publish jobs need the same:
+  # an `if:` without a status function is implicitly `success() && …`, which
+  # checks every upstream job, release-please included. Run 42359145908 had
+  # `plan` succeed and both publish jobs skipped for exactly that reason.
   #
   # Every package is built from its release tag, never from the commit that
   # triggered the run. A gap is filled by whichever push comes next, and that
@@ -129,7 +132,7 @@ jobs:
 
   publish:
     needs: plan
-    if: ${{ needs.plan.outputs.other != '[]' }}
+    if: ${{ !cancelled() && needs.plan.result == 'success' && needs.plan.outputs.other != '[]' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -170,7 +173,7 @@ jobs:
   # has to run once and publish everything itself.
   publish-typos:
     needs: plan
-    if: ${{ needs.plan.outputs.typos != '[]' }}
+    if: ${{ !cancelled() && needs.plan.result == 'success' && needs.plan.outputs.typos != '[]' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
