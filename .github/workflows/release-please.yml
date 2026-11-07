@@ -9,11 +9,20 @@ permissions:
   contents: write
   pull-requests: write
 
+# One run at a time: two merges in quick succession would otherwise run
+# release-please concurrently and race to publish the same versions. Never
+# cancel-in-progress, which could stop a publish halfway. GitHub keeps only the
+# newest pending run and drops the others, which is fine: every run derives
+# what to do from the manifest and the registry, not from its own push.
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
 jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: googleapis/release-please-action@v4
+      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
         id: release
         with:
           config-file: release-please-config.json
@@ -35,7 +44,17 @@ jobs:
   # platform ones self-corrects on the next run rather than shipping a version
   # whose optionalDependencies don't exist), and it re-runs on every push to
   # master, so a gap heals on its own. `if: always()` is what keeps a failed
-  # release-please job from disarming it.
+  # release-please job from disarming it, and the publish jobs need the same:
+  # an `if:` without a status function is implicitly `success() && …`, which
+  # checks every upstream job, release-please included. Run 42359145908 had
+  # `plan` succeed and both publish jobs skipped for exactly that reason.
+  #
+  # Every package is built from its release tag, never from the commit that
+  # triggered the run. A gap is filled by whichever push comes next, and that
+  # commit may already carry unreleased changes: building it ships them under
+  # the old version number. That is how domos 3.0.1 went out with #89's
+  # breaking change instead of #87's fix. A version whose tag doesn't exist yet
+  # waits for a later run.
   plan:
     needs: release-please
     if: always()
@@ -43,8 +62,9 @@ jobs:
     outputs:
       other: ${{ steps.plan.outputs.other }}
       typos: ${{ steps.plan.outputs.typos }}
+      typos_tag: ${{ steps.plan.outputs.typos_tag }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
       - id: plan
         shell: bash
         run: |
@@ -55,6 +75,11 @@ jobs:
             name=$(jq -r .name "$path/package.json")
             version=$(jq -r .version "$path/package.json")
 
+            # release-please tags `<component>-v<version>`, and the component
+            # defaults to the package name without its scope.
+            component=$(jq -r --arg p "$path" '.packages[$p].component // empty' release-please-config.json)
+            tag="${component:-${name##*/}}-v$version"
+
             # The registry wants the scope separator percent-encoded.
             encoded=${name//\//%2f}
 
@@ -63,18 +88,17 @@ jobs:
               -H 'Accept: application/vnd.npm.install-v1+json' \
               "https://registry.npmjs.org/$encoded" || echo 000)
 
+            unpublished=""
             case "$status" in
               200)
                 if jq -e --arg v "$version" '.versions[$v]' "$body" >/dev/null; then
                   echo "  ok       $name@$version"
                 else
-                  echo "  MISSING  $name@$version (registry has: $(jq -r '.versions | keys | join(",")' "$body"))"
-                  missing+=("$path")
+                  unpublished="registry has: $(jq -r '.versions | keys | join(",")' "$body")"
                 fi
                 ;;
               404)
-                echo "  MISSING  $name@$version (never published)"
-                missing+=("$path")
+                unpublished="never published"
                 ;;
               *)
                 # Never guess on an unexpected response: a false "missing"
@@ -84,29 +108,53 @@ jobs:
                 ;;
             esac
             rm -f "$body"
+            [ -n "$unpublished" ] || continue
+
+            # `--exit-code` makes a missing tag exit 2, apart from real errors.
+            rc=0
+            git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null || rc=$?
+            case "$rc" in
+              0)
+                echo "  MISSING  $name@$version ($unpublished), publishing from $tag"
+                missing+=("$(jq -nc --arg path "$path" --arg tag "$tag" '{$path, $tag}')")
+                ;;
+              2)
+                echo "  WAITING  $name@$version ($unpublished), $tag does not exist yet"
+                ;;
+              *)
+                echo "tag lookup for $tag failed with exit code $rc" >&2
+                exit 1
+                ;;
+            esac
           done < <(jq -r 'keys[]' .release-please-manifest.json)
 
-          all=$(printf '%s\n' "${missing[@]:-}" | jq -Rsc 'split("\n") | map(select(length > 0))')
+          all=$(printf '%s\n' "${missing[@]:-}" | jq -sc '.')
           echo "unpublished: $all"
           {
-            echo "other=$(jq -c '[.[] | select(startswith("packages/typos") | not)]' <<<"$all")"
-            echo "typos=$(jq -c '[.[] | select(startswith("packages/typos"))]' <<<"$all")"
+            echo "other=$(jq -c '[.[] | select(.path | startswith("packages/typos") | not)]' <<<"$all")"
+            echo "typos=$(jq -c '[.[] | select(.path | startswith("packages/typos")) | .path]' <<<"$all")"
+            # typos' packages share one version and, since #86, release from
+            # one combined PR, so their tags all point at the same commit and
+            # any of them will do.
+            echo "typos_tag=$(jq -r '[.[] | select(.path | startswith("packages/typos"))][0].tag // ""' <<<"$all")"
           } >> "$GITHUB_OUTPUT"
 
   publish:
     needs: plan
-    if: ${{ needs.plan.outputs.other != '[]' }}
+    if: ${{ !cancelled() && needs.plan.result == 'success' && needs.plan.outputs.other != '[]' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
     strategy:
       matrix:
-        path: ${{ fromJSON(needs.plan.outputs.other) }}
+        include: ${{ fromJSON(needs.plan.outputs.other) }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: ${{ matrix.tag }}
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
@@ -134,22 +182,23 @@ jobs:
   # has to run once and publish everything itself.
   publish-typos:
     needs: plan
-    if: ${{ needs.plan.outputs.typos != '[]' }}
+    if: ${{ !cancelled() && needs.plan.result == 'success' && needs.plan.outputs.typos != '[]' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-      # TODO: pin to a commit SHA (like the other actions above) once verified —
-      # not available from this sandbox (no network access to look up the hash).
-      - uses: actions/setup-go@v5
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: ${{ needs.plan.outputs.typos_tag }}
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5.6.0
         with:
           go-version-file: packages/typos/go.mod
-      # TODO: pin to a specific released version once verified, for the same reason.
-      - run: go install github.com/goreleaser/goreleaser/v2@latest
-      - uses: actions/setup-node@v4
+      # The dev shell's version (nixpkgs goreleaser). `just bump-toolchain`
+      # doesn't touch this line, so bump it by hand when nixpkgs moves.
+      - run: go install github.com/goreleaser/goreleaser/v2@v2.17.1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 24
           registry-url: https://registry.npmjs.org
