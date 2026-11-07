@@ -42,10 +42,9 @@
     },
     "packages/domos": {
       "name": "@julianelda/domos",
-      "version": "3.0.0",
+      "version": "3.0.1",
       "dependencies": {
         "@julianelda/chroma": "^1.0.0",
-        "@julianelda/stilo": "^2.0.0",
         "clsx": "^2.1.1",
         "tailwind-merge": "^3.6.0",
       },
