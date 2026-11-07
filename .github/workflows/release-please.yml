@@ -36,6 +36,13 @@ jobs:
   # whose optionalDependencies don't exist), and it re-runs on every push to
   # master, so a gap heals on its own. `if: always()` is what keeps a failed
   # release-please job from disarming it.
+  #
+  # Every package is built from its release tag, never from the commit that
+  # triggered the run. A gap is filled by whichever push comes next, and that
+  # commit may already carry unreleased changes: building it ships them under
+  # the old version number. That is how domos 3.0.1 went out with #89's
+  # breaking change instead of #87's fix. A version whose tag doesn't exist yet
+  # waits for a later run.
   plan:
     needs: release-please
     if: always()
@@ -43,6 +50,7 @@ jobs:
     outputs:
       other: ${{ steps.plan.outputs.other }}
       typos: ${{ steps.plan.outputs.typos }}
+      typos_tag: ${{ steps.plan.outputs.typos_tag }}
     steps:
       - uses: actions/checkout@v4
       - id: plan
@@ -55,6 +63,11 @@ jobs:
             name=$(jq -r .name "$path/package.json")
             version=$(jq -r .version "$path/package.json")
 
+            # release-please tags `<component>-v<version>`, and the component
+            # defaults to the package name without its scope.
+            component=$(jq -r --arg p "$path" '.packages[$p].component // empty' release-please-config.json)
+            tag="${component:-${name##*/}}-v$version"
+
             # The registry wants the scope separator percent-encoded.
             encoded=${name//\//%2f}
 
@@ -63,18 +76,17 @@ jobs:
               -H 'Accept: application/vnd.npm.install-v1+json' \
               "https://registry.npmjs.org/$encoded" || echo 000)
 
+            unpublished=""
             case "$status" in
               200)
                 if jq -e --arg v "$version" '.versions[$v]' "$body" >/dev/null; then
                   echo "  ok       $name@$version"
                 else
-                  echo "  MISSING  $name@$version (registry has: $(jq -r '.versions | keys | join(",")' "$body"))"
-                  missing+=("$path")
+                  unpublished="registry has: $(jq -r '.versions | keys | join(",")' "$body")"
                 fi
                 ;;
               404)
-                echo "  MISSING  $name@$version (never published)"
-                missing+=("$path")
+                unpublished="never published"
                 ;;
               *)
                 # Never guess on an unexpected response: a false "missing"
@@ -84,13 +96,35 @@ jobs:
                 ;;
             esac
             rm -f "$body"
+            [ -n "$unpublished" ] || continue
+
+            # `--exit-code` makes a missing tag exit 2, apart from real errors.
+            rc=0
+            git ls-remote --exit-code --tags origin "refs/tags/$tag" >/dev/null || rc=$?
+            case "$rc" in
+              0)
+                echo "  MISSING  $name@$version ($unpublished), publishing from $tag"
+                missing+=("$(jq -nc --arg path "$path" --arg tag "$tag" '{$path, $tag}')")
+                ;;
+              2)
+                echo "  WAITING  $name@$version ($unpublished), $tag does not exist yet"
+                ;;
+              *)
+                echo "tag lookup for $tag failed with exit code $rc" >&2
+                exit 1
+                ;;
+            esac
           done < <(jq -r 'keys[]' .release-please-manifest.json)
 
-          all=$(printf '%s\n' "${missing[@]:-}" | jq -Rsc 'split("\n") | map(select(length > 0))')
+          all=$(printf '%s\n' "${missing[@]:-}" | jq -sc '.')
           echo "unpublished: $all"
           {
-            echo "other=$(jq -c '[.[] | select(startswith("packages/typos") | not)]' <<<"$all")"
-            echo "typos=$(jq -c '[.[] | select(startswith("packages/typos"))]' <<<"$all")"
+            echo "other=$(jq -c '[.[] | select(.path | startswith("packages/typos") | not)]' <<<"$all")"
+            echo "typos=$(jq -c '[.[] | select(.path | startswith("packages/typos")) | .path]' <<<"$all")"
+            # typos' packages share one version and, since #86, release from
+            # one combined PR, so their tags all point at the same commit and
+            # any of them will do.
+            echo "typos_tag=$(jq -r '[.[] | select(.path | startswith("packages/typos"))][0].tag // ""' <<<"$all")"
           } >> "$GITHUB_OUTPUT"
 
   publish:
@@ -102,9 +136,11 @@ jobs:
       id-token: write
     strategy:
       matrix:
-        path: ${{ fromJSON(needs.plan.outputs.other) }}
+        include: ${{ fromJSON(needs.plan.outputs.other) }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.tag }}
       - uses: oven-sh/setup-bun@v2
       - uses: actions/setup-node@v4
         with:
@@ -141,6 +177,8 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.plan.outputs.typos_tag }}
       - uses: oven-sh/setup-bun@v2
       # TODO: pin to a commit SHA (like the other actions above) once verified —
       # not available from this sandbox (no network access to look up the hash).
